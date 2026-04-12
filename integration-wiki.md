@@ -33,7 +33,7 @@ title: RisqueCV.fr - Intégration logiciels tiers
     .rouge { color: #a41835; }
 </style>
 
-# <div class="logo-risquecv"><img src="https://risquecv.fr/wp-content/uploads/2025/04/icone-photoshop-v3-TROU.png" alt="Logo RisqueCV"><span class="bleu">Risque</span><span class="rouge">CV</span><span class="bleu">.fr</span> - Intégration logiciels tiers</div>
+# <span class="logo-risquecv"><img src="https://risquecv.fr/wp-content/uploads/2025/04/icone-photoshop-v3-TROU.png" alt="Logo RisqueCV"><span class="bleu">Risque</span><span class="rouge">CV</span><span class="bleu">.fr</span> - Intégration logiciels tiers</span>
 
 Cette page décrit le **protocole de communication bidirectionnel** entre RisqueCV et ses partenaires.
 
