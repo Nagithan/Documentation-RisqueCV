@@ -3,7 +3,7 @@ layout: default
 title: RisqueCV.fr - Intégration logiciels tiers
 permalink: /integration-wiki/
 ---
-
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
@@ -321,16 +321,5 @@ Ajoutez simplement le paramètre `debug_integration=1` à l'URL :
     - Chaque code d'erreur (`INVALID_SESSION`, `UNSUPPORTED_VERSION`, etc.) est journalisé avec une explication textuelle détaillée.
     - Facilite le débogage de vos payloads JSON sans avoir à inspecter manuellement chaque `event.data`.
 
-{% highlight javascript %}
-const patient = {
-  name: "Nathan",
-  active: true
-};
-{% endhighlight %}
-
-{% highlight json %}
-{
-  "name": "Nathan",
-  "active": true
-}
-{% endhighlight %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
