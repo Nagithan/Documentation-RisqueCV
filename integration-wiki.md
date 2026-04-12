@@ -772,7 +772,7 @@ async function sauvegarderPdfEnBaseDeDonnees(base64Data, filename) {
 
 Tous les messages partagent une structure de base : `type`, `version` (fixée à `1`) et `partner`.
 
-### Étape 1 : Le Signal de Départ
+### Étape 1 : Le signal de départ
 #### 🟢 `risquecv:ready` (RisqueCV ➡️ Votre Logiciel)
 Envoyé dès que RisqueCV est prêt à recevoir des données. Ce message contient le `sessionId` requis pour la suite.
 
@@ -789,7 +789,7 @@ Envoyé dès que RisqueCV est prêt à recevoir des données. Ce message contien
 }
 ```
 
-### Étape 2 : L'Injection des Données
+### Étape 2 : L'injection des données du patient
 #### 📝 `risquecv:prefill` (Votre Logiciel ➡️ RisqueCV)
 Message de réponse au `ready`. Permet d'injecter le contexte patient.
 
@@ -810,7 +810,7 @@ Message de réponse au `ready`. Permet d'injecter le contexte patient.
 }
 ```
 
-### Étape 3 : La Confirmation
+### Étape 3 : La confirmation de réception
 #### ✅ `risquecv:prefill:ack` (RisqueCV ➡️ Votre Logiciel)
 Envoyé après réception du `prefill`. Confirme quelles données ont été validées et injectées.
 
@@ -826,7 +826,7 @@ Envoyé après réception du `prefill`. Confirme quelles données ont été vali
 }
 ```
 
-### Étape 4 : Le Résultat (Finalisation)
+### Étape 4 : La récupération du résultat en PDF
 #### 📄 `risquecv:pdf` (RisqueCV ➡️ Votre Logiciel)
 Envoyé lorsque le médecin clique sur le bouton de transfert dans RisqueCV. Contient le document final.
 
@@ -845,7 +845,7 @@ Envoyé lorsque le médecin clique sur le bouton de transfert dans RisqueCV. Con
 
 ---
 
-### Cas Particulier : Gestion d'Erreur
+### Cas particulier : message d'erreur
 #### 🛑 `risquecv:error` (RisqueCV ➡️ Votre Logiciel)
 Envoyé en cas de rupture du protocole ou d'erreur critique de session.
 
