@@ -50,20 +50,14 @@ permalink: /integration-wiki/
  * Couleurs VS Code Dark
  */
 
-pre[class*="language-"],
-code[class*="language-"] {
-	color: #d4d4d4;
-	font-size: 16px;
-	text-shadow: none;
+code[class*="language-"],
+pre[class*="language-"] {
 	font-family: "Fira Mono", Menlo, Monaco, "Lucida Console", "Courier New", Courier, monospace;
+	font-size: 16px;
+	line-height: 1.375;
 	direction: ltr;
 	text-align: left;
-	white-space: pre;
-	white-space: pre-wrap;
 	word-spacing: normal;
-	word-break: normal;
-	word-wrap: break-word;
-	line-height: 1.375;
 	-moz-tab-size: 4;
 	-o-tab-size: 4;
 	tab-size: 4;
@@ -71,7 +65,14 @@ code[class*="language-"] {
 	-moz-hyphens: none;
 	-ms-hyphens: none;
 	hyphens: none;
+	white-space: pre;
+	white-space: pre-wrap;
+	word-break: keep-all;
+	word-wrap: break-word;
+	background: #b819401c;
+	color: #b81940;
 }
+
 
 pre[class*="language-"]::selection,
 code[class*="language-"]::selection,
