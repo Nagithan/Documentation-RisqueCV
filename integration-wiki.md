@@ -17,6 +17,7 @@ permalink: /integration-wiki/
         font-size: 30px;
         line-height: 1.2;
         margin-bottom: 1rem;
+        color: #1b2b7f;
     }
 
     .logo-risquecv img {
@@ -35,25 +36,34 @@ permalink: /integration-wiki/
 
     body > div > h1:nth-child(1) { display: none; }
 
+    .warning {
+        background-color: #d435352e;
+        padding: 10px 15px;
+        border-radius: 8px;
+        color: #622525;
+        line-height: 1.6;
+    }
+
     @import url(https://fonts.googleapis.com/css?family=Fira+Mono);
 /*
  * Thème Prism pour RisqueCV.fr
- * Basé sur une version modifiée de :
- * Hopscotch
- * by Jan T. Sott
- * https://github.com/idleberg/Hopscotch
- *
- * This work is licensed under the Creative Commons CC0 1.0 Universal License
+ * Couleurs VS Code Dark
  */
 
-code[class*="language-"],
-pre[class*="language-"] {
-	font-family: "Fira Mono", Menlo, Monaco, "Lucida Console", "Courier New", Courier, monospace;
+pre[class*="language-"],
+code[class*="language-"] {
+	color: #d4d4d4;
 	font-size: 16px;
-	line-height: 1.375;
+	text-shadow: none;
+	font-family: "Fira Mono", Menlo, Monaco, "Lucida Console", "Courier New", Courier, monospace;
 	direction: ltr;
 	text-align: left;
+	white-space: pre;
+	white-space: pre-wrap;
 	word-spacing: normal;
+	word-break: normal;
+	word-wrap: break-word;
+	line-height: 1.375;
 	-moz-tab-size: 4;
 	-o-tab-size: 4;
 	tab-size: 4;
@@ -61,130 +71,267 @@ pre[class*="language-"] {
 	-moz-hyphens: none;
 	-ms-hyphens: none;
 	hyphens: none;
-	white-space: pre;
-	white-space: pre-wrap;
-	word-break: break-all;
-	word-wrap: break-word;
-	background: #b819401c;
-	color: #b81940;
 }
 
-pre > code[class*="language-"] {
-	font-size: 1em;
+pre[class*="language-"]::selection,
+code[class*="language-"]::selection,
+pre[class*="language-"] *::selection,
+code[class*="language-"] *::selection {
+	text-shadow: none;
+	background: #264F78;
 }
 
-/* Code blocks */
+@media print {
+	pre[class*="language-"],
+	code[class*="language-"] {
+		text-shadow: none;
+	}
+}
+
 pre[class*="language-"] {
 	padding: 1em;
 	margin: .5em 0;
 	overflow: auto;
+	background: #1e1e1e;
 }
 
-/* Inline code */
-:not(pre) > code[class*="language-"] {
-	padding: .1em;
-	border-radius: .3em;
-}
-
-.token.comment,
-.token.prolog,
-.token.doctype,
-.token.cdata {
-	color: #72aa5b;
-}
-
-.token.punctuation {
-	color: #ffd700;
-}
-
+/*********************************************************
+* Tokens
+*/
 .namespace {
 	opacity: .7;
 }
 
-.token.null,
-.token.operator,
+.token.doctype .token.doctype-tag {
+	color: #569CD6;
+}
+
+.token.doctype .token.name {
+	color: #9cdcfe;
+}
+
+.token.comment,
+.token.prolog {
+	color: #6a9955;
+}
+
+.token.punctuation,
+.language-html .language-css .token.punctuation,
+.language-html .language-javascript .token.punctuation {
+	color: #d4d4d4;
+}
+
+.token.property,
+.token.tag,
 .token.boolean,
-.token.number {
-	color: #ffffff;
+.token.number,
+.token.constant,
+.token.symbol,
+.token.inserted,
+.token.unit {
+	color: #b5cea8;
 }
 
-.token.property {
-	color: #94cff0;
-}
-
-.token.tag {
-	color: #1290bf;
-}
-
-.token.string {
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.deleted {
 	color: #ce9178;
 }
 
-.token.selector {
-	color: #c85e7c;
+.language-css .token.string.url {
+	text-decoration: underline;
 }
 
-.token.attr-name {
-	color: #fd8b19;
+.token.operator,
+.token.entity {
+	color: #d4d4d4;
 }
 
-.token.entity,
-.token.url,
-.language-css .token.string,
-.style .token.string {
-	color: #149b93;
+.token.operator.arrow {
+	color: #569CD6;
 }
 
-.token.attr-value,
-.token.keyword,
-.token.control,
-.token.directive,
-.token.unit {
-	color: #5498cf;
-}
-
-.token.statement,
-.token.regex,
 .token.atrule {
-	color: #149b93;
+	color: #ce9178;
 }
 
-.token.placeholder,
-.token.variable {
-	color: #1290bf;
+.token.atrule .token.rule {
+	color: #c586c0;
+}
+
+.token.atrule .token.url {
+	color: #9cdcfe;
+}
+
+.token.atrule .token.url .token.function {
+	color: #dcdcaa;
+}
+
+.token.atrule .token.url .token.punctuation {
+	color: #d4d4d4;
+}
+
+.token.keyword {
+	color: #569CD6;
+}
+
+.token.keyword.module,
+.token.keyword.control-flow {
+	color: #c586c0;
+}
+
+.token.function,
+.token.function .token.maybe-class-name {
+	color: #dcdcaa;
+}
+
+.token.regex {
+	color: #d16969;
 }
 
 .token.important {
-	color: #dd464c;
-	font-weight: bold;
+	color: #569cd6;
+}
+
+.token.italic {
+	font-style: italic;
+}
+
+.token.constant {
+	color: #9cdcfe;
+}
+
+.token.class-name,
+.token.maybe-class-name {
+	color: #4ec9b0;
+}
+
+.token.console {
+	color: #9cdcfe;
+}
+
+.token.parameter {
+	color: #9cdcfe;
+}
+
+.token.interpolation {
+	color: #9cdcfe;
+}
+
+.token.punctuation.interpolation-punctuation {
+	color: #569cd6;
+}
+
+.token.boolean {
+	color: #569cd6;
+}
+
+.token.property,
+.token.variable,
+.token.imports .token.maybe-class-name,
+.token.exports .token.maybe-class-name {
+	color: #9cdcfe;
+}
+
+.token.selector {
+	color: #d7ba7d;
+}
+
+.token.escape {
+	color: #d7ba7d;
+}
+
+.token.tag {
+	color: #569cd6;
+}
+
+.token.tag .token.punctuation {
+	color: #808080;
+}
+
+.token.cdata {
+	color: #808080;
+}
+
+.token.attr-name {
+	color: #9cdcfe;
+}
+
+.token.attr-value,
+.token.attr-value .token.punctuation {
+	color: #ce9178;
+}
+
+.token.attr-value .token.punctuation.attr-equals {
+	color: #d4d4d4;
 }
 
 .token.entity {
-	cursor: help;
+	color: #569cd6;
 }
 
-pre > code.highlight {
-	outline: .4em solid red;
-	outline-offset: .4em;
+.token.namespace {
+	color: #4ec9b0;
+}
+/*********************************************************
+* Language Specific
+*/
+
+pre[class*="language-javascript"],
+code[class*="language-javascript"],
+pre[class*="language-jsx"],
+code[class*="language-jsx"],
+pre[class*="language-typescript"],
+code[class*="language-typescript"],
+pre[class*="language-tsx"],
+code[class*="language-tsx"] {
+	color: #9cdcfe;
 }
 
-code.language-javascript {
-    color: #4ec1ff;
+pre[class*="language-css"],
+code[class*="language-css"] {
+	color: #ce9178;
 }
 
-span.token.function {
-    color: #dcdca9;
+pre[class*="language-html"],
+code[class*="language-html"] {
+	color: #d4d4d4;
 }
 
-language-javascript {}
-
-span.token.number {
-    color: #b3cba6;
+.language-regex .token.anchor {
+	color: #dcdcaa;
 }
 
-span.token.boolean {
-    color: #4ea0e2;
+.language-html .token.punctuation {
+	color: #808080;
 }
+/*********************************************************
+* Line highlighting
+*/
+pre[class*="language-"] > code[class*="language-"] {
+	position: relative;
+	z-index: 1;
+}
+
+.line-highlight.line-highlight {
+	background: #f7ebc6;
+	box-shadow: inset 5px 0 0 #f7d87c;
+	z-index: 0;
+}
+
+.markdown-body .highlight pre, .markdown-body pre {
+    padding: 16px;
+    overflow: auto;
+    font-size: 85%;
+    line-height: 1.45;
+    background-color: #1f1f1f;
+    border-radius: 8px;
+}
+
+
 </style>
 
 <h1 class="logo-risquecv">
@@ -265,9 +412,9 @@ Ce protocole a été conçu pour répondre aux exigences les plus strictes de co
 Le `payload` peut contenir n'importe quelle combinaison des clés ci-dessous. Toutes les valeurs sont optionnelles (`null` ou omission pour ignorer). Toute clé inconnue sera ignorée.
 
 ### ⚠️ ATTENTION, ERREURS FREQUENTES :
-<div style="background-color: #d4353560; padding: 10px; border-radius: 5px;">
-- Respecter la <span style="font-weight: bold;">casse des clés</span> (ex: <code>PAS</code> et non <code>pas</code>, <code>HbA1c</code> et non <code>hba1c</code>, <code>age</code> et non <code>Age</code>, etc.).<br>
-- Respecter les <span style="font-weight: bold;">unités mentionnées</span> (notamment <code>mmol/L</code> pour le cholestérol, <code>%</code> pour l'HbA1c).<br>
+<div class="warning">
+- Respecter la <span style="font-weight: bold;">casse des clés</span> (ex: <code class="language-plaintext">PAS</code> et non <code class="language-plaintext">pas</code>, <code class="language-plaintext">HbA1c</code> et non <code class="language-plaintext">hba1c</code>, <code class="language-plaintext">age</code> et non <code class="language-plaintext">Age</code>, etc.).<br>
+- Respecter les <span style="font-weight: bold;">unités mentionnées</span> (notamment <code class="language-plaintext">mmol/L</code> pour le cholestérol, <code class="language-plaintext">%</code> pour l'HbA1c).<br>
 - Respecter le <span style="font-weight: bold;">typage des données</span>, il faut envoyer des nombres pour les nombres, des booléens pour les booléens, etc.<br>
 - Ne pas envoyer de <span style="font-weight: bold;">données nominatives</span> (même si elles seront ignorées et non traitées).<br>
 </div>
