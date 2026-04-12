@@ -3,7 +3,6 @@ layout: default
 title: RisqueCV.fr - Intégration logiciels tiers
 permalink: /integration-wiki/
 ---
-<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
@@ -35,6 +34,157 @@ permalink: /integration-wiki/
     .rouge { color: #a41835; font-family: 'Montserrat', sans-serif; }
 
     body > div > h1:nth-child(1) { display: none; }
+
+    @import url(https://fonts.googleapis.com/css?family=Fira+Mono);
+/*
+ * Thème Prism pour RisqueCV.fr
+ * Basé sur une version modifiée de :
+ * Hopscotch
+ * by Jan T. Sott
+ * https://github.com/idleberg/Hopscotch
+ *
+ * This work is licensed under the Creative Commons CC0 1.0 Universal License
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	font-family: "Fira Mono", Menlo, Monaco, "Lucida Console", "Courier New", Courier, monospace;
+	font-size: 16px;
+	line-height: 1.375;
+	direction: ltr;
+	text-align: left;
+	word-spacing: normal;
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+	white-space: pre;
+	white-space: pre-wrap;
+	word-break: break-all;
+	word-wrap: break-word;
+	background: #b819401c;
+	color: #b81940;
+}
+
+pre > code[class*="language-"] {
+	font-size: 1em;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #72aa5b;
+}
+
+.token.punctuation {
+	color: #ffd700;
+}
+
+.namespace {
+	opacity: .7;
+}
+
+.token.null,
+.token.operator,
+.token.boolean,
+.token.number {
+	color: #ffffff;
+}
+
+.token.property {
+	color: #94cff0;
+}
+
+.token.tag {
+	color: #1290bf;
+}
+
+.token.string {
+	color: #ce9178;
+}
+
+.token.selector {
+	color: #c85e7c;
+}
+
+.token.attr-name {
+	color: #fd8b19;
+}
+
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+	color: #149b93;
+}
+
+.token.attr-value,
+.token.keyword,
+.token.control,
+.token.directive,
+.token.unit {
+	color: #5498cf;
+}
+
+.token.statement,
+.token.regex,
+.token.atrule {
+	color: #149b93;
+}
+
+.token.placeholder,
+.token.variable {
+	color: #1290bf;
+}
+
+.token.important {
+	color: #dd464c;
+	font-weight: bold;
+}
+
+.token.entity {
+	cursor: help;
+}
+
+pre > code.highlight {
+	outline: .4em solid red;
+	outline-offset: .4em;
+}
+
+code.language-javascript {
+    color: #4ec1ff;
+}
+
+span.token.function {
+    color: #dcdca9;
+}
+
+language-javascript {}
+
+span.token.number {
+    color: #b3cba6;
+}
+
+span.token.boolean {
+    color: #4ea0e2;
+}
 </style>
 
 <h1 class="logo-risquecv">
