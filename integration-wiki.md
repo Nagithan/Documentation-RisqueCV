@@ -31,8 +31,8 @@ permalink: /integration-wiki/
         font-family: 'Montserrat', sans-serif;
     }
 
-    .bleu { color: #1b2b7f; }
-    .rouge { color: #a41835; }
+    .bleu { color: #1b2b7f; font-family: 'Montserrat', sans-serif; }
+    .rouge { color: #a41835; font-family: 'Montserrat', sans-serif; }
 
     body > div > h1:nth-child(1) { display: none; }
 </style>
