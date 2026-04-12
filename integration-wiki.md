@@ -320,3 +320,17 @@ Ajoutez simplement le paramètre `debug_integration=1` à l'URL :
 3.  **Erreurs Protocolaires (Messages corrompus)** :
     - Chaque code d'erreur (`INVALID_SESSION`, `UNSUPPORTED_VERSION`, etc.) est journalisé avec une explication textuelle détaillée.
     - Facilite le débogage de vos payloads JSON sans avoir à inspecter manuellement chaque `event.data`.
+
+{% highlight javascript %}
+const patient = {
+  name: "Nathan",
+  active: true
+};
+{% endhighlight %}
+
+{% highlight json %}
+{
+  "name": "Nathan",
+  "active": true
+}
+{% endhighlight %}
