@@ -478,7 +478,11 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
 
 ## 🛠 Exemples JS d'intégration côté partenaire
 
-### Avec webview
+Voici des exemples prêts à l'emploi selon la méthode de rendu que vous utilisez (WebView ou Popup). N'hésitez pas à les dérouler pour voir le code.
+
+<details class="code-spoiler" markdown="1">
+<summary>💻 Exemple d'intégration pour WebView (Electron, React Native...)</summary>
+
 ```javascript
 // --- 1. CONFIGURATION ---
 const CONFIG = {
@@ -597,7 +601,11 @@ async function sauvegarderPdf(base64Data, filename) {
 }
 ```
 
-### Avec popup
+</details>
+
+<details class="code-spoiler" markdown="1">
+<summary>💻 Exemple d'intégration pour fenêtre Popup (Logiciels Web / SaaS)</summary>
+
 ```javascript
 // --- 1. CONFIGURATION ---
 const CONFIG = {
@@ -748,6 +756,8 @@ async function sauvegarderPdfEnBaseDeDonnees(base64Data, filename) {
     }
 }
 ```
+
+</details>
 
 ---
 
