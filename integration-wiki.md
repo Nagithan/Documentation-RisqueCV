@@ -7,57 +7,36 @@ permalink: /integration-wiki/
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
-    * {
-font-family: 'Inter', sans-serif;
-}
-    * {
-font-family: 'Inter', sans-serif;
-}
+    * { font-family: 'Inter', sans-serif; }
 
-    h1, h2, h3 {
-font-family: 'Montserrat', sans-serif;
-}
-    h1, h2, h3 {
-font-family: 'Montserrat', sans-serif;
-}
+    h1, h2, h3 { font-family: 'Montserrat', sans-serif; }
 
     .logo-risquecv {
         display: flex;
         align-items: center;
-gap: 10px;
-gap: 10px;
+        gap: 10px;
         font-size: 30px;
         line-height: 1.2;
-    margin-bottom: 1rem;
-        line-height: 1.2;
-    margin-bottom: 1rem;
+        margin-bottom: 1rem;
     }
 
     .logo-risquecv img {
-                width: 40px;
-                width: 40px;
+        width: 40px;
         height: 40px;
-flex: 0 0 auto;
-flex: 0 0 auto;
+        flex: 0 0 auto;
     }
 
     .logo-risquecv-text {
-    .logo-risquecv-text {
         font-weight: 730;
-        font-family: 'Montserrat', sans-serif;
         font-family: 'Montserrat', sans-serif;
     }
 
     .bleu { color: #1b2b7f; }
     .rouge { color: #a41835; }
+
+    body > div > h1:nth-child(1) { display: none; }
 </style>
 
-<h1 class="logo-risquecv">
-<img src="https://risquecv.fr/wp-content/uploads/2025/04/icone-photoshop-v3-TROU.png" alt="Logo RisqueCV">
-  <span class="logo-risquecv-text">
-<span class="bleu">Risque</span><span class="rouge">CV</span><span class="bleu">.fr</span> - Intégration logiciels tiers
-</span>
-</h1>
 <h1 class="logo-risquecv">
 <img src="https://risquecv.fr/wp-content/uploads/2025/04/icone-photoshop-v3-TROU.png" alt="Logo RisqueCV">
   <span class="logo-risquecv-text">
