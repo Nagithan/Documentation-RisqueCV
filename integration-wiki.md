@@ -1,6 +1,6 @@
 ---
 layout: default
-title: RisqueCV.fr - Intégration logiciels tiers"
+title:
 permalink: /integration-wiki/
 ---
 
