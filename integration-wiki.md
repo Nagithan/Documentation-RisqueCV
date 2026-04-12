@@ -454,7 +454,7 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
 | `agediabete` | `number` | ans | Âge lors du diagnostic du diabète |
 | `age_atcd` | `number` | ans | Âge lors du premier événement cardiovasculaire (AVC, AIT, SCA, IDM, AOMI, anévrisme de l'aorte abdominale) |
 
-### 3. Valeurs de type `string`
+### 3. Valeurs de type string
 
 | Clé | Type | Valeurs autorisées |
 | :--- | :--- | :--- |
