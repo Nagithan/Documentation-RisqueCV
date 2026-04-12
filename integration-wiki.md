@@ -53,7 +53,7 @@ permalink: /integration-wiki/
 code[class*="language-"],
 pre[class*="language-"] {
 	font-family: "Fira Mono", Menlo, Monaco, "Lucida Console", "Courier New", Courier, monospace;
-	font-size: 16px;
+	font-size: 0.9em;
 	line-height: 1.375;
 	direction: ltr;
 	text-align: left;
@@ -468,39 +468,169 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
 | `insuline` | `boolean` | Diabète traité par insuline. |
 | `hyperCHOfamille`| `boolean` | Hypercholestérolémie familiale hétérozygote connue. |
 | `retinopathie` | `boolean` | Présence d'une rétinopathie diabétique. |
+| `neuropathie` | `boolean` | Présence d'une neuropathie diabétique. |
+| `atcd_coronarien` | `boolean` | Antécédent de maladie coronaire (IDM, SCA, revascularisation). |
+| `atcd_cerebrovasculaire`| `boolean` | Antécédent d'AVC ou d'AIT. |
+| `atcd_aomi` | `boolean` | Antécédent d'Artériopathie Oblitérante des Membres Inférieurs. |
+| `atcd_anevrismeAorte`| `boolean` | Antécédent d'anévrisme de l'aorte abdominale. |
+| `microangiopathie3sites`| `boolean` | Présence d'une microangiopathie sur ≥3 sites (ex: rétino + neuro + albu). |
+| `autreFacteurMajeur` | `boolean` | Présence d'un autre facteur de risque majeur (pour l'HF). |
+| `evaluationComplete`| `boolean` | Force l'affichage de l'évaluation complète (tunnel détaillé). |
 
 ---
 
 ## 🛠 Exemple JS d'intégration côté partenaire
 
+### Avec popup
 ```javascript
-// 1. Ouvrir la popup
-const popup = window.open('https://risquecv.fr/srp-test/', 'RisqueCV');
+// --- 1. CONFIGURATION ---
+const CONFIG = {
+    version: 1, // Version du protocole d'intégration RisqueCV
+    partnerSlug: 'votre-slug', // Identifiant de votre logiciel (ex : "weda"))
+    targetOrigin: 'https://risquecv.fr', // Origine stricte
+    popupOptions: 'width=1100,height=800'
+};
 
-// 2. Écouter les messages
-window.addEventListener('message', (event) => {
-    // Toujours vérifier l'origine !
-    if (event.origin !== 'https://risquecv.fr') return;
+// --- 2. ÉTAT DE LA SESSION ---
+let popupWindow = null;
+let messageListener = null;
+let pollClosedInterval = null;
+let handshakeTimeout = null;
 
-    const version = 1;
-    const msg = event.data;
-
-    if (msg.type === 'risquecv:ready') {
-        // 3. Envoyer les données patient
-        popup.postMessage({
-            type: 'risquecv:prefill',
-            version: version,
-            partner: msg.partner,
-            sessionId: msg.sessionId,
-            payload: { /* ...vos données... */ }
-        }, event.origin);
+// --- 3. DÉCLENCHEMENT DE L'OUVERTURE ---
+document.getElementById('bouton-ouvrir-risquecv').addEventListener('click', () => {
+    
+    // Anti-spam : ramener la fenêtre au premier plan si elle est déjà ouverte
+    if (popupWindow && !popupWindow.closed) {
+        popupWindow.focus();
+        return; 
     }
 
-    if (msg.type === 'risquecv:pdf') {
-        console.log("PDF reçu :", msg.filename);
-        // Traitement du base64...
+    // Nettoyage des anciennes sessions
+    cleanupSession();
+
+    // Ouverture de l'interface RisqueCV
+    popupWindow = window.open(`${CONFIG.targetOrigin}/${CONFIG.partnerSlug}/`, 'RisqueCV', CONFIG.popupOptions);
+    
+    if (!popupWindow) {
+        alert("Ouverture bloquée. Veuillez autoriser les pop-ups pour utiliser RisqueCV.");
+        return;
     }
+
+    // Timeout si le site distant est inaccessible
+    handshakeTimeout = setTimeout(() => {
+        console.warn("⏳ Délai d'attente dépassé : RisqueCV ne répond pas.");
+    }, 5000);
+
+    // Détection de la fermeture manuelle par l'utilisateur
+    pollClosedInterval = setInterval(() => {
+        if (popupWindow.closed) {
+            console.info("ℹ️ Session RisqueCV terminée (fenêtre fermée manuellement).");
+            cleanupSession();
+        }
+    }, 1000);
+
+    // --- 4. GESTION DES MESSAGES ---
+    messageListener = (event) => {
+        // Ignorer tout message ne provenant pas de RisqueCV
+        if (event.origin !== CONFIG.targetOrigin) return;
+        
+        const msg = event.data;
+
+        switch (msg.type) {
+          // Si on reçoit "ready", alors on peut envoyer les données du patient
+            case 'risquecv:ready':
+                clearTimeout(handshakeTimeout);
+
+                // A. Envoie des données cliniques du patient
+                popupWindow.postMessage({
+                    type: 'risquecv:prefill',
+                    version: CONFIG.version,
+                    partner: msg.partner,
+                    sessionId: msg.sessionId,
+                    payload: { 
+                      // Les données doivent être formatées avant l'envoi (ex: "femme" et pas "Femme" ni "F")
+                        age: 55, 
+                        sexe: "femme", 
+                        tabac: false,
+                        PAS: 142,
+                        CT: 5.2,
+                        HDL: 1.3
+                        // Ajoutez vos autres variables cliniques ici. Le payload n'a pas besoin d'être exhaustif.
+                    }
+                }, CONFIG.targetOrigin);
+                break;
+
+            // Si on reçoit "ack", alors RisqueCV a bien reçu les données
+            case 'risquecv:prefill:ack':
+                // Si necessaire pour debug, on peut vérifier l'injection
+                if (msg.status === 'partial') {
+                    console.warn('⚠️ Données ignorées par RisqueCV (hors-bornes ou inconnues) :', msg.ignoredKeys);
+                }
+                break;
+
+            // Si on reçoit "pdf", alors on peut sauvegarder le PDF recu dans le dossier du patient
+            case 'risquecv:pdf':                
+                // Fermeture optionnelle de la popup
+                popupWindow.close();
+
+                // Nettoyage des écouteurs
+                cleanupSession();
+
+                // Envoi silencieux du Base64 vers votre API
+                sauvegarderPdfEnBaseDeDonnees(msg.data, msg.filename);
+                break;
+
+            // Si on reçoit "error", alors.... il y a eu une erreur 😁
+            case 'risquecv:error':
+                console.error(`❌ Erreur RisqueCV [${msg.code}]:`, msg.message);
+                break;
+        }
+    };
+
+    window.addEventListener('message', messageListener);
 });
+
+// --- 5. FONCTIONS UTILITAIRES ---
+
+/** Nettoie les écouteurs pour éviter les fuites de mémoire (memory leaks) */
+function cleanupSession() {
+    if (messageListener) {
+        window.removeEventListener('message', messageListener);
+        messageListener = null;
+    }
+    if (pollClosedInterval) {
+        clearInterval(pollClosedInterval);
+        pollClosedInterval = null;
+    }
+    if (handshakeTimeout) {
+        clearTimeout(handshakeTimeout);
+        handshakeTimeout = null;
+    }
+}
+
+/** Transmet le PDF (Base64) à votre API pour l'enregistrer dans le dossier patient */
+async function sauvegarderPdfEnBaseDeDonnees(base64Data, filename) {
+    try {
+        const response = await fetch('/api/votre-logiciel/patients/12345/documents', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                nom_fichier: filename,
+                contenu_base64: base64Data,
+                type_document: 'EVALUATION_RISQUE_CV'
+            })
+        });
+
+        if (response.ok) {
+            console.log("✅ PDF sauvegardé avec succès dans le dossier du patient.");
+        } else {
+            console.error("❌ Échec de la sauvegarde du PDF côté serveur.");
+        }
+    } catch (error) {
+        console.error("Erreur réseau lors de la sauvegarde du PDF :", error);
+    }
+}
 ```
 
 ---
@@ -542,7 +672,7 @@ Message de réponse au `ready`. Permet d'injecter le contexte patient.
     "tabac": false,
     "PAS": 142, // pour les valeurs numériques, il faut envoyer des nombres (pas d'unités)
     "atcd": true,
-    // ... voir dictionnaire des clés ci-dessous
+    // ... voir dictionnaire des clés ci-dessus
   }
 }
 ```
@@ -590,6 +720,7 @@ Envoyé en cas de rupture du protocole ou d'erreur critique de session.
 | :--- | :--- |
 | `INVALID_ENVELOPE` | Le JSON ne respecte pas la structure de base. |
 | `UNSUPPORTED_VERSION`| La version du protocole est différente de celle de RisqueCV. |
+| `UNSUPPORTED_MESSAGE_TYPE`| Le type de message (`type`) n'est pas pris en charge. |
 | `INVALID_SESSION` | Le `sessionId` est manquant ou incorrect. |
 | `INVALID_PAYLOAD` | Le `payload` n'est pas un objet JSON plat. |
 | `PREFILL_ALREADY_APPLIED` | Un `prefill` a déjà été appliqué pour cette session. |
