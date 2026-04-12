@@ -44,6 +44,13 @@ permalink: /integration-wiki/
         line-height: 1.6;
     }
 
+    details summary {
+        cursor: pointer;
+        line-height: 2.1;
+        font-size: 1.1em;
+        font-weight: 500;
+    }
+
     @import url(https://fonts.googleapis.com/css?family=Fira+Mono);
 /*
  * Thème Prism pour RisqueCV.fr
@@ -604,7 +611,7 @@ async function sauvegarderPdf(base64Data, filename) {
 </details>
 
 <details class="code-spoiler" markdown="1">
-<summary>💻 Exemple d'intégration pour fenêtre Popup (Logiciels Web / SaaS)</summary>
+<summary>💻 Exemple d'intégration pour fenêtre Popup (⚠️ moins recommandé car UX/UI moins bonne)</summary>
 
 ```javascript
 // --- 1. CONFIGURATION ---
