@@ -712,7 +712,7 @@ async function sauvegarderPdfEnBaseDeDonnees(base64Data, filename) {
 // --- 4. DÉCLENCHEMENT DE L'OUVERTURE ---
 document.getElementById('bouton-ouvrir-risquecv').addEventListener('click', () => {
     
-    // Anti-spam : ramener la fenêtre au premier plan si elle est déjà ouverte
+    // Anti-spam : ramener la fenêtre au premier plan si elle est déjà ouverte (ne pas relancer le window.open pour éviter de recharger la page et de casser le Handshake)
     if (popupWindow && !popupWindow.closed) {
         popupWindow.focus();
         return; 
@@ -899,7 +899,10 @@ Envoyé lorsque le médecin clique sur le bouton de transfert dans RisqueCV. Con
   "data": "JVBERi..." // Flux binaire converti en string Base64 (environ 50kB)
 }
 ```
-> **Note technique :** La propriété `data` contient la chaîne Base64 brute du PDF (ex: `JVBERi0...`). Elle **ne contient pas** l'en-tête Data URI. Si vous souhaitez l'afficher directement dans un navigateur (dans une iframe ou un lien), vous devrez concaténer la chaîne de la manière suivante : `"data:application/pdf;base64," + msg.data`.
+> **Note technique :** La propriété `data` contient la chaîne Base64 brute du PDF (ex: `JVBERi0...`). Elle **ne contient pas** l'en-tête Data URI. Si vous souhaitez générer un lien de téléchargement ou l'afficher, vous devez concaténer la chaîne ainsi en Javascript :
+```javascript
+const pdfUrl = "data:application/pdf;base64," + msg.data;
+```
 
 ### Étape 5 : Signal de fermeture
 #### 🏁 `risquecv:close` (RisqueCV ➡️ Votre Logiciel)
@@ -934,12 +937,12 @@ Envoyé en cas de rupture du protocole ou d'erreur critique de session.
 
 | Code | Signification |
 | :--- | :--- |
-| `INVALID_ENVELOPE` | Le JSON ne respecte pas la structure de base. |
+| `INVALID_MESSAGE_FORMAT` | Le JSON ne respecte pas la structure de base. |
 | `UNSUPPORTED_VERSION`| La version du protocole est différente de celle utilisée par le backend de RisqueCV. |
 | `UNSUPPORTED_MESSAGE_TYPE`| Le `type` de message n'est pas pris en charge. |
 | `INVALID_SESSION` | Le `sessionId` est manquant ou incorrect. |
-| `INVALID_PAYLOAD` | Le `payload` n'est pas un objet JSON plat. |
-| `EMPTY_VALID_PAYLOAD` | Aucune donnée clinique valide n'a été trouvée dans le payload (objet vide ou toutes les clés sont inconnues). |
+| `PAYLOAD_NOT_A_FLAT_OBJECT` | Le `payload` n'est pas un objet JSON plat. |
+| `VALID_BUT_EMPTY_PAYLOAD` | Aucune donnée clinique valide n'a été trouvée dans le payload (objet vide ou toutes les clés sont inconnues). |
 | `INVALID_PARTNER` | Le slug partenaire ne correspond pas à l'URL ouverte. |
 | `PDF_GENERATION_FAILED` | La génération du PDF a échoué. |
 | `PREFILL_ALREADY_APPLIED` | Un `prefill` a déjà été appliqué pour cette session. |
