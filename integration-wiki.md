@@ -374,10 +374,6 @@ RisqueCV est conçu pour être ouvert depuis votre application via :
 - **Fenêtre popup nouvel onglet (recommandé)** : `window.open('https://risquecv.fr/slug-partenaire/', '_blank')`. Cela permet une communication bilatérale fluide via la référence `window.opener`.
 - **Iframe** : compatible mais non recommandé pour des raisons d'UI/UX
 
-<div class="warning">
-⚠️ <strong>Important :</strong> Assurez-vous de bien inclure le <strong>slash final (<code>/</code>)</strong> à la fin de l'URL (ex: <code>https://risquecv.fr/votre-slug/</code>). L'oubli de ce slash provoque une redirection côté serveur (301) qui détruit le lien sécurisé (perte de <code>window.opener</code>) entre la fenêtre parente et RisqueCV.
-</div>
-
 ### 2. Établissement de la connexion ("handshake")
 
 Le protocole suit une machine à états stricte pour garantir la sécurité des données :
@@ -568,7 +564,7 @@ async function sauvegarderPdf(base64Data, filename) {
 // --- 4. DÉCLENCHEMENT DE L'OUVERTURE ---
 document.getElementById('bouton-ouvrir-risquecv').addEventListener('click', () => {
     
-    // Charger l'URL (Ne pas oublier le slash final !)
+    // Charger l'URL d'intégration
     webview.src = `${CONFIG.targetOrigin}/${CONFIG.partnerSlug}/`;
     webview.style.display = 'block'; 
     
@@ -720,7 +716,7 @@ document.getElementById('bouton-ouvrir-risquecv').addEventListener('click', () =
     // Nettoyage complet avant ouverture
     cleanupSession();
 
-    // Ouverture de l'interface RisqueCV dans un nouvel onglet (Ne pas oublier le slash final !)
+    // Ouverture de l'interface RisqueCV dans un nouvel onglet
     popupWindow = window.open(`${CONFIG.targetOrigin}/${CONFIG.partnerSlug}/`, '_blank');
     
     if (!popupWindow) {
