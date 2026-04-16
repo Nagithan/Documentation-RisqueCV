@@ -371,8 +371,8 @@ L'intégration repose sur un protocole d'échange de messages asynchrones via `w
 RisqueCV est conçu pour être ouvert depuis votre application via :
 
 - **WebView (recommandé)** : RisqueCV détecte automatiquement son parent (`window.parent`) pour initier le dialogue.
-- **Fenêtre popup** : `window.open('https://risquecv.fr/slug-partenaire/')`. Cela permet une communication bilatérale fluide via la référence `window.opener`.
-- **Iframe**  (compatible mais non recommandé)
+- **Fenêtre popup nouvel onglet (recommandé)** : `window.open('https://risquecv.fr/slug-partenaire/', '_blank')`. Cela permet une communication bilatérale fluide via la référence `window.opener`.
+- **Iframe** : compatible mais non recommandé pour des raisons d'UI/UX
 
 <div class="warning">
 ⚠️ <strong>Important :</strong> Assurez-vous de bien inclure le <strong>slash final (<code>/</code>)</strong> à la fin de l'URL (ex: <code>https://risquecv.fr/votre-slug/</code>). L'oubli de ce slash provoque une redirection côté serveur (301) qui détruit le lien sécurisé (perte de <code>window.opener</code>) entre la fenêtre parente et RisqueCV.
@@ -433,8 +433,8 @@ Si RisqueCV est ouvert en mode intégration mais ne reçoit **aucun trafic valid
 
 ### Prévention de l'Inception (Iframes)
 Rediriger une Iframe vers une URL externe peut provoquer le chargement de votre propre portail à l'intérieur de l'Iframe (Effet Inception). 
-- **Dans une Iframe** : RisqueCV émet le message `risquecv:close` et **reste sur sa page**. C'est à votre application de capter ce message pour détruire l'Iframe.
-- **Dans une Popup** : RisqueCV émet le message, tente de s'auto-fermer (`window.close()`), et n'utilise sa redirection de secours (`returnUrl`) qu'en tout dernier recours.
+- **Dans une Iframe** : RisqueCV émet le message `risquecv:close` et **reste sur sa page**. C'est à votre application de capter ce message pour détruire l'Iframe (pour éviter l'inception)
+- **Dans un Nouvel onglet / Popup** : RisqueCV émet le message, tente de s'auto-fermer (`window.close()`), et n'utilise sa redirection de secours (`returnUrl`) qu'en tout dernier recours.
 
 ---
 
@@ -650,15 +650,14 @@ window.addEventListener('message', (event) => {
 </details>
 
 <details class="code-spoiler" markdown="1">
-<summary>💻 Exemple d'intégration pour fenêtre Popup (⚠️ moins recommandé car UX/UI moins bonne)</summary>
+<summary>💻 Exemple d'intégration avec fenêtre popup dans un nouvel onglet</summary>
 
 ```javascript
 // --- 1. CONFIGURATION ---
 const CONFIG = {
     version: 1, // Version du protocole d'intégration RisqueCV
     partnerSlug: 'votre-slug', // Identifiant de votre logiciel (ex : "weda"))
-    targetOrigin: 'https://risquecv.fr', // Origine stricte
-    popupOptions: 'width=1100,height=800'
+    targetOrigin: 'https://risquecv.fr' // Origine stricte
 };
 
 // --- 2. ÉTAT DE LA SESSION ---
@@ -721,8 +720,8 @@ document.getElementById('bouton-ouvrir-risquecv').addEventListener('click', () =
     // Nettoyage complet avant ouverture
     cleanupSession();
 
-    // Ouverture de l'interface RisqueCV (Ne pas oublier le slash final !)
-    popupWindow = window.open(`${CONFIG.targetOrigin}/${CONFIG.partnerSlug}/`, 'RisqueCV', CONFIG.popupOptions);
+    // Ouverture de l'interface RisqueCV dans un nouvel onglet (Ne pas oublier le slash final !)
+    popupWindow = window.open(`${CONFIG.targetOrigin}/${CONFIG.partnerSlug}/`, '_blank');
     
     if (!popupWindow) {
         alert("Ouverture bloquée. Veuillez autoriser les pop-ups pour utiliser RisqueCV.");
