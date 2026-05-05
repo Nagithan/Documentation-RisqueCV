@@ -532,7 +532,7 @@ La méthode `window.postMessage` permet au médecin en consultation de prérempl
     let pollClosedInterval = null;
     let handshakeTimeout = null;
 
-    const targetUrl = 'https://risquecv.local/test-integration';
+    const targetUrl = 'https://risquecv.fr/test-integration';
     const partnerSlug = 'test-integration';
 
     const btn = document.getElementById('sandbox-trigger');
