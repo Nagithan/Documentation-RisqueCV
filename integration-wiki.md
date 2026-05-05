@@ -340,6 +340,149 @@ pre[class*="language-"] > code[class*="language-"] {
 }
 
 
+
+    /* Sandbox Test Button & Status */
+    .sandbox-test-container {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 25px 0;
+        flex-wrap: wrap;
+    }
+
+    .bouton-sandbox {
+        position: relative;
+        overflow: hidden;
+        background: #2aa22a2b;
+        color: #3c6534;
+        border: 1px solid #9db299;
+        font-family: inherit;
+        font-weight: 600;
+        font-size: 1.13em;
+        line-height: 1.15;
+        border-radius: 14px;
+        padding: 10px 16px;
+        cursor: pointer;
+        -webkit-user-select: none;
+        user-select: none;
+        transition: background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease, transform 0.16s ease, box-shadow 0.16s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .bouton-sandbox:hover {
+        background: #138b1338;
+        border-color: #88a482;
+        color: #315a2b;
+    }
+
+    .bouton-sandbox:active {
+        background: #138b1341;
+        border-color: #739a6c;
+        transform: scale(0.98);
+    }
+
+    .bouton-sandbox:focus-visible {
+        border-color: #739a6c;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(74, 133, 63, 0.2);
+    }
+
+    .status-pill {
+        display: none;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        border-radius: 20px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        font-size: 0.9em;
+        font-weight: 600;
+        color: #64748b;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        animation: fadeIn 0.3s ease;
+    }
+
+    .status-pill.is-active {
+        display: flex;
+        border-color: #bbf7d0;
+        background: #f0fdf4;
+        color: #166534;
+    }
+
+    .status-pill .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #cbd5e1;
+    }
+
+    .status-pill.is-active .dot {
+        background: #22c55e;
+        box-shadow: 0 0 8px rgba(34, 197, 94, 0.4);
+    }
+
+    .pdf-pill {
+        display: none;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        border-radius: 20px;
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        color: #1e40af;
+        font-size: 0.9em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        animation: slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .pdf-pill:hover {
+        background: #dbeafe;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(30, 64, 175, 0.1);
+    }
+
+
+    @keyframes slideIn {
+        from { opacity: 0; transform: translateX(15px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+
+    /* Journal PostMessage */
+    .sandbox-log {
+        display: none;
+        margin-top: 15px;
+        background: #1e1e1e;
+        color: #d4d4d4;
+        border-radius: 10px;
+        padding: 12px;
+        font-family: 'Fira Mono', monospace;
+        font-size: 0.85em;
+        max-height: 300px;
+        overflow-y: auto;
+        border: 1px solid #333;
+        box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
+        animation: fadeIn 0.3s ease;
+    }
+
+    .log-entry {
+        margin-bottom: 8px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #333;
+        line-height: 1.4;
+    }
+
+    .log-entry:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+    .log-header { display: flex; align-items: center; }
+    .log-time { color: #888; margin-right: 10px; font-size: 0.8em; }
+    .log-dir { font-weight: bold; margin-right: 8px; font-size: 0.9em; }
+    .log-in { color: #4ec9b0; }
+    .log-out { color: #ce9178; }
+    .log-data { color: #9cdcfe; display: block; margin-top: 4px; white-space: pre-wrap; word-break: break-all; font-size: 0.95em; }
 </style>
 
 <h1 class="logo-risquecv">
@@ -360,6 +503,173 @@ L'absence de serveur de calcul est **un choix délibéré pour garantir la confi
 L'intégration de RisqueCV.fr à un logicier métier repose donc sur l'API Standard `window.postMessage`, permettant un **échange sécurisé** des données cliniques. Ce protocole permet l'ouverture de RisqueCV.fr, le transfert de données cliniques du logiciel métier vers la fenêtre de RisqueCV.fr (sans transfert des données sur internet), la génération du PDF des résultats en local (librairie JS) et l'envoi du rapport PDF de RisqueCV.fr vers le logiciel métier sans transfert des données sur internet.
 
 La méthode `window.postMessage` permet au médecin en consultation de préremplir les données cliniques et d'utiliser l'interface de RisqueCV.fr (courbes, graphiques, conseils, etc.) comme un outil d'**aide à la décision**.
+
+<div class="sandbox-test-container">
+    <button id="sandbox-trigger" class="bouton-sandbox">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 1024 1024" style="fill: currentColor;"><path d="M960 704a64 64 0 0 0-64 64v64a64 64 0 0 1-64 64H192a64 64 0 0 1-64-64V192a64 64 0 0 1 64-64h64a64 64 0 0 0 0-128h-64C85.96 0 0 85.96 0 192v640c0 106.04 85.96 192 192 192h640c106.04 0 192-85.96 192-192v-64a64 64 0 0 0-64-64"/><path d="M1023.88 51.52c0-1.92 0-3.84-1.6-5.44a64 64 0 0 0-1.92-6.4 64 64 0 0 0-3.2-6.4s0-3.2-2.56-4.8a64 64 0 0 0-17.6-17.6L991.88 8l-6.08-3.2-6.72-1.92h-5.44A64 64 0 0 0 959.88 0h-384a64 64 0 0 0 0 128h229.44L434.76 498.88a64.04 64.04 0 0 0 90.56 90.56l370.56-370.88V448a64 64 0 0 0 128 0V64q.6-6.24 0-12.48"/></svg>
+        <span>Tester l'interface d'intégration</span>
+    </button>
+    <div id="sandbox-status" class="status-pill">
+        <span class="dot"></span>
+        <span class="text">Connecté</span>
+    </div>
+    <div id="sandbox-pdf" class="pdf-pill">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="18" height="18" style="fill: currentColor;"><path d="M152 32v56h56.008z" opacity=".2"/><path d="M216.008 88a7.97 7.97 0 0 0-2.432-5.738l-55.919-55.918q-.277-.277-.58-.526c-.05-.04-.102-.075-.153-.114a8 8 0 0 0-.477-.353c-.045-.03-.093-.055-.138-.085a8 8 0 0 0-.535-.32q-.05-.024-.103-.049a8 8 0 0 0-.605-.286c-.023-.01-.047-.016-.071-.026a8 8 0 0 0-.664-.238q-.04-.01-.08-.02a8 8 0 0 0-.676-.17c-.066-.013-.133-.019-.199-.03-.19-.034-.382-.067-.577-.087A8 8 0 0 0 152 24H55.992a16.02 16.02 0 0 0-16 16v176a16.02 16.02 0 0 0 16 16H200a16.02 16.02 0 0 0 16-16V88.16c.001-.054.008-.106.008-.16M160 51.314 188.687 80H160ZM200 216H55.992V40H144v48a8 8 0 0 0 8 8h48l.01 120Z"/><path d="M150.343 150.343 136 164.687V120a8 8 0 0 0-16 0v44.687l-14.343-14.344a8 8 0 0 0-11.314 11.314l28 28c.026.026.055.048.081.074q.242.237.504.455c.097.08.2.15.301.225.109.081.215.165.328.24.116.079.237.146.357.218.105.062.207.128.315.185.12.065.244.12.366.177.114.054.227.111.343.16.119.049.24.088.36.13.126.046.25.095.38.134.12.036.241.063.362.093.132.033.263.07.397.097.14.028.28.044.42.064.119.017.234.04.353.051a8 8 0 0 0 1.58 0c.119-.012.234-.034.353-.05.14-.021.28-.037.42-.065.134-.027.265-.064.397-.097.121-.03.243-.057.362-.093.13-.04.254-.088.38-.133.12-.043.241-.082.36-.131.116-.049.229-.106.343-.16.122-.058.246-.112.366-.177.108-.057.21-.123.315-.185.12-.072.24-.14.357-.217.113-.076.22-.16.328-.241.1-.075.204-.145.301-.225q.266-.221.513-.464c.023-.023.049-.042.072-.065l28-28a8 8 0 0 0-11.314-11.314"/></svg>
+        <span>Ouvrir le PDF reçu</span>
+    </div>
+</div>
+
+<div id="sandbox-log" class="sandbox-log"></div>
+
+<script>
+(function() {
+    let popup = null;
+    let pdfData = null;
+    let messageListener = null;
+    let pollClosedInterval = null;
+    let handshakeTimeout = null;
+
+    const targetUrl = 'https://risquecv.local/test-integration';
+    const partnerSlug = 'test-integration';
+
+    const btn = document.getElementById('sandbox-trigger');
+    const status = document.getElementById('sandbox-status');
+    const pdfPill = document.getElementById('sandbox-pdf');
+    const logContainer = document.getElementById('sandbox-log');
+
+    function cleanup() {
+        if (messageListener) {
+            window.removeEventListener('message', messageListener);
+            messageListener = null;
+        }
+        if (pollClosedInterval) {
+            clearInterval(pollClosedInterval);
+            pollClosedInterval = null;
+        }
+        if (handshakeTimeout) {
+            clearTimeout(handshakeTimeout);
+            handshakeTimeout = null;
+        }
+    }
+
+    function log(dir, data) {
+        const entry = document.createElement('div');
+        entry.className = 'log-entry';
+        const time = new Date().toLocaleTimeString();
+        const dirClass = dir === 'IN' ? 'log-in' : 'log-out';
+        const dirText = dir === 'IN' ? '← REÇU' : '→ ENVOI';
+        if (dir === 'SYSTEM') {
+            entry.innerHTML = `<div class="log-header"><span class="log-time">${time}</span><span class="log-dir" style="color:#569cd6">[SYSTEM]</span></div><code class="log-data">${data}</code>`;
+        } else {
+            entry.innerHTML = `
+                <div class="log-header">
+                    <span class="log-time">${time}</span>
+                    <span class="log-dir ${dirClass}">${dirText}</span>
+                </div>
+                <code class="log-data">${JSON.stringify(data, null, 2)}</code>
+            `;
+        }
+        logContainer.prepend(entry);
+        logContainer.style.display = 'block';
+    }
+
+    btn.addEventListener('click', () => {
+        // Anti-spam : focus si déjà ouvert
+        if (popup && !popup.closed) {
+            popup.focus();
+            return;
+        }
+
+        cleanup();
+        logContainer.innerHTML = '';
+        pdfPill.style.display = 'none';
+        pdfData = null;
+
+        popup = window.open(targetUrl, '_blank');
+        if (!popup) {
+            alert("L'ouverture de l'onglet de test a été bloquée. Veuillez autoriser les pop-ups.");
+            return;
+        }
+
+        status.style.display = 'flex';
+        status.classList.remove('is-active');
+        status.querySelector('.text').textContent = 'Attente connexion...';
+        log('SYSTEM', 'Ouverture de RisqueCV...');
+
+        // Détection fermeture manuelle
+        pollClosedInterval = setInterval(() => {
+            if (popup && popup.closed) {
+                status.classList.remove('is-active');
+                status.querySelector('.text').textContent = 'Onglet fermé';
+                log('SYSTEM', 'L\'onglet a été fermé par l\'utilisateur.');
+                cleanup();
+            }
+        }, 1000);
+
+        // Timeout et Ping
+        handshakeTimeout = setTimeout(() => {
+            if (popup && !popup.closed) {
+                log('SYSTEM', 'Délai dépassé, tentative de Ping...');
+                const p = { type: 'risquecv:ping' };
+                popup.postMessage(p, new URL(targetUrl).origin);
+                log('OUT', p);
+            }
+        }, 3000);
+
+        messageListener = (e) => {
+            let origin;
+            try { origin = new URL(targetUrl).origin; } catch(x) { return; }
+            if (e.origin !== origin) return;
+
+            const m = e.data;
+            log('IN', m);
+
+            if (m.type === 'risquecv:ready') {
+                clearTimeout(handshakeTimeout);
+                status.classList.add('is-active');
+                status.querySelector('.text').textContent = 'Connecté';
+                
+                const payload = {
+                    type: 'risquecv:prefill',
+                    version: 1,
+                    partner: partnerSlug,
+                    sessionId: m.sessionId,
+                    payload: {
+                        pays: 'France', age: 52, sexe: 'homme', 
+                        PAS: 155, CT: 6.2, HDL: 1.1, LDL: 4.1,
+                        atcd: false, diabete: false, MRC: false, autrepb: false, tabac: false
+                    }
+                };
+                popup.postMessage(payload, origin);
+                log('OUT', payload);
+
+            } else if (m.type === 'risquecv:pdf') {
+                pdfData = m.data;
+                pdfPill.style.display = 'flex';
+                status.querySelector('.text').textContent = 'PDF REÇU ✅';
+            } else if (m.type === 'risquecv:close') {
+                if (popup && !popup.closed) popup.close();
+                // Le setInterval s'occupera du cleanup
+            }
+        };
+
+        window.addEventListener('message', messageListener);
+    });
+
+    pdfPill.addEventListener('click', () => {
+        if (!pdfData) return;
+        try {
+            const b = atob(pdfData);
+            const n = b.length;
+            const a = new Uint8Array(n);
+            for (let i = 0; i < n; i++) a[i] = b.charCodeAt(i);
+            const blob = new Blob([a], { type: 'application/pdf' });
+            window.open(URL.createObjectURL(blob), '_blank');
+        } catch (err) { console.error(err); }
+    });
+})();
+</script>
+
 
 ---
 
