@@ -343,6 +343,7 @@ pre[class*="language-"] > code[class*="language-"] {
     .sandbox-test-container {
         display: flex;
         align-items: center;
+        justify-content: center;
         gap: 12px;
         margin: 25px 0;
         flex-wrap: wrap;
@@ -393,7 +394,7 @@ pre[class*="language-"] > code[class*="language-"] {
     .bouton-sandbox--lightblue {
         background: #eef2ff;
         color: #1e3a8a;
-        border-color: #dbeafe;
+        border-color: #bacae1;
         display: none; /* Caché par défaut */
         animation: slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
