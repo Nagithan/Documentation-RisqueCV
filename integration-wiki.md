@@ -367,26 +367,26 @@ pre[class*="language-"] > code[class*="language-"] {
         border: 1px solid;
     }
 
-    /* Thème DarkBlue (Bouton principal) */
-    .bouton-sandbox--darkblue {
-        background: #0111661a;
-        color: #181841;
-        border-color: #0111664d;
+    /* Thème Red (Bouton principal) */
+    .bouton-sandbox--red {
+        background: #7100001F;
+        color: #6d1525;
+        border-color: #b17b7b;
     }
-    .bouton-sandbox--darkblue:hover {
-        background: #01116626;
-        border-color: #01116666;
-        color: #10102b;
+    .bouton-sandbox--red:hover {
+        background: #7e00002e;
+        border-color: #a76772;
+        color: #5d1020;
     }
-    .bouton-sandbox--darkblue:active {
-        background: #01116633;
-        border-color: #01116680;
+    .bouton-sandbox--red:active {
+        background: #7100002e;
+        border-color: #965564;
         transform: scale(0.98);
     }
-    .bouton-sandbox--darkblue:focus-visible {
-        border-color: #01116680;
+    .bouton-sandbox--red:focus-visible {
+        border-color: #8f4c5d;
         outline: none;
-        box-shadow: 0 0 0 2px rgba(1, 17, 102, 0.2);
+        box-shadow: 0 0 0 2px rgba(164, 24, 53, 0.18);
     }
 
     /* Thème LightBlue (Bouton PDF) */
@@ -398,13 +398,13 @@ pre[class*="language-"] > code[class*="language-"] {
         animation: slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
     .bouton-sandbox--lightblue:hover {
-        background: #dbeafe;
+        background: #e6effc;
         border-color: #c7d2fe;
         color: #172554;
     }
     .bouton-sandbox--lightblue:active {
-        background: #bfdbfe;
-        border-color: #a5b4fc;
+        background: #e0ecfc;
+        border-color: #bcc2df;
         transform: scale(0.98);
     }
     .bouton-sandbox--lightblue:focus-visible {
@@ -506,7 +506,7 @@ L'intégration de RisqueCV.fr à un logicier métier repose donc sur l'API Stand
 La méthode `window.postMessage` permet au médecin en consultation de préremplir les données cliniques et d'utiliser l'interface de RisqueCV.fr (courbes, graphiques, conseils, etc.) comme un outil d'**aide à la décision**.
 
 <div class="sandbox-test-container">
-    <button id="sandbox-trigger" class="bouton-sandbox bouton-sandbox--darkblue">
+    <button id="sandbox-trigger" class="bouton-sandbox bouton-sandbox--red">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 1024 1024" style="fill: currentColor;"><path d="M960 704a64 64 0 0 0-64 64v64a64 64 0 0 1-64 64H192a64 64 0 0 1-64-64V192a64 64 0 0 1 64-64h64a64 64 0 0 0 0-128h-64C85.96 0 0 85.96 0 192v640c0 106.04 85.96 192 192 192h640c106.04 0 192-85.96 192-192v-64a64 64 0 0 0-64-64"/><path d="M1023.88 51.52c0-1.92 0-3.84-1.6-5.44a64 64 0 0 0-1.92-6.4 64 64 0 0 0-3.2-6.4s0-3.2-2.56-4.8a64 64 0 0 0-17.6-17.6L991.88 8l-6.08-3.2-6.72-1.92h-5.44A64 64 0 0 0 959.88 0h-384a64 64 0 0 0 0 128h229.44L434.76 498.88a64.04 64.04 0 0 0 90.56 90.56l370.56-370.88V448a64 64 0 0 0 128 0V64q.6-6.24 0-12.48"/></svg>
         <span>Tester l'interface d'intégration</span>
     </button>
