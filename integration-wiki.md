@@ -576,7 +576,7 @@ La méthode `window.postMessage` permet au médecin en consultation de prérempl
         logContainer.style.display = 'block';
     }
 
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (event) => {
         // Anti-spam : focus si déjà ouvert
         if (popup && !popup.closed) {
             popup.focus();
@@ -588,7 +588,10 @@ La méthode `window.postMessage` permet au médecin en consultation de prérempl
         pdfPill.style.display = 'none';
         pdfData = null;
 
-        popup = window.open(targetUrl, '_blank');
+        // Si la touche Option (macOS) / Alt est enfoncée, on bascule sur l'environnement local en HTTPS
+        const currentTargetUrl = event.altKey ? 'https://risquecv.local/test-integration' : targetUrl;
+
+        popup = window.open(currentTargetUrl, '_blank');
         if (!popup) {
             alert("L'ouverture de l'onglet de test a été bloquée. Veuillez autoriser les pop-ups.");
             return;
@@ -614,14 +617,14 @@ La méthode `window.postMessage` permet au médecin en consultation de prérempl
             if (popup && !popup.closed) {
                 log('SYSTEM', 'Délai dépassé, tentative de Ping...');
                 const p = { type: 'risquecv:ping' };
-                popup.postMessage(p, new URL(targetUrl).origin);
+                popup.postMessage(p, new URL(currentTargetUrl).origin);
                 log('OUT', p);
             }
         }, 3000);
 
         messageListener = (e) => {
             let origin;
-            try { origin = new URL(targetUrl).origin; } catch(x) { return; }
+            try { origin = new URL(currentTargetUrl).origin; } catch(x) { return; }
             if (e.origin !== origin) return;
 
             const m = e.data;
@@ -639,7 +642,7 @@ La méthode `window.postMessage` permet au médecin en consultation de prérempl
                         partner: partnerSlug,
                         sessionId: m.sessionId,
                         payload: {
-                            pays: 'France', age: 52, sexe: 'homme', 
+                            id_pays: 'FR', age: 52, sexe: 'homme', 
                             PAS: 155, CT: 6.2, HDL: 1.1, LDL: 4.1,
                             atcd: false, diabete: false, MRC: false, autrepb: false, tabac: false
                         }
