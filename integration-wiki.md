@@ -642,7 +642,7 @@ La méthode `window.postMessage` permet au médecin en consultation de prérempl
                         partner: partnerSlug,
                         sessionId: m.sessionId,
                         payload: {
-                            id_pays: 'FR', age: 52, sexe: 'homme', 
+                            pays: 'FR', age: 52, sexe: 'homme', 
                             PAS: 155, CT: 6.2, HDL: 1.1, LDL: 4.1,
                             atcd: false, diabete: false, MRC: false, autrepb: false, tabac: false
                         }
@@ -804,9 +804,215 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
 | `sexe` | `string` | `"homme"`, `"femme"` |
 | `typediabete` | `string` | `"type1"`, `"type2"`, `"autre"` |
 | `albuminurie` | `string` | `"non"`, `"micro"`, `"oui"` |
-| `pays` | `string` | `"France"`, `"region_low"`, `"region_moderate"`, `"region_high"`, `"region_veryhigh"` |
+| `pays` | `string` | • **Recommandé :** code ISO 3166-1 alpha-2 (ex : `"FR"`, `"BE"`, `"US"`) <br> • **Également accepté :** nom naturel en français (ex : `"France"`, `"Belgique"`, `"États-Unis"`) |
 
-> *Note sur la région/pays :* Nous recommandons d'utiliser directement les codes de stratification européenne du risque (`"region_low"`, `"region_moderate"`, `"region_high"`, `"region_veryhigh"`) si votre logiciel en dispose. À défaut, vous pouvez envoyer le nom du pays européen en toutes lettres (ex: `"France"`, `"Belgique"`), RisqueCV déduira automatiquement la région associée.
+<details markdown="1">
+<summary>Liste des 200 identifiants pays acceptés dans `pays`</summary>
+
+| ID accepté dans `pays` | Nom français canonique accepté |
+| :--- | :--- |
+| `AD` | Andorre |
+| `AE` | Émirats arabes unis |
+| `AF` | Afghanistan |
+| `AG` | Antigua-et-Barbuda |
+| `AL` | Albanie |
+| `AM` | Arménie |
+| `AO` | Angola |
+| `AR` | Argentine |
+| `AT` | Autriche |
+| `AU` | Australie |
+| `AZ` | Azerbaïdjan |
+| `BA` | Bosnie-Herzégovine |
+| `BB` | Barbade |
+| `BD` | Bangladesh |
+| `BE` | Belgique |
+| `BF` | Burkina Faso |
+| `BG` | Bulgarie |
+| `BH` | Bahreïn |
+| `BI` | Burundi |
+| `BJ` | Bénin |
+| `BM` | Bermudes |
+| `BN` | Brunei |
+| `BO` | Bolivie |
+| `BR` | Brésil |
+| `BS` | Bahamas |
+| `BT` | Bhoutan |
+| `BW` | Botswana |
+| `BY` | Biélorussie |
+| `BZ` | Belize |
+| `CA` | Canada |
+| `CD` | Congo-Kinshasa |
+| `CF` | République centrafricaine |
+| `CG` | Congo-Brazzaville |
+| `CH` | Suisse |
+| `CI` | Côte d’Ivoire |
+| `CL` | Chili |
+| `CM` | Cameroun |
+| `CN` | Chine |
+| `CO` | Colombie |
+| `CR` | Costa Rica |
+| `CU` | Cuba |
+| `CV` | Cap-Vert |
+| `CY` | Chypre |
+| `CZ` | Tchéquie |
+| `DE` | Allemagne |
+| `DJ` | Djibouti |
+| `DK` | Danemark |
+| `DM` | Dominique |
+| `DO` | République dominicaine |
+| `DZ` | Algérie |
+| `EC` | Équateur |
+| `EE` | Estonie |
+| `EG` | Égypte |
+| `EH` | Sahara occidental |
+| `ER` | Érythrée |
+| `ES` | Espagne |
+| `ET` | Éthiopie |
+| `FI` | Finlande |
+| `FJ` | Fidji |
+| `FM` | Micronésie |
+| `FR` | France |
+| `GA` | Gabon |
+| `GB` | Royaume-Uni |
+| `GD` | Grenade |
+| `GE` | Géorgie |
+| `GH` | Ghana |
+| `GI` | Gibraltar |
+| `GL` | Groenland |
+| `GM` | Gambie |
+| `GN` | Guinée |
+| `GQ` | Guinée équatoriale |
+| `GR` | Grèce |
+| `GT` | Guatemala |
+| `GW` | Guinée-Bissau |
+| `GY` | Guyana |
+| `HN` | Honduras |
+| `HR` | Croatie |
+| `HT` | Haïti |
+| `HU` | Hongrie |
+| `ID` | Indonésie |
+| `IE` | Irlande |
+| `IL` | Israël |
+| `IN` | Inde |
+| `IQ` | Irak |
+| `IR` | Iran |
+| `IS` | Islande |
+| `IT` | Italie |
+| `JM` | Jamaïque |
+| `JO` | Jordanie |
+| `JP` | Japon |
+| `KE` | Kenya |
+| `KG` | Kirghizistan |
+| `KH` | Cambodge |
+| `KI` | Kiribati |
+| `KM` | Comores |
+| `KN` | Saint-Christophe-et-Niévès |
+| `KP` | Corée du Nord |
+| `KR` | Corée du Sud |
+| `KW` | Koweït |
+| `KY` | Îles Caïmans |
+| `KZ` | Kazakhstan |
+| `LA` | Laos |
+| `LB` | Liban |
+| `LC` | Sainte-Lucie |
+| `LI` | Liechtenstein |
+| `LK` | Sri Lanka |
+| `LR` | Liberia |
+| `LS` | Lesotho |
+| `LT` | Lituanie |
+| `LU` | Luxembourg |
+| `LV` | Lettonie |
+| `LY` | Libye |
+| `MA` | Maroc |
+| `MC` | Monaco |
+| `MD` | Moldavie |
+| `ME` | Monténégro |
+| `MG` | Madagascar |
+| `MH` | Îles Marshall |
+| `MK` | Macédoine du Nord |
+| `ML` | Mali |
+| `MM` | Birmanie |
+| `MN` | Mongolie |
+| `MR` | Mauritanie |
+| `MT` | Malte |
+| `MU` | Maurice |
+| `MV` | Maldives |
+| `MW` | Malawi |
+| `MX` | Mexique |
+| `MY` | Malaisie |
+| `MZ` | Mozambique |
+| `NA` | Namibie |
+| `NE` | Niger |
+| `NG` | Nigeria |
+| `NI` | Nicaragua |
+| `NL` | Pays-Bas |
+| `NO` | Norvège |
+| `NP` | Népal |
+| `NZ` | Nouvelle-Zélande |
+| `OM` | Oman |
+| `PA` | Panama |
+| `PE` | Pérou |
+| `PG` | Papouasie-Nouvelle-Guinée |
+| `PH` | Philippines |
+| `PK` | Pakistan |
+| `PL` | Pologne |
+| `PS` | Territoires palestiniens |
+| `PT` | Portugal |
+| `PY` | Paraguay |
+| `QA` | Qatar |
+| `RO` | Roumanie |
+| `RS` | Serbie |
+| `RU` | Russie |
+| `RW` | Rwanda |
+| `SA` | Arabie saoudite |
+| `SB` | Îles Salomon |
+| `SC` | Seychelles |
+| `SD` | Soudan |
+| `SE` | Suède |
+| `SG` | Singapour |
+| `SI` | Slovénie |
+| `SK` | Slovaquie |
+| `SL` | Sierra Leone |
+| `SM` | Saint-Marin |
+| `SN` | Sénégal |
+| `SO` | Somalie |
+| `SR` | Suriname |
+| `SS` | Soudan du Sud |
+| `ST` | Sao Tomé-et-Principe |
+| `SV` | Salvador |
+| `SY` | Syrie |
+| `SZ` | Eswatini |
+| `TC` | Îles Turques-et-Caïques |
+| `TD` | Tchad |
+| `TG` | Togo |
+| `TH` | Thaïlande |
+| `TJ` | Tadjikistan |
+| `TL` | Timor oriental |
+| `TM` | Turkménistan |
+| `TN` | Tunisie |
+| `TO` | Tonga |
+| `TR` | Turquie |
+| `TT` | Trinité-et-Tobago |
+| `TW` | Taïwan |
+| `TZ` | Tanzanie |
+| `UA` | Ukraine |
+| `UG` | Ouganda |
+| `US` | États-Unis |
+| `UY` | Uruguay |
+| `UZ` | Ouzbékistan |
+| `VC` | Saint-Vincent-et-les Grenadines |
+| `VE` | Venezuela |
+| `VG` | Îles Vierges britanniques |
+| `VN` | Viêt Nam |
+| `VU` | Vanuatu |
+| `WS` | Samoa |
+| `XK` | Kosovo |
+| `YE` | Yémen |
+| `ZA` | Afrique du Sud |
+| `ZM` | Zambie |
+| `ZW` | Zimbabwe |
+
+</details>
 
 ### 4. Booléens
 
@@ -1172,6 +1378,7 @@ Message de réponse au `ready`. Permet d'injecter le contexte patient.
   "payload": {
     "age": 55,
     "sexe": "femme",
+    "pays": "FR",
     "tabac": false,
     "PAS": 142, // pour les valeurs numériques, il faut envoyer des nombres (pas d'unités)
     "atcd": true,
@@ -1191,7 +1398,7 @@ Envoyé après réception du `prefill`. Confirme quelles données ont été vali
   "partner": "votre-slug",
   "sessionId": "L_ID_RECU_DANS_READY",
   "status": "ok", // "ok" ou "partial"
-  "acceptedKeys": ["age", "sexe", "tabac", "atcd"],
+  "acceptedKeys": ["age", "sexe", "pays", "tabac", "atcd"],
   "ignoredKeys": ["cleInconnue"] 
 }
 ```
