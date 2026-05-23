@@ -681,6 +681,22 @@ La méthode `window.postMessage` permet au médecin en consultation de prérempl
 
 ---
 
+## 🎯 Ce que permet RisqueCV.fr
+
+### Utilisation standard
+
+- **Évaluer le risque cardiovasculaire** d'un patient (risque faible, modéré, élevé...) à partir des données cliniques saisies par le médecin (cholestérol, age, diabète...)
+- **Visualiser les résultats** dans une interface interactive avec des graphiques pour favoriser une meilleure compréhension du risque par le patient, et aider à la décision médicale partagée
+- **Obtenir des conseils sur la prise en charge adaptée** selon le profil du patient (arrêter le tabac, mettre en place un traitement...)
+- **Générer un rapport PDF** contenant la synthèse de l'évaluation et des recommandations
+
+### Avec l'intégration dans un logiciel métier
+
+- **Ouvrir RisqueCV.fr facilement** via un bouton dans le logiciel métier dans une WebView
+- **Préremplir automatiquement les données cliniques** disponibles dans le dossier patient, pour limiter la ressaisie (ex : valeur de choléstérol, âge, sexe, ...)
+- Utiliser les graphiques pour discuter avec le patient de sa santé cardiovasculaire
+- **Enregistrer en un clic le PDF final dans le dossier médical** du logiciel métier
+
 ## 🏗 Architecture du protocole
 
 L'intégration repose sur un protocole d'échange de messages asynchrones via `window.postMessage` :
