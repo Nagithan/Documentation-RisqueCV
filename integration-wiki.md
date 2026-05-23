@@ -1101,10 +1101,10 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
 
 | Clé | Type | Description | True si... |
 | :--- | :--- | :--- | :--- |
-| `atcd` | `boolean` | Antécédents de maladie cardiovasculaire avérée. | Maladie coronaire (angor, IDM, SCA revascularisation), AVC, AIT, AOMI, anévrisme de l'aorte abdominale (voir la liste complète sur le site, sous le titre "Antécédents cardiovasculaires") |
-| `diabete` | `boolean` | Présence d'un diabète (Type 1 ou 2). | Diabète type 1 ou 2 |
+| `atcd` | `boolean` | Antécédents de maladie cardiovasculaire avérée. | Maladie coronaire (angor, infarctus du myocarde, syndrome coronarien aigu, stent ou pontage coronarien), AVC, AIT, AOMI, anévrisme de l'aorte abdominale (voir la liste complète sur le site, sous le titre "Antécédents cardiovasculaires") |
+| `diabete` | `boolean` | Présence d'un diabète (Type 1 ou 2). | Diabète (peu importe le type et le traitement) |
 | `MRC` | `boolean` | Maladie Rénale Chronique (DFG < 60 ou albuminurie). | DFG < 60 ou albuminurie ou "Maladie rénale chronique" |
-| `autrepb` | `boolean` | Autres situations (HyperCHO familiale, HTA secondaire, etc.). | Hypercholestérolémie familiale hétérozygote, grossesse, etc. (voir la liste complète sur le site, sous le titre "Autre situation particulière ?") |
+| `autrepb` | `boolean` | Autres situations complexes ou particulières qui nécessitent une évaluation personnalisée. | Hypercholestérolémie familiale hétérozygote, grossesse, etc. (voir la liste complète sur le site, sous le titre "Autre situation particulière ?") |
 
 ### 2. Valeurs numériques
 
