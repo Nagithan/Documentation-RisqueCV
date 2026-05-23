@@ -1023,8 +1023,8 @@ RisqueCV est conçu pour être ouvert depuis votre application via :
 - **Fenêtre popup nouvel onglet (recommandé)** : `window.open('https://risquecv.fr/slug-partenaire/', '_blank')`. Cela permet une communication bilatérale fluide via la référence `window.opener`.
 - **Iframe** : compatible mais non recommandé pour des raisons d'UI/UX
 
-> Pour que votre logiciel puisse intégrer RisqueCV dans une Iframe, le serveur de RisqueCV doit vous y autoriser (`Content-Security-Policy: frame-ancestors`). Si vous constatez une erreur "Clickjacking" ou "Refused to frame", demandez à ce que votre domaine soit bien whitelisté dans nos entêtes.
-> Si vous décidez d'utiliser une Iframe avec l'attribut `sandbox="..."`, vous devez impérativement configurer les valeurs suivantes :
+> 1. Pour que votre logiciel puisse intégrer RisqueCV dans une Iframe, le serveur de RisqueCV doit vous y autoriser (`Content-Security-Policy: frame-ancestors`). Si vous constatez une erreur "Clickjacking" ou "Refused to frame", demandez à ce que votre domaine soit bien whitelisté dans nos entêtes.
+> 2. Si vous décidez d'utiliser une Iframe avec l'attribut `sandbox="..."`, vous devez impérativement configurer les valeurs suivantes :
 > - `allow-scripts` : indispensable pour autoriser le fonctionnement de RisqueCV (tous les calculs cliniques et graphiques s'exécutent côté client en Javascript).
 > - `allow-same-origin` : indispensable pour que la communication `postMessage` et la validation d'origine fonctionnent. Sans ce paramètre, l'origine de l'Iframe sera traitée comme `null` (unique origin) par le navigateur, ce qui empêchera RisqueCV de valider l'origine de vos messages et vice-versa.
 > - `allow-popups` : indispensable pour permettre l'ouverture des PDF générés et des liens externes.
@@ -1503,15 +1503,15 @@ Si vous rencontrez des difficultés (pas de réponse au handshake, données non 
 
 ### Ce que le mode debug affiche dans votre console :
 
-1.  **Confirmation d'Initialisation** :
+1.  **Confirmation d'initialisation** :
     - `[RisqueCV] Initialisation intégration pour partenaire : votre-slug`
-    - Valide que votre route d'intégration est correctement reconnue par WordPress.
+    - Valide que votre URL d'intégration est correctement reconnue par RisqueCV.
 
-2.  **Erreurs de Sécurité (Rejets silencieux)** :
-    - `[RisqueCV] Origine non autorisée : https://votre-url-test.com` (Si votre domaine n'est pas dans notre liste blanche).
+2.  **Erreurs de sécurité (rejets silencieux)** :
+    - `[RisqueCV] Origine non autorisée : https://votre-url.com` (Si votre domaine n'est pas dans notre liste blanche).
     - `[RisqueCV] Source de message non attendue.` (Si le message ne provient pas de l'objet `window` ayant ouvert RisqueCV).
 
-3.  **Erreurs Protocolaires (Messages corrompus)** :
+3.  **Erreurs protocolaires** :
     - Chaque code d'erreur (`INVALID_SESSION`, `UNSUPPORTED_VERSION`, etc.) est journalisé avec une explication textuelle détaillée.
     - Facilite le débogage de vos payloads JSON sans avoir à inspecter manuellement chaque `event.data`.
 
