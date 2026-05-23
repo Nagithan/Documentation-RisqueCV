@@ -697,6 +697,321 @@ La méthode `window.postMessage` permet au médecin en consultation de prérempl
 - Utiliser les graphiques pour discuter avec le patient de sa santé cardiovasculaire
 - **Enregistrer en un clic le PDF final dans le dossier médical** du logiciel métier
 
+---
+
+## 🛠 Exemples JS d'intégration côté partenaire
+
+Voici des exemples prêts à l'emploi selon la méthode de rendu que vous utilisez (WebView ou Popup). N'hésitez pas à les dérouler pour voir le code.
+
+<details class="code-spoiler" markdown="1">
+<summary>💻 Exemple d'intégration pour WebView (Electron, React Native...)</summary>
+
+```javascript
+// --- 1. CONFIGURATION ---
+const CONFIG = {
+    version: 1, // Version du protocole d'intégration RisqueCV
+    partnerSlug: 'votre-slug', // Identifiant de votre logiciel (ex : "weda")
+    targetOrigin: 'https://risquecv.fr' // Origine stricte
+};
+
+// --- 2. ÉTAT DE LA SESSION ---
+const webview = document.getElementById('risquecv-webview');
+let handshakeTimeout = null;
+
+// --- 3. FONCTIONS UTILITAIRES ---
+function fermerWebView() {
+    webview.style.display = 'none';
+    webview.src = 'about:blank';
+}
+
+/** Transmet le PDF (Base64) à votre API pour l'enregistrer dans le dossier patient */
+async function sauvegarderPdf(base64Data, filename) {
+    try {
+        // Optionnel : renommer le fichier avec l'identité du patient pour éviter les collisions
+        // Le filename renvoyé par RisqueCV a une structure du type `RisqueCV_19-05-2026_17h45.pdf`
+        const nomPatient = getNomPatient(); // Fonction de votre logiciel (ex: retourne "Jean_Dupont")
+        const nomFichierPatient = `RisqueCV_${nomPatient}_${filename.split('_').slice(1).join('_')}`;
+
+        console.log(`Enregistrement du PDF ${nomFichierPatient} en cours...`);
+        
+        // Exemple d'appel API interne à votre logiciel
+        const response = await fetch('/api/votre-logiciel/patients/12345/documents', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                nom_fichier: nomFichierPatient,
+                contenu_base64: base64Data,
+                type_document: 'EVALUATION_RISQUE_CV'
+            })
+        });
+
+        if (response.ok) {
+            console.log("✅ PDF sauvegardé avec succès dans le dossier patient.");
+        } else {
+            console.error("❌ Échec de la sauvegarde côté serveur.");
+        }
+    } catch (error) {
+        console.error("Erreur technique lors de la sauvegarde du PDF :", error);
+    }
+}
+
+// --- 4. DÉCLENCHEMENT DE L'OUVERTURE ---
+document.getElementById('bouton-ouvrir-risquecv').addEventListener('click', () => {
+    
+    // Charger l'URL d'intégration
+    webview.src = `${CONFIG.targetOrigin}/${CONFIG.partnerSlug}/`;
+    webview.style.display = 'block'; 
+    
+    // Sécurité : Timeout si le chargement échoue. On effectue un "Ping" pro-actif.
+    handshakeTimeout = setTimeout(() => {
+        console.warn("⏳ Délai d'attente dépassé : RisqueCV ne répond pas. Tentative de Ping...");
+        // L'envoi dépend de votre framework (ici webview standard HTML5)
+        if (webview.contentWindow) {
+            webview.contentWindow.postMessage({ type: 'risquecv:ping' }, CONFIG.targetOrigin);
+        }
+    }, 3000);
+});
+
+// --- 5. GESTION DES MESSAGES ---
+
+// L'écouteur dépend de votre pont natif. window.addEventListener (Electron), window.chrome.webview.addEventListener (WebView2), etc.
+window.addEventListener('message', (event) => {
+    
+    // Ignorer tout message ne provenant pas de RisqueCV
+    if (event.origin !== CONFIG.targetOrigin) return;
+    
+    const msg = event.data;
+
+    switch (msg.type) {
+        
+        // Si on reçoit "ready", alors on peut envoyer les données du patient
+        case 'risquecv:ready':
+            clearTimeout(handshakeTimeout);
+
+            // Envoi des données cliniques du patient
+            const payloadMessage = {
+                type: 'risquecv:prefill',
+                version: CONFIG.version,
+                partner: msg.partner,
+                sessionId: msg.sessionId,
+                payload: { 
+                    // Les données doivent être formatées avant l'envoi (ex: "femme" et pas "Femme" ni "F")
+                    age: 55, 
+                    sexe: "femme", 
+                    tabac: false,
+                    PAS: 142,
+                    CT: 5.2,
+                    HDL: 1.3
+                    // Ajoutez vos autres variables cliniques ici. Le payload n'a pas besoin d'être exhaustif.
+                }
+            };
+
+            webview.contentWindow.postMessage(payloadMessage, CONFIG.targetOrigin);
+            break;
+
+        // Si on reçoit "ack", alors RisqueCV a bien reçu les données
+        case 'risquecv:prefill:ack':
+            // Si nécessaire pour debug, on peut vérifier l'injection
+            if (msg.status === 'partial') {
+                console.warn('⚠️ Données ignorées par RisqueCV (hors-bornes ou inconnues) :', msg.ignoredKeys);
+            }
+            break;
+
+        // Si on reçoit "pdf", alors on peut sauvegarder le PDF recu dans le dossier du patient
+        case 'risquecv:pdf':
+            fermerWebView();
+            sauvegarderPdf(msg.data, msg.filename);
+            break;
+
+        // Si le médecin clique sur le bouton "Retour au logiciel", on masque l'interface
+        case 'risquecv:close':
+            console.log("Fermeture demandée par RisqueCV.");
+            fermerWebView();
+            break;
+
+        // Si on reçoit "error", il y a eu un problème métier ou protocolaire
+        case 'risquecv:error':
+            console.error(`❌ Erreur RisqueCV [${msg.code}]:`, msg.message);
+            break;
+    }
+});
+```
+
+</details>
+
+<details class="code-spoiler" markdown="1">
+<summary>💻 Exemple d'intégration avec fenêtre popup dans un nouvel onglet</summary>
+
+```javascript
+// --- 1. CONFIGURATION ---
+const CONFIG = {
+    version: 1, // Version du protocole d'intégration RisqueCV
+    partnerSlug: 'votre-slug', // Identifiant de votre logiciel (ex : "weda"))
+    targetOrigin: 'https://risquecv.fr' // Origine stricte
+};
+
+// --- 2. ÉTAT DE LA SESSION ---
+let popupWindow = null;
+let messageListener = null;
+let pollClosedInterval = null;
+let handshakeTimeout = null;
+
+// --- 3. FONCTIONS UTILITAIRES ---
+
+/** Nettoie les écouteurs pour éviter les fuites de mémoire (memory leaks) */
+function cleanupSession() {
+    if (messageListener) {
+        window.removeEventListener('message', messageListener);
+        messageListener = null;
+    }
+    if (pollClosedInterval) {
+        clearInterval(pollClosedInterval);
+        pollClosedInterval = null;
+    }
+    if (handshakeTimeout) {
+        clearTimeout(handshakeTimeout);
+        handshakeTimeout = null;
+    }
+    popupWindow = null;
+}
+
+/** Transmet le PDF (Base64) à votre API pour l'enregistrer dans le dossier patient */
+async function sauvegarderPdfEnBaseDeDonnees(base64Data, filename) {
+    try {
+        // Optionnel : renommer le fichier avec l'identité du patient pour éviter les collisions
+        // Le filename renvoyé par RisqueCV a une structure du type `RisqueCV_19-05-2026_17h45.pdf`
+        const nomPatient = getNomPatient(); // Fonction de votre logiciel (ex: retourne "Jean_Dupont")
+        const nomFichierPatient = `RisqueCV_${nomPatient}_${filename.split('_').slice(1).join('_')}`;
+
+        console.log(`Enregistrement du PDF ${nomFichierPatient} en cours...`);
+
+        const response = await fetch('/api/votre-logiciel/patients/12345/documents', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                nom_fichier: nomFichierPatient,
+                contenu_base64: base64Data,
+                type_document: 'EVALUATION_RISQUE_CV'
+            })
+        });
+
+        if (response.ok) {
+            console.log("✅ PDF sauvegardé avec succès dans le dossier du patient.");
+        } else {
+            console.error("❌ Échec de la sauvegarde du PDF côté serveur.");
+        }
+    } catch (error) {
+        console.error("Erreur réseau lors de la sauvegarde du PDF :", error);
+    }
+}
+
+// --- 4. DÉCLENCHEMENT DE L'OUVERTURE ---
+document.getElementById('bouton-ouvrir-risquecv').addEventListener('click', () => {
+    
+    // Anti-spam : ramener la fenêtre au premier plan si elle est déjà ouverte (ne pas relancer le window.open pour éviter de recharger la page et de casser le Handshake)
+    if (popupWindow && !popupWindow.closed) {
+        popupWindow.focus();
+        return; 
+    }
+
+    // Nettoyage complet avant ouverture
+    cleanupSession();
+
+    // Ouverture de l'interface RisqueCV dans un nouvel onglet
+    popupWindow = window.open(`${CONFIG.targetOrigin}/${CONFIG.partnerSlug}/`, '_blank');
+    
+    if (!popupWindow) {
+        alert("Ouverture bloquée. Veuillez autoriser les pop-ups pour utiliser RisqueCV.");
+        return;
+    }
+
+    // Détection de la fermeture manuelle par l'utilisateur (croix de la fenêtre)
+    pollClosedInterval = setInterval(() => {
+        if (popupWindow && popupWindow.closed) {
+            console.info("ℹ️ Session RisqueCV terminée (fenêtre fermée par l'utilisateur).");
+            cleanupSession();
+        }
+    }, 1000);
+
+    // Timeout si le site distant est inaccessible. On effectue un "Ping" pro-actif.
+    handshakeTimeout = setTimeout(() => {
+        console.warn("⏳ Délai d'attente dépassé : RisqueCV ne répond pas. Tentative de Ping...");
+        if (popupWindow && !popupWindow.closed) {
+            popupWindow.postMessage({ type: 'risquecv:ping' }, CONFIG.targetOrigin);
+        }
+    }, 3000);
+
+    // --- 5. GESTION DES MESSAGES ---
+    messageListener = (event) => {
+        // Ignorer tout message ne provenant pas de RisqueCV
+        if (event.origin !== CONFIG.targetOrigin) return;
+        
+        const msg = event.data;
+
+        switch (msg.type) {
+          // Si on reçoit "ready", alors on peut envoyer les données du patient
+            case 'risquecv:ready':
+                clearTimeout(handshakeTimeout);
+
+                // Envoi des données cliniques du patient
+                popupWindow.postMessage({
+                    type: 'risquecv:prefill',
+                    version: CONFIG.version,
+                    partner: msg.partner,
+                    sessionId: msg.sessionId,
+                    payload: { 
+                      // Les données doivent être formatées avant l'envoi (ex: "femme" et pas "Femme" ni "F")
+                        age: 55, 
+                        sexe: "femme", 
+                        tabac: false,
+                        PAS: 142,
+                        CT: 5.2,
+                        HDL: 1.3
+                        // Ajoutez vos autres variables cliniques ici. Le payload n'a pas besoin d'être exhaustif.
+                    }
+                }, CONFIG.targetOrigin);
+                break;
+
+            // Si on reçoit "ack", alors RisqueCV a bien reçu les données
+            case 'risquecv:prefill:ack':
+                // Si nécessaire pour debug, on peut vérifier l'injection
+                if (msg.status === 'partial') {
+                    console.warn('⚠️ Données ignorées par RisqueCV (hors-bornes ou inconnues) :', msg.ignoredKeys);
+                }
+                break;
+
+            // Si on reçoit "pdf", alors on peut sauvegarder le PDF recu dans le dossier du patient
+            case 'risquecv:pdf':                
+                // Fermeture propre de la popup
+                if (popupWindow) popupWindow.close();
+                cleanupSession();
+
+                // Enregistrement du PDF dans le dossier du patient (Base64)
+                sauvegarderPdfEnBaseDeDonnees(msg.data, msg.filename);
+                break;
+                
+            // Si le médecin clique sur le bouton "Retour au logiciel"
+            case 'risquecv:close':
+                console.log("Fermeture demandée par RisqueCV.");
+                if (popupWindow) popupWindow.close();
+                cleanupSession();
+                break;
+
+            // En cas d'erreur métier ou protocolaire
+            case 'risquecv:error':
+                console.error(`❌ Erreur RisqueCV [${msg.code}]:`, msg.message);
+                break;
+        }
+    };
+
+    window.addEventListener('message', messageListener);
+});
+```
+
+</details>
+ 
+ ---
+
 ## 🏗 Architecture du protocole
 
 L'intégration repose sur un protocole d'échange de messages asynchrones via `window.postMessage` :
@@ -1049,319 +1364,6 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
 | `microangiopathie3sites`| `boolean` | Présence d'une microangiopathie sur ≥3 sites (ex: rétino + neuro + albu). |
 | `autreFacteurMajeur` | `boolean` | Présence d'un autre facteur de risque majeur (pour l'HF). |
 | `evaluationComplete`| `boolean` | Force l'affichage de l'évaluation complète (tunnel détaillé). |
-
----
-
-## 🛠 Exemples JS d'intégration côté partenaire
-
-Voici des exemples prêts à l'emploi selon la méthode de rendu que vous utilisez (WebView ou Popup). N'hésitez pas à les dérouler pour voir le code.
-
-<details class="code-spoiler" markdown="1">
-<summary>💻 Exemple d'intégration pour WebView (Electron, React Native...)</summary>
-
-```javascript
-// --- 1. CONFIGURATION ---
-const CONFIG = {
-    version: 1, // Version du protocole d'intégration RisqueCV
-    partnerSlug: 'votre-slug', // Identifiant de votre logiciel (ex : "weda")
-    targetOrigin: 'https://risquecv.fr' // Origine stricte
-};
-
-// --- 2. ÉTAT DE LA SESSION ---
-const webview = document.getElementById('risquecv-webview');
-let handshakeTimeout = null;
-
-// --- 3. FONCTIONS UTILITAIRES ---
-function fermerWebView() {
-    webview.style.display = 'none';
-    webview.src = 'about:blank';
-}
-
-/** Transmet le PDF (Base64) à votre API pour l'enregistrer dans le dossier patient */
-async function sauvegarderPdf(base64Data, filename) {
-    try {
-        // Optionnel : renommer le fichier avec l'identité du patient pour éviter les collisions
-        // Le filename renvoyé par RisqueCV a une structure du type `RisqueCV_19-05-2026_17h45.pdf`
-        const nomPatient = getNomPatient(); // Fonction de votre logiciel (ex: retourne "Jean_Dupont")
-        const nomFichierPatient = `RisqueCV_${nomPatient}_${filename.split('_').slice(1).join('_')}`;
-
-        console.log(`Enregistrement du PDF ${nomFichierPatient} en cours...`);
-        
-        // Exemple d'appel API interne à votre logiciel
-        const response = await fetch('/api/votre-logiciel/patients/12345/documents', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                nom_fichier: nomFichierPatient,
-                contenu_base64: base64Data,
-                type_document: 'EVALUATION_RISQUE_CV'
-            })
-        });
-
-        if (response.ok) {
-            console.log("✅ PDF sauvegardé avec succès dans le dossier patient.");
-        } else {
-            console.error("❌ Échec de la sauvegarde côté serveur.");
-        }
-    } catch (error) {
-        console.error("Erreur technique lors de la sauvegarde du PDF :", error);
-    }
-}
-
-// --- 4. DÉCLENCHEMENT DE L'OUVERTURE ---
-document.getElementById('bouton-ouvrir-risquecv').addEventListener('click', () => {
-    
-    // Charger l'URL d'intégration
-    webview.src = `${CONFIG.targetOrigin}/${CONFIG.partnerSlug}/`;
-    webview.style.display = 'block'; 
-    
-    // Sécurité : Timeout si le chargement échoue. On effectue un "Ping" pro-actif.
-    handshakeTimeout = setTimeout(() => {
-        console.warn("⏳ Délai d'attente dépassé : RisqueCV ne répond pas. Tentative de Ping...");
-        // L'envoi dépend de votre framework (ici webview standard HTML5)
-        if (webview.contentWindow) {
-            webview.contentWindow.postMessage({ type: 'risquecv:ping' }, CONFIG.targetOrigin);
-        }
-    }, 3000);
-});
-
-// --- 5. GESTION DES MESSAGES ---
-
-// L'écouteur dépend de votre pont natif. window.addEventListener (Electron), window.chrome.webview.addEventListener (WebView2), etc.
-window.addEventListener('message', (event) => {
-    
-    // Ignorer tout message ne provenant pas de RisqueCV
-    if (event.origin !== CONFIG.targetOrigin) return;
-    
-    const msg = event.data;
-
-    switch (msg.type) {
-        
-        // Si on reçoit "ready", alors on peut envoyer les données du patient
-        case 'risquecv:ready':
-            clearTimeout(handshakeTimeout);
-
-            // Envoi des données cliniques du patient
-            const payloadMessage = {
-                type: 'risquecv:prefill',
-                version: CONFIG.version,
-                partner: msg.partner,
-                sessionId: msg.sessionId,
-                payload: { 
-                    // Les données doivent être formatées avant l'envoi (ex: "femme" et pas "Femme" ni "F")
-                    age: 55, 
-                    sexe: "femme", 
-                    tabac: false,
-                    PAS: 142,
-                    CT: 5.2,
-                    HDL: 1.3
-                    // Ajoutez vos autres variables cliniques ici. Le payload n'a pas besoin d'être exhaustif.
-                }
-            };
-
-            webview.contentWindow.postMessage(payloadMessage, CONFIG.targetOrigin);
-            break;
-
-        // Si on reçoit "ack", alors RisqueCV a bien reçu les données
-        case 'risquecv:prefill:ack':
-            // Si nécessaire pour debug, on peut vérifier l'injection
-            if (msg.status === 'partial') {
-                console.warn('⚠️ Données ignorées par RisqueCV (hors-bornes ou inconnues) :', msg.ignoredKeys);
-            }
-            break;
-
-        // Si on reçoit "pdf", alors on peut sauvegarder le PDF recu dans le dossier du patient
-        case 'risquecv:pdf':
-            fermerWebView();
-            sauvegarderPdf(msg.data, msg.filename);
-            break;
-
-        // Si le médecin clique sur le bouton "Retour au logiciel", on masque l'interface
-        case 'risquecv:close':
-            console.log("Fermeture demandée par RisqueCV.");
-            fermerWebView();
-            break;
-
-        // Si on reçoit "error", il y a eu un problème métier ou protocolaire
-        case 'risquecv:error':
-            console.error(`❌ Erreur RisqueCV [${msg.code}]:`, msg.message);
-            break;
-    }
-});
-```
-
-</details>
-
-<details class="code-spoiler" markdown="1">
-<summary>💻 Exemple d'intégration avec fenêtre popup dans un nouvel onglet</summary>
-
-```javascript
-// --- 1. CONFIGURATION ---
-const CONFIG = {
-    version: 1, // Version du protocole d'intégration RisqueCV
-    partnerSlug: 'votre-slug', // Identifiant de votre logiciel (ex : "weda"))
-    targetOrigin: 'https://risquecv.fr' // Origine stricte
-};
-
-// --- 2. ÉTAT DE LA SESSION ---
-let popupWindow = null;
-let messageListener = null;
-let pollClosedInterval = null;
-let handshakeTimeout = null;
-
-// --- 3. FONCTIONS UTILITAIRES ---
-
-/** Nettoie les écouteurs pour éviter les fuites de mémoire (memory leaks) */
-function cleanupSession() {
-    if (messageListener) {
-        window.removeEventListener('message', messageListener);
-        messageListener = null;
-    }
-    if (pollClosedInterval) {
-        clearInterval(pollClosedInterval);
-        pollClosedInterval = null;
-    }
-    if (handshakeTimeout) {
-        clearTimeout(handshakeTimeout);
-        handshakeTimeout = null;
-    }
-    popupWindow = null;
-}
-
-/** Transmet le PDF (Base64) à votre API pour l'enregistrer dans le dossier patient */
-async function sauvegarderPdfEnBaseDeDonnees(base64Data, filename) {
-    try {
-        // Optionnel : renommer le fichier avec l'identité du patient pour éviter les collisions
-        // Le filename renvoyé par RisqueCV a une structure du type `RisqueCV_19-05-2026_17h45.pdf`
-        const nomPatient = getNomPatient(); // Fonction de votre logiciel (ex: retourne "Jean_Dupont")
-        const nomFichierPatient = `RisqueCV_${nomPatient}_${filename.split('_').slice(1).join('_')}`;
-
-        console.log(`Enregistrement du PDF ${nomFichierPatient} en cours...`);
-
-        const response = await fetch('/api/votre-logiciel/patients/12345/documents', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                nom_fichier: nomFichierPatient,
-                contenu_base64: base64Data,
-                type_document: 'EVALUATION_RISQUE_CV'
-            })
-        });
-
-        if (response.ok) {
-            console.log("✅ PDF sauvegardé avec succès dans le dossier du patient.");
-        } else {
-            console.error("❌ Échec de la sauvegarde du PDF côté serveur.");
-        }
-    } catch (error) {
-        console.error("Erreur réseau lors de la sauvegarde du PDF :", error);
-    }
-}
-
-// --- 4. DÉCLENCHEMENT DE L'OUVERTURE ---
-document.getElementById('bouton-ouvrir-risquecv').addEventListener('click', () => {
-    
-    // Anti-spam : ramener la fenêtre au premier plan si elle est déjà ouverte (ne pas relancer le window.open pour éviter de recharger la page et de casser le Handshake)
-    if (popupWindow && !popupWindow.closed) {
-        popupWindow.focus();
-        return; 
-    }
-
-    // Nettoyage complet avant ouverture
-    cleanupSession();
-
-    // Ouverture de l'interface RisqueCV dans un nouvel onglet
-    popupWindow = window.open(`${CONFIG.targetOrigin}/${CONFIG.partnerSlug}/`, '_blank');
-    
-    if (!popupWindow) {
-        alert("Ouverture bloquée. Veuillez autoriser les pop-ups pour utiliser RisqueCV.");
-        return;
-    }
-
-    // Détection de la fermeture manuelle par l'utilisateur (croix de la fenêtre)
-    pollClosedInterval = setInterval(() => {
-        if (popupWindow && popupWindow.closed) {
-            console.info("ℹ️ Session RisqueCV terminée (fenêtre fermée par l'utilisateur).");
-            cleanupSession();
-        }
-    }, 1000);
-
-    // Timeout si le site distant est inaccessible. On effectue un "Ping" pro-actif.
-    handshakeTimeout = setTimeout(() => {
-        console.warn("⏳ Délai d'attente dépassé : RisqueCV ne répond pas. Tentative de Ping...");
-        if (popupWindow && !popupWindow.closed) {
-            popupWindow.postMessage({ type: 'risquecv:ping' }, CONFIG.targetOrigin);
-        }
-    }, 3000);
-
-    // --- 5. GESTION DES MESSAGES ---
-    messageListener = (event) => {
-        // Ignorer tout message ne provenant pas de RisqueCV
-        if (event.origin !== CONFIG.targetOrigin) return;
-        
-        const msg = event.data;
-
-        switch (msg.type) {
-          // Si on reçoit "ready", alors on peut envoyer les données du patient
-            case 'risquecv:ready':
-                clearTimeout(handshakeTimeout);
-
-                // Envoi des données cliniques du patient
-                popupWindow.postMessage({
-                    type: 'risquecv:prefill',
-                    version: CONFIG.version,
-                    partner: msg.partner,
-                    sessionId: msg.sessionId,
-                    payload: { 
-                      // Les données doivent être formatées avant l'envoi (ex: "femme" et pas "Femme" ni "F")
-                        age: 55, 
-                        sexe: "femme", 
-                        tabac: false,
-                        PAS: 142,
-                        CT: 5.2,
-                        HDL: 1.3
-                        // Ajoutez vos autres variables cliniques ici. Le payload n'a pas besoin d'être exhaustif.
-                    }
-                }, CONFIG.targetOrigin);
-                break;
-
-            // Si on reçoit "ack", alors RisqueCV a bien reçu les données
-            case 'risquecv:prefill:ack':
-                // Si nécessaire pour debug, on peut vérifier l'injection
-                if (msg.status === 'partial') {
-                    console.warn('⚠️ Données ignorées par RisqueCV (hors-bornes ou inconnues) :', msg.ignoredKeys);
-                }
-                break;
-
-            // Si on reçoit "pdf", alors on peut sauvegarder le PDF recu dans le dossier du patient
-            case 'risquecv:pdf':                
-                // Fermeture propre de la popup
-                if (popupWindow) popupWindow.close();
-                cleanupSession();
-
-                // Enregistrement du PDF dans le dossier du patient (Base64)
-                sauvegarderPdfEnBaseDeDonnees(msg.data, msg.filename);
-                break;
-                
-            // Si le médecin clique sur le bouton "Retour au logiciel"
-            case 'risquecv:close':
-                console.log("Fermeture demandée par RisqueCV.");
-                if (popupWindow) popupWindow.close();
-                cleanupSession();
-                break;
-
-            // En cas d'erreur métier ou protocolaire
-            case 'risquecv:error':
-                console.error(`❌ Erreur RisqueCV [${msg.code}]:`, msg.message);
-                break;
-        }
-    };
-
-    window.addEventListener('message', messageListener);
-});
-```
-
-</details>
 
 ---
 
