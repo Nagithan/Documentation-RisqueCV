@@ -1085,7 +1085,7 @@ Ce protocole a été conçu pour répondre aux exigences les plus strictes de co
 
 ## 📖 Dictionnaire des caractéristiques patient
 
-Le `payload` peut contenir n'importe quelle combinaison des clés ci-dessous. Toutes les valeurs sont optionnelles (`null` ou omission pour ignorer). Toute clé inconnue sera ignorée.
+Le `payload` peut contenir n'importe quelle combinaison des clés ci-dessous. **Toutes les valeurs sont optionnelles** (`null` ou omission pour ignorer). Toute clé inconnue sera ignorée.
 
 Utiliser de préférence le **typage JSON natif** : nombres pour les nombres, booléens pour les booléens.
 
