@@ -1089,11 +1089,28 @@ Le `payload` peut contenir n'importe quelle combinaison des clés ci-dessous. To
 
 ### ⚠️ ATTENTION, ERREURS FREQUENTES :
 <div class="warning">
-- Respecter la <span style="font-weight: bold;">casse des clés</span> (ex: <code class="language-plaintext">PAS</code> et non <code class="language-plaintext">pas</code>, <code class="language-plaintext">HbA1c</code> et non <code class="language-plaintext">hba1c</code>, <code class="language-plaintext">age</code> et non <code class="language-plaintext">Age</code>, etc.).<br>
 - Respecter les <span style="font-weight: bold;">unités mentionnées</span>. Soyez particulièrement vigilants sur le Cholestérol (<code class="language-plaintext">CT</code>, <code class="language-plaintext">HDL</code>, <code class="language-plaintext">LDL</code>) qui doit impérativement être envoyé en <code class="language-plaintext">mmol/L</code> (et non en g/L), ainsi que sur l'<code class="language-plaintext">HbA1c</code> qui doit être envoyée en <code class="language-plaintext">%</code> (et non en mmol/mol).<br>
-- Respecter le <span style="font-weight: bold;">typage des données</span>, il faut envoyer des nombres pour les nombres, des booléens pour les booléens, etc.<br>
 - Ne pas envoyer de <span style="font-weight: bold;">données nominatives</span> (même si elles seront ignorées et non traitées).<br>
+- Utiliser de préférence les <span style="font-weight: bold;">clés canoniques</span> documentées ci-dessous (ex: <code class="language-plaintext">PAS</code>, <code class="language-plaintext">HbA1c</code>, <code class="language-plaintext">age</code>). Les variations de casse (ex : <code class="language-plaintext">pas</code>, <code class="language-plaintext">hba1c</code>) sont tolérées mais non recommandées.<br>
+- Utiliser de préférence le <span style="font-weight: bold;">typage JSON natif</span> : nombres pour les nombres, booléens pour les booléens. Les chaînes numériques (ex: <code class="language-plaintext">"130"</code>) et valeurs booléennes non ambiguës (ex : <code class="language-plaintext">"true"</code>, <code class="language-plaintext">"1"</code>, <code class="language-plaintext">1</code>) sont acceptées mais ne sont pas recommandées. Les chaînes contenant une unité (ex : <code class="language-plaintext">"130 mmHg"</code>) ou du texte seront ignorées.<br>
 </div>
+
+<details markdown="1">
+<summary>Plus d'information sur les formats attendus</summary>
+
+Le format recommandé est d'envoyer les **clés** et les **types JSON natifs** tels que documentés ci-dessous. 
+<br>
+Cependant, pour faciliter l'intégration avec les logiciels métier, RisqueCV tolère certaines erreurs de format : 
+
+- les clés sont comparées sans tenir compte de la casse, puis rattachées à leur clé canonique (ex : `pas`, `PAS` ou `Pas` sont traités comme `PAS`, `hba1c` comme `HbA1c`, `mrc` comme `MRC`)
+- les nombres peuvent être envoyés sous forme de string (ex : `"130"`, `"130.5"` ou `"130,5"`). 
+- Les champs déclarés comme entiers sont arrondis à l'entier le plus proche avant validation des bornes.
+- les booléens peuvent être envoyés sous forme native (`true`, `false`), sous forme de chaînes (`"true"`, `"false"`, `"1"`, `"0"`) ou sous forme numérique (`1`, `0`)
+- les unités ne sont jamais converties automatiquement : une valeur comme `"2 g/L"`, `"130 mmHg"` ou `"48 mmol/mol"` est ignorée pour des raisons de sécurité clinique.
+
+En cas de présence de plusieurs clés pointant vers la même donnée, seule la clé canonique exacte est traitée. Par exemple, si `PAS` et `pas` sont envoyées ensemble, seule `PAS` sera traitée, tandis que `pas` sera signalée dans `ignoredKeys`.
+
+</details>
 
 ### 1. Les 4 premières questions systématiques de RisqueCV.fr
 Ces booléens pilotent les 4 premières questions du formulaire.
