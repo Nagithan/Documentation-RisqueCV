@@ -1128,21 +1128,19 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
 
 ### 2. Valeurs numériques
 
-Les champs `PAS`, `age`, `agediabete` et `age_atcd` sont des nombres entiers (si vous envoyez des valeurs décimales, elles seront arrondies à l'entier le plus proche). Les autres valeurs numériques acceptent les décimales.
-
-| Clé | Type | Unité | Description |
-| :--- | :--- | :--- | :--- |
-| `age` | `number` | ans | Âge du patient |
-| `PAS` | `number` | mmHg | Pression Artérielle Systolique (mesurée ce jour si possible). |
-| `CT` | `number` | mmol/L | Cholestérol Total |
-| `HDL` | `number` | mmol/L | Cholestérol HDL |
-| `LDL` | `number` | mmol/L | Cholestérol LDL |
-| `DFG` | `number` | mL/min | Débit de Filtration Glomérulaire |
-| `HbA1c` | `number` | % | Hémoglobine glyquée |
-| `crp` | `number` | mg/L | Protéine C-réactive ultra-sensible (hs-CRP) (attention pas la CRP standard) |
-| `imc` | `number` | kg/m² | Indice de Masse Corporelle |
-| `agediabete` | `number` | ans | Âge lors du diagnostic du diabète |
-| `age_atcd` | `number` | ans | Âge lors du premier événement cardiovasculaire (AVC, AIT, SCA, IDM, AOMI, anévrisme de l'aorte abdominale) |
+| Clé | Type | Unité | Format | Description |
+| :--- | :--- | :--- | :--- | :--- |
+| `age` | `number` | ans | Entier | Âge du patient |
+| `PAS` | `number` | mmHg | Entier | Pression Artérielle Systolique (mesurée ce jour si possible). |
+| `CT` | `number` | mmol/L | Décimal | Cholestérol Total |
+| `HDL` | `number` | mmol/L | Décimal | Cholestérol HDL |
+| `LDL` | `number` | mmol/L | Décimal | Cholestérol LDL |
+| `DFG` | `number` | mL/min | Décimal | Débit de Filtration Glomérulaire |
+| `HbA1c` | `number` | % | Décimal | Hémoglobine glyquée |
+| `crp` | `number` | mg/L | Décimal | Protéine C-réactive ultra-sensible (hs-CRP) (attention pas la CRP standard) |
+| `imc` | `number` | kg/m² | Décimal | Indice de Masse Corporelle |
+| `agediabete` | `number` | ans | Entier | Âge lors du diagnostic du diabète |
+| `age_atcd` | `number` | ans | Entier | Âge lors du premier événement cardiovasculaire (AVC, AIT, SCA, IDM, AOMI, anévrisme de l'aorte abdominale) |
 
 ### 3. Valeurs de type string
 
