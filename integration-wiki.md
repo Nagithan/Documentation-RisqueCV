@@ -765,10 +765,12 @@ Le `payload` peut contenir n'importe quelle combinaison des clés ci-dessous. To
 ### ⚠️ ATTENTION, ERREURS FREQUENTES :
 <div class="warning">
 - Respecter la <span style="font-weight: bold;">casse des clés</span> (ex: <code class="language-plaintext">PAS</code> et non <code class="language-plaintext">pas</code>, <code class="language-plaintext">HbA1c</code> et non <code class="language-plaintext">hba1c</code>, <code class="language-plaintext">age</code> et non <code class="language-plaintext">Age</code>, etc.).<br>
-- Respecter les <span style="font-weight: bold;">unités mentionnées</span> (notamment <code class="language-plaintext">mmol/L</code> pour le cholestérol, <code class="language-plaintext">%</code> pour l'HbA1c).<br>
+- Respecter les <span style="font-weight: bold;">unités mentionnées</span>. Soyez particulièrement vigilants sur le Cholestérol (<code class="language-plaintext">CT</code>, <code class="language-plaintext">HDL</code>, <code class="language-plaintext">LDL</code>) qui doit impérativement être envoyé en <code class="language-plaintext">mmol/L</code> (et non en g/L), ainsi que sur l'<code class="language-plaintext">HbA1c</code> qui doit être envoyée en <code class="language-plaintext">%</code> (et non en mmol/mol).<br>
 - Respecter le <span style="font-weight: bold;">typage des données</span>, il faut envoyer des nombres pour les nombres, des booléens pour les booléens, etc.<br>
 - Ne pas envoyer de <span style="font-weight: bold;">données nominatives</span> (même si elles seront ignorées et non traitées).<br>
 </div>
+
+Si une donnée est inconnue, vous pouvez simplement omettre la clé dans le payload, ou envoyer la valeur `null`.
 
 ### 1. Les 4 premières questions systématiques de RisqueCV.fr
 Ces booléens pilotent les 4 premières questions du formulaire.
