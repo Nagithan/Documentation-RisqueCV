@@ -1110,9 +1110,9 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
 </details>
 
 ### ⚠️ ATTENTION, ERREURS FREQUENTES :
-<div class="warning" markdown="1">
-- **Respecter les unités mentionnées.** Soyez particulièrement vigilants sur le **cholestérol** (`CT`, `HDL`, `LDL`) qui doit impérativement être envoyé en `mmol/L` (et non en g/L), ainsi que sur l'**HbA1c** qui doit être envoyée en `%` (et non en mmol/mol).<br>
-- **Ne pas envoyer de données nominatives** (même si elles seront ignorées et non traitées).<br>
+<div class="warning">
+- Respecter les <span style="font-weight: bold;">unités mentionnées</span>. Soyez particulièrement vigilants sur le Cholestérol (<code class="language-plaintext">CT</code>, <code class="language-plaintext">HDL</code>, <code class="language-plaintext">LDL</code>) qui doit impérativement être envoyé en <code class="language-plaintext">mmol/L</code> (et non en g/L), ainsi que sur l'<code class="language-plaintext">HbA1c</code> qui doit être envoyée en <code class="language-plaintext">%</code> (et non en mmol/mol).<br>
+- Ne pas envoyer de <span style="font-weight: bold;">données nominatives</span> (même si elles seront ignorées et non traitées).<br>
 </div>
 
 ### 1. Les 4 premières questions systématiques de RisqueCV.fr
