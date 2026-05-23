@@ -1102,13 +1102,12 @@ Le format recommandé est d'envoyer les **clés** et les **types JSON natifs** t
 <br>
 Cependant, pour faciliter l'intégration avec les logiciels métier, RisqueCV tolère certaines erreurs de format : 
 
-- les clés sont comparées sans tenir compte de la casse, puis rattachées à leur clé canonique (ex : `pas`, `PAS` ou `Pas` sont traités comme `PAS`, `hba1c` comme `HbA1c`, `mrc` comme `MRC`)
 - les nombres peuvent être envoyés sous forme de string (ex : `"130"`, `"130.5"` ou `"130,5"`). 
 - Les champs déclarés comme entiers sont arrondis à l'entier le plus proche avant validation des bornes.
 - les booléens peuvent être envoyés sous forme native (`true`, `false`), sous forme de chaînes (`"true"`, `"false"`, `"1"`, `"0"`) ou sous forme numérique (`1`, `0`)
 - les unités ne sont jamais converties automatiquement : une valeur comme `"2 g/L"`, `"130 mmHg"` ou `"48 mmol/mol"` est ignorée pour des raisons de sécurité clinique.
 
-En cas de présence de plusieurs clés pointant vers la même donnée, seule la clé canonique exacte est traitée. Par exemple, si `PAS` et `pas` sont envoyées ensemble, seule `PAS` sera traitée, tandis que `pas` sera signalée dans `ignoredKeys`.
+- les clés sont comparées sans tenir compte de la casse, puis rattachées à leur clé canonique (ex : `pas`, `PAS` ou `Pas` sont traités comme `PAS`, `hba1c` comme `HbA1c`, `mrc` comme `MRC`) En cas de présence de plusieurs clés pointant vers la même donnée, seule la clé canonique exacte est traitée. Par exemple, si `PAS` et `pas` sont envoyées ensemble, seule `PAS` sera traitée, tandis que `pas` sera signalée dans `ignoredKeys`. Si plusieurs variantes non canoniques pointent vers la même donnée sans clé canonique exacte (ex : `Pas` et `pas` sans `PAS`), elles sont toutes ignorées et signalées dans `ignoredKeys`.
 
 </details>
 
@@ -1124,6 +1123,8 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
 | `autrepb` | `boolean` | Autres situations complexes ou particulières qui nécessitent une évaluation personnalisée. | Hypercholestérolémie familiale hétérozygote, grossesse, etc. (voir la liste complète sur le site, sous le titre "Autre situation particulière ?") |
 
 ### 2. Valeurs numériques
+
+Les champs `PAS`, `age`, `agediabete` et `age_atcd` sont des nombres entiers (si vous envoyez des valeurs décimales, elles seront arrondies à l'entier le plus proche). Les autres valeurs numériques acceptent les décimales.
 
 | Clé | Type | Unité | Description |
 | :--- | :--- | :--- | :--- |
