@@ -1499,11 +1499,11 @@ Envoyé en cas de rupture du protocole ou d'erreur critique de session.
 | `PDF_GENERATION_FAILED` | La génération du PDF a échoué. |
 | `PREFILL_ALREADY_APPLIED` | Un `prefill` a déjà été appliqué pour cette session. |
 
-## 🛠 Débogage de l'intégration
+---
 
-Si vous rencontrez des difficultés (pas de réponse au handshake, données non injectées, etc.), vous pouvez activer le **Mode Verbeux** de RisqueCV.
+## 🛠 Mode debug
 
-Ajoutez simplement le paramètre `debug_integration=1` à l'URL :  
+Si vous rencontrez des difficultés (pas de réponse au handshake, données non injectées, etc.), vous pouvez activer le **mode verbeux** en ajoutant le paramètre `debug_integration=1` à l'URL :  
 - `https://risquecv.fr/votre-slug/?debug_integration=1`
 
 
