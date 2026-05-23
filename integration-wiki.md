@@ -1095,8 +1095,6 @@ Le `payload` peut contenir n'importe quelle combinaison des clés ci-dessous. To
 - Ne pas envoyer de <span style="font-weight: bold;">données nominatives</span> (même si elles seront ignorées et non traitées).<br>
 </div>
 
-Si une donnée est inconnue, vous pouvez simplement omettre la clé dans le payload, ou envoyer la valeur `null`.
-
 ### 1. Les 4 premières questions systématiques de RisqueCV.fr
 Ces booléens pilotent les 4 premières questions du formulaire.
 Les mettre à `false` permet de sauter les questions de tri initiales.
