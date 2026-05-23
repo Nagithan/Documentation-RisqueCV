@@ -1062,14 +1062,19 @@ function fermerWebView() {
 /** Transmet le PDF (Base64) à votre API pour l'enregistrer dans le dossier patient */
 async function sauvegarderPdf(base64Data, filename) {
     try {
-        console.log(`Enregistrement du PDF ${filename} en cours...`);
+        // Optionnel : renommer le fichier avec l'identité du patient pour éviter les collisions
+        // Le filename renvoyé par RisqueCV a une structure du type `RisqueCV_19-05-2026_17h45.pdf`
+        const nomPatient = getNomPatient(); // Fonction de votre logiciel (ex: retourne "Jean_Dupont")
+        const nomFichierPatient = `RisqueCV_${nomPatient}_${filename.split('_').slice(1).join('_')}`;
+
+        console.log(`Enregistrement du PDF ${nomFichierPatient} en cours...`);
         
         // Exemple d'appel API interne à votre logiciel
         const response = await fetch('/api/votre-logiciel/patients/12345/documents', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                nom_fichier: filename,
+                nom_fichier: nomFichierPatient,
                 contenu_base64: base64Data,
                 type_document: 'EVALUATION_RISQUE_CV'
             })
@@ -1208,11 +1213,18 @@ function cleanupSession() {
 /** Transmet le PDF (Base64) à votre API pour l'enregistrer dans le dossier patient */
 async function sauvegarderPdfEnBaseDeDonnees(base64Data, filename) {
     try {
+        // Optionnel : renommer le fichier avec l'identité du patient pour éviter les collisions
+        // Le filename renvoyé par RisqueCV a une structure du type `RisqueCV_19-05-2026_17h45.pdf`
+        const nomPatient = getNomPatient(); // Fonction de votre logiciel (ex: retourne "Jean_Dupont")
+        const nomFichierPatient = `RisqueCV_${nomPatient}_${filename.split('_').slice(1).join('_')}`;
+
+        console.log(`Enregistrement du PDF ${nomFichierPatient} en cours...`);
+
         const response = await fetch('/api/votre-logiciel/patients/12345/documents', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                nom_fichier: filename,
+                nom_fichier: nomFichierPatient,
                 contenu_base64: base64Data,
                 type_document: 'EVALUATION_RISQUE_CV'
             })
