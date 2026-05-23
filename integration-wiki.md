@@ -1023,6 +1023,7 @@ RisqueCV est conçu pour être ouvert depuis votre application via :
 - **Fenêtre popup nouvel onglet (recommandé)** : `window.open('https://risquecv.fr/slug-partenaire/', '_blank')`. Cela permet une communication bilatérale fluide via la référence `window.opener`.
 - **Iframe** : compatible mais non recommandé pour des raisons d'UI/UX
 
+> Pour que votre logiciel puisse intégrer RisqueCV dans une Iframe, le serveur de RisqueCV doit vous y autoriser (`Content-Security-Policy: frame-ancestors`). Si vous constatez une erreur "Clickjacking" ou "Refused to frame", demandez à ce que votre domaine soit bien whitelisté dans nos entêtes.
 > Si vous décidez d'utiliser une Iframe avec l'attribut `sandbox="..."`, vous devez impérativement configurer les valeurs suivantes :
 > - `allow-scripts` : indispensable pour autoriser le fonctionnement de RisqueCV (tous les calculs cliniques et graphiques s'exécutent côté client en Javascript).
 > - `allow-same-origin` : indispensable pour que la communication `postMessage` et la validation d'origine fonctionnent. Sans ce paramètre, l'origine de l'Iframe sera traitée comme `null` (unique origin) par le navigateur, ce qui empêchera RisqueCV de valider l'origine de vos messages et vice-versa.
@@ -1033,33 +1034,39 @@ RisqueCV est conçu pour être ouvert depuis votre application via :
 
 Le protocole suit une machine à états stricte pour garantir la sécurité des données :
 
-1.  **Phase d'écoute** : Dès l'ouverture, votre application doit se mettre à l'écoute de l'événement `message` global.
-2.  **Signal "ready" (RisqueCV ➡️ Partenaire)** : Une fois chargé, RisqueCV émet un message `risquecv:ready` pour vous informer que le tunnel de communication est ouvert et vous transmettre un `sessionId` unique.
-    - *Obligation* : Vous devez renvoyer le `sessionId` reçu lors de l'étape de prefill.
-3.  **Signal "ping" (Partenaire ➡️ RisqueCV)** : Si votre application a manqué le signal initial (chargement asynchrone), vous pouvez envoyer un message `{ "type": "risquecv:ping" }`. RisqueCV renverra immédiatement le signal `ready`.
-4.  **Injection "prefill" (Partenaire ➡️ RisqueCV)** : En réponse au `ready`, vous envoyez vos données patient via un message `risquecv:prefill`.
-5.  **Verrouillage de session (Channel Locking)** : À la réception de votre premier message de données (**prefill**), RisqueCV **verrouille le canal**. Pour le reste de la session, RisqueCV n'acceptera plus aucun message provenant d'une autre origine ou d'une autre fenêtre que la vôtre.
+1.  **Phase d'ouverture de RisqueCV** : Dès l'ouverture, votre application doit se mettre à l'écoute de l'événement `message` global.
+2.  **Signal "ready" (RisqueCV vers Partenaire)** : Une fois chargé, le site RisqueCV émet un message `risquecv:ready` pour vous informer que le tunnel de communication est ouvert et vous transmettre un `sessionId` unique qu'il faudra utiliser pour tous les messages suivants.
+    - *Signal ping (Partenaire vers RisqueCV)* : Si votre application a manqué le signal initial, vous pouvez envoyer un message `risquecv:ping`. RisqueCV vous renverra le message `risquecv:ready`.
+3.  **Injection "prefill" (Partenaire vers RisqueCV)** : En réponse au `risquecv:ready`, vous envoyez les données patient (age, sexe, cholestérol...) via un message `risquecv:prefill` (format du payload détaillé plus bas).
+    - *Verrouillage de session (channel locking)* : Dès la réception de votre premier message de données (`risquecv:prefill`), RisqueCV **verrouille le canal**. Pour le reste de la session, RisqueCV n'acceptera plus aucun message provenant d'une autre origine ou d'une autre fenêtre que la vôtre, ni aucun message signé avec un autre `sessionId`.
+    - *Délai de repli (handshake timeout)* : Si RisqueCV ne reçoit **aucun trafic valide** (ni ping, ni prefill) dans les **5 secondes** suivant son ouverture, il bascule automatiquement en **mode standard** (non lié au logiciel métier). Cela évite de bloquer le médecin si votre logiciel métier subit un bug technique.
 
 ### 3. Traitement des données
-L'algorithme de RisqueCV ne se contente pas de recevoir vos données, il assure leur intégrité :
+L'algorithme de RisqueCV assure l'intégrité, la validation et la normalisation des données reçues :
 
-- **Validation des bornes** : Si vous envoyez une valeur cliniquement aberrante (ex: age = 300), le champ est ignoré pour protéger la cohérence médicale.
-- **Accusé de réception (`ack`)** : RisqueCV vous renvoie systématiquement un message `risquecv:prefill:ack`. Il contient la liste des clés acceptées et celles ignorées (clés inconnues ou valeurs hors-bornes).
-- **Mise à jour atomique** : L'injection des données dans l'interface de RisqueCV est immédiate et globale. Tous les scores et graphiques se recalculent en une seule passe dès réception de votre `prefill`.
+- **Validation des données entrantes** : Les clés inconnues ou les valeurs mal formatées sont ignorées.
+- **Validation des bornes** : Si vous envoyez une valeur numérique cliniquement aberrante (ex: age = 300), le champ est ignoré pour protéger la cohérence médicale.
+- **Accusé de réception (`ack`)** : RisqueCV vous renvoie systématiquement un message `risquecv:prefill:ack` (ackknowledgement) qui contient la liste des valeurs acceptées et ignorées.
+- **Mise à jour instantanée** : L'injection des données dans l'interface de RisqueCV est immédiate. Tous les scores et graphiques se mettent à jour dès réception de votre `prefill`.
 
 ### 4. UI adaptée au partenaire
 - Bouton "Retour au Logiciel" (texte personnalisable, ex "Retour à Doctolib")
 - Bouton PDF "Envoyer vers Logiciel" (texte personnalisable, ex "Envoyer vers Doctolib")
+- Le reste de l'application est strictement identique à la version publique.
 
-### 5. Récupération du rapport (PDF)
-Lorsque le médecin a terminé son évaluation sur RisqueCV :
-1. En cliquant sur le bouton "Envoyer vers Logiciel", RisqueCV génère le rapport PDF localement dans le navigateur via la librairie `pdfmake` (aucune donnée n'est envoyée à nos serveurs).
-2. Il vous transmet le PDF via un message `risquecv:pdf`.
-3. Le payload contient le fichier encodé en **Base64**.
-4. **En cas d'échec** (ex: erreur mémoire), RisqueCV émet un message `risquecv:error` avec le code `PDF_GENERATION_FAILED`.
+### 5. Récupération du rapport PDF
+Lorsque le médecin a terminé son évaluation sur RisqueCV, il clique sur "Envoyer vers logiciel" (ou sur "Retour vers logiciel")
+1. RisqueCV génère un rapport PDF (localement dans le navigateur via la librairie `pdfmake`, aucune donnée n'est envoyée à nos serveurs).
+2. Il vous transmet le PDF encodé en **Base64** via un message `risquecv:pdf`.
+3. Vous pouvez stocker le PDF dans la base de données de votre logiciel.
 
 ### 6. Fermeture de session
-Lors du clic sur le bouton de retour, RisqueCV émet un signal `risquecv:close`. Voir la section "Résilience" ci-dessous pour la gestion des Iframes.
+Lors du clic sur le bouton de retour, RisqueCV émet un signal `risquecv:close`.
+
+> #### Prévention de l'inception des iframes
+> Rediriger une Iframe vers une URL externe peut provoquer le chargement de votre propre portail à l'intérieur de l'Iframe
+> - **Dans une Iframe** : RisqueCV émet le message `risquecv:close` et **reste sur sa page**. C'est à votre application de capter ce message pour détruire l'Iframe (pour éviter l'inception)
+> - **Dans un Nouvel onglet / Popup** : RisqueCV émet le message, tente de s'auto-fermer (`window.close()`), et n'utilise sa redirection de secours (`returnUrl`) qu'en tout dernier recours.
 
 ---
 
@@ -1067,35 +1074,16 @@ Lors du clic sur le bouton de retour, RisqueCV émet un signal `risquecv:close`.
 
 Ce protocole a été conçu pour répondre aux exigences les plus strictes de confidentialité (RGPD / HDS) :
 
-- **Zéro transit Internet** : Les données patient circulent exclusivement entre votre fenêtre et celle de RisqueCV dans la mémoire vive de l'ordinateur du médecin.
-- **Zéro persistance** : RisqueCV n'enregistre absolument rien concernant les données injectées (ni base de données, ni localstorage, ni cookies). Une fois la fenêtre fermée, les données sont définitivement purgées.
+- **Zéro transit Internet** : Les données patient circulent exclusivement dans la mémoire vive de l'ordinateur du médecin, entre votre fenêtre et celle de RisqueCV.
+- **Zéro persistance** : RisqueCV n'enregistre absolument rien concernant les données injectées ou calculées (ni base de données, ni localstorage, ni cookies). Une fois la fenêtre fermée, les données sont définitivement purgées.
 - **Isolation des origines** : RisqueCV rejette tout message dont l'`event.origin` ne correspond pas strictement à un liste blanche de partenaires.
 - **Pas de cookies** : RisqueCV n'utilise aucun cookie.
 - **Pas de publicité** : RisqueCV n'affiche aucune publicité.
 
 ---
 
-## 🛡️ Résilience et Protocoles de repli
 
-Pour garantir une expérience sans friction, RisqueCV implémente plusieurs mécanismes de sécurité :
-
-### Délai de repli (Handshake Timeout)
-Si RisqueCV est ouvert en mode intégration mais ne reçoit **aucun trafic valide** (ni ping, ni prefill) dans les **5 secondes** suivant son chargement, il bascule automatiquement en **Mode Standard** (autonome). Cela évite de bloquer le médecin si votre logiciel métier subit un bug technique.
-
-### Prévention de l'Inception (Iframes)
-Rediriger une Iframe vers une URL externe peut provoquer le chargement de votre propre portail à l'intérieur de l'Iframe (Effet Inception). 
-- **Dans une Iframe** : RisqueCV émet le message `risquecv:close` et **reste sur sa page**. C'est à votre application de capter ce message pour détruire l'Iframe (pour éviter l'inception)
-- **Dans un Nouvel onglet / Popup** : RisqueCV émet le message, tente de s'auto-fermer (`window.close()`), et n'utilise sa redirection de secours (`returnUrl`) qu'en tout dernier recours.
-
----
-
-## 🌐 Configuration Serveur (CSP)
-
-Pour que votre logiciel puisse intégrer RisqueCV dans une Iframe, le serveur de RisqueCV doit vous y autoriser (`Content-Security-Policy: frame-ancestors`). Si vous constatez une erreur "Clickjacking" ou "Refused to frame", demandez à ce que votre domaine soit bien whitelisté dans nos entêtes.
-
----
-
-## 📖 Dictionnaire des caractéristiques
+## 📖 Dictionnaire des caractéristiques patient
 
 Le `payload` peut contenir n'importe quelle combinaison des clés ci-dessous. Toutes les valeurs sont optionnelles (`null` ou omission pour ignorer). Toute clé inconnue sera ignorée.
 
