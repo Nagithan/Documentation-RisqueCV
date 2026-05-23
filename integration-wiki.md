@@ -1012,7 +1012,7 @@ document.getElementById('bouton-ouvrir-risquecv').addEventListener('click', () =
  
  ---
 
-## 🏗 Architecture du protocole
+## 🏗 Description de l'architecture du protocole
 
 L'intégration repose sur un protocole d'échange de messages asynchrones via `window.postMessage` :
 
@@ -1022,6 +1022,12 @@ RisqueCV est conçu pour être ouvert depuis votre application via :
 - **WebView (recommandé)** : RisqueCV détecte automatiquement son parent (`window.parent`) pour initier le dialogue.
 - **Fenêtre popup nouvel onglet (recommandé)** : `window.open('https://risquecv.fr/slug-partenaire/', '_blank')`. Cela permet une communication bilatérale fluide via la référence `window.opener`.
 - **Iframe** : compatible mais non recommandé pour des raisons d'UI/UX
+
+> Si vous décidez d'utiliser une Iframe avec l'attribut `sandbox="..."`, vous devez impérativement configurer les valeurs suivantes :
+> - `allow-scripts` : indispensable pour autoriser le fonctionnement de RisqueCV (tous les calculs cliniques et graphiques s'exécutent côté client en Javascript).
+> - `allow-same-origin` : indispensable pour que la communication `postMessage` et la validation d'origine fonctionnent. Sans ce paramètre, l'origine de l'Iframe sera traitée comme `null` (unique origin) par le navigateur, ce qui empêchera RisqueCV de valider l'origine de vos messages et vice-versa.
+> - `allow-popups` : indispensable pour permettre l'ouverture des PDF générés et des liens externes.
+> **Exemple :** `<iframe src="https://risquecv.fr/doctolib/" sandbox="allow-scripts allow-same-origin allow-popups"></iframe>`
 
 ### 2. Établissement de la connexion ("handshake")
 
