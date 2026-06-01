@@ -1510,6 +1510,7 @@ Envoyé en cas de rupture du protocole ou d'erreur critique de session.
 | `INVALID_PARTNER` | Le slug partenaire ne correspond pas à l'URL ouverte. |
 | `PDF_GENERATION_FAILED` | La génération du PDF a échoué. |
 | `PREFILL_ALREADY_APPLIED` | Un `prefill` a déjà été appliqué pour cette session. |
+| `PAYLOAD_TOO_LARGE` | Le `payload` contient trop de clés (maximum 200). |
 
 ---
 
