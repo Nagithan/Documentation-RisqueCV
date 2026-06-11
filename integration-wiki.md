@@ -1364,7 +1364,7 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
 | Clé | Type | Description |
 | :--- | :--- | :--- |
 | `tabac` | `boolean` | Tabagisme actif actuel. |
-| `aspirine` | `boolean` | Traitement antiagrégant plaquettaire en cours. |
+| `antithrombotique` | `boolean` | Traitement actuel : aspirine ou autre antiagrégant plaquettaire ou anticoagulants. |
 | `insuline` | `boolean` | Diabète traité par insuline. |
 | `hyperCHOfamille`| `boolean` | Hypercholestérolémie familiale hétérozygote connue. |
 | `retinopathie` | `boolean` | Présence d'une rétinopathie diabétique. |
