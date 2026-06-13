@@ -1046,6 +1046,7 @@ L'algorithme de RisqueCV assure l'intégrité, la validation et la normalisation
 
 - **Validation des données entrantes** : Les clés inconnues ou les valeurs mal formatées sont ignorées.
 - **Validation des bornes** : Si vous envoyez une valeur numérique cliniquement aberrante (ex: age = 300), le champ est ignoré pour protéger la cohérence médicale.
+- **Cohérence inter-champs** : Si l'injection crée une impossibilité logique (ex: vous envoyez un âge de diagnostic du diabète supérieur à l'âge actuel du patient), les valeurs incohérentes sont rejetées.
 - **Accusé de réception (`ack`)** : RisqueCV vous renvoie systématiquement un message `risquecv:prefill:ack` (ackknowledgement) qui contient la liste des valeurs acceptées et ignorées.
 - **Mise à jour instantanée** : L'injection des données dans l'interface de RisqueCV est immédiate. Tous les scores et graphiques se mettent à jour dès réception de votre `prefill`.
 
