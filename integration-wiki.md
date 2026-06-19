@@ -763,6 +763,7 @@ document.getElementById('bouton-ouvrir-risquecv').addEventListener('click', () =
     webview.style.display = 'block'; 
     
     // Sécurité : Timeout si le chargement échoue. On effectue un "Ping" pro-actif.
+    // Chaque ping valide relance le délai de handshake côté RisqueCV, mais il faut ensuite envoyer un prefill.
     handshakeTimeout = setTimeout(() => {
         console.warn("⏳ Délai d'attente dépassé : RisqueCV ne répond pas. Tentative de Ping...");
         // L'envoi dépend de votre framework (ici webview standard HTML5)
@@ -812,7 +813,9 @@ window.addEventListener('message', (event) => {
         // Si on reçoit "ack", alors RisqueCV a bien reçu les données
         case 'risquecv:prefill:ack':
             // Si nécessaire pour debug, on peut vérifier l'injection
-            if (msg.status === 'partial') {
+            if (msg.status === 'empty') {
+                console.info('Connexion RisqueCV établie sans donnée clinique préremplie.');
+            } else if (msg.status === 'partial') {
                 console.warn('⚠️ Données ignorées par RisqueCV (hors-bornes ou inconnues) :', msg.ignoredKeys);
             }
             break;
@@ -934,6 +937,7 @@ document.getElementById('bouton-ouvrir-risquecv').addEventListener('click', () =
     }, 1000);
 
     // Timeout si le site distant est inaccessible. On effectue un "Ping" pro-actif.
+    // Chaque ping valide relance le délai de handshake côté RisqueCV, mais il faut ensuite envoyer un prefill.
     handshakeTimeout = setTimeout(() => {
         console.warn("⏳ Délai d'attente dépassé : RisqueCV ne répond pas. Tentative de Ping...");
         if (popupWindow && !popupWindow.closed) {
@@ -949,7 +953,7 @@ document.getElementById('bouton-ouvrir-risquecv').addEventListener('click', () =
         const msg = event.data;
 
         switch (msg.type) {
-          // Si on reçoit "ready", alors on peut envoyer les données du patient
+            // Si on reçoit "ready", alors on peut envoyer les données du patient
             case 'risquecv:ready':
                 clearTimeout(handshakeTimeout);
 
@@ -960,7 +964,7 @@ document.getElementById('bouton-ouvrir-risquecv').addEventListener('click', () =
                     partner: msg.partner,
                     sessionId: msg.sessionId,
                     payload: { 
-                      // Les données doivent être formatées avant l'envoi (ex: "femme" et pas "Femme" ni "F")
+                        // Les données doivent être formatées avant l'envoi (ex: "femme" et pas "Femme" ni "F")
                         age: 55, 
                         sexe: "femme", 
                         tabac: false,
@@ -975,7 +979,9 @@ document.getElementById('bouton-ouvrir-risquecv').addEventListener('click', () =
             // Si on reçoit "ack", alors RisqueCV a bien reçu les données
             case 'risquecv:prefill:ack':
                 // Si nécessaire pour debug, on peut vérifier l'injection
-                if (msg.status === 'partial') {
+                if (msg.status === 'empty') {
+                    console.info('Connexion RisqueCV établie sans donnée clinique préremplie.');
+                } else if (msg.status === 'partial') {
                     console.warn('⚠️ Données ignorées par RisqueCV (hors-bornes ou inconnues) :', msg.ignoredKeys);
                 }
                 break;
@@ -1038,8 +1044,9 @@ Le protocole suit une machine à états stricte pour garantir la sécurité des 
 2.  **Signal "ready" (RisqueCV vers Partenaire)** : Une fois chargé, le site RisqueCV émet un message `risquecv:ready` pour vous informer que le tunnel de communication est ouvert et vous transmettre un `sessionId` unique qu'il faudra utiliser pour tous les messages suivants.
     - *Signal ping (Partenaire vers RisqueCV)* : Si votre application a manqué le signal initial, vous pouvez envoyer un message `risquecv:ping`. RisqueCV vous renverra le message `risquecv:ready`.
 3.  **Injection "prefill" (Partenaire vers RisqueCV)** : En réponse au `risquecv:ready`, vous envoyez les données patient (age, sexe, cholestérol...) via un message `risquecv:prefill` (format du payload détaillé plus bas).
-    - *Verrouillage de session (channel locking)* : Dès la réception de votre premier message de données (`risquecv:prefill`), RisqueCV **verrouille le canal**. Pour le reste de la session, RisqueCV n'acceptera plus aucun message provenant d'une autre origine ou d'une autre fenêtre que la vôtre, ni aucun message signé avec un autre `sessionId`.
-    - *Délai de repli (handshake timeout)* : Si RisqueCV ne reçoit **aucun trafic valide** (ni ping, ni prefill) dans les **5 secondes** suivant son ouverture, il bascule automatiquement en **mode standard** (non lié au logiciel métier). Cela évite de bloquer le médecin si votre logiciel métier subit un bug technique.
+    - *Verrouillage de session (channel locking)* : Dès la réception de votre premier message `risquecv:prefill` de données (y compris un payload vide `{}`), RisqueCV **verrouille le canal**. Pour le reste de la session, RisqueCV n'acceptera plus aucun message provenant d'une autre origine ou d'une autre fenêtre que la vôtre, ni aucun message signé avec un autre `sessionId`.
+    - *Délai de repli (handshake timeout)* : Si RisqueCV ne reçoit **aucun trafic valide** (ni ping, ni prefill) dans les **5 secondes** suivant son ouverture, il bascule automatiquement en **mode standard** (non lié au logiciel métier). Un `risquecv:ping` valide relance ce délai et renvoie un nouveau `risquecv:ready`; il doit ensuite être suivi d'un `risquecv:prefill`. Cela évite de bloquer le médecin si votre logiciel métier subit un bug technique.
+    - *Connexion sans donnée clinique* : si votre logiciel n'a aucune donnée fiable à préremplir mais souhaite tout de même récupérer le PDF final, envoyez un `risquecv:prefill` avec `payload: {}`. RisqueCV répondra par un ACK `status: "empty"` et activera le canal de retour PDF.
 
 ### 3. Traitement des données
 L'algorithme de RisqueCV assure l'intégrité, la validation et la normalisation des données reçues :
@@ -1047,7 +1054,7 @@ L'algorithme de RisqueCV assure l'intégrité, la validation et la normalisation
 - **Validation des données entrantes** : Les clés inconnues ou les valeurs mal formatées sont ignorées.
 - **Validation des bornes** : Si vous envoyez une valeur numérique cliniquement aberrante (ex: age = 300), le champ est ignoré pour protéger la cohérence médicale.
 - **Cohérence inter-champs** : Si l'injection crée une impossibilité logique (ex: vous envoyez un âge de diagnostic du diabète supérieur à l'âge actuel du patient), les valeurs incohérentes sont rejetées.
-- **Accusé de réception (`ack`)** : RisqueCV vous renvoie systématiquement un message `risquecv:prefill:ack` (ackknowledgement) qui contient la liste des valeurs acceptées et ignorées.
+- **Accusé de réception (`ack`)** : RisqueCV vous renvoie un message `risquecv:prefill:ack` (acknowledgement) quand le `prefill` est accepté (au moins une donnée clinique valide, ou payload vide `{}`). Les payloads non plats, trop volumineux, ou non vides mais sans aucune donnée clinique exploitable renvoient un message `risquecv:error`.
 - **Mise à jour instantanée** : L'injection des données dans l'interface de RisqueCV est immédiate. Tous les scores et graphiques se mettent à jour dès réception de votre `prefill`.
 
 ### 4. UI adaptée au partenaire
@@ -1076,7 +1083,7 @@ Lors du clic sur le bouton de retour, RisqueCV émet un signal `risquecv:close`.
 Ce protocole a été conçu pour répondre aux exigences les plus strictes de confidentialité (RGPD / HDS) :
 
 - **Zéro transit Internet** : Les données patient circulent exclusivement dans la mémoire vive de l'ordinateur du médecin, entre votre fenêtre et celle de RisqueCV.
-- **Zéro persistance** : RisqueCV n'enregistre absolument rien concernant les données injectées ou calculées (ni base de données, ni localstorage, ni cookies). Une fois la fenêtre fermée, les données sont définitivement purgées.
+- **Zéro persistance** : RisqueCV n'enregistre absolument rien concernant les données cliniques injectées ou calculées (ni base de données, ni cookies). Une fois la fenêtre fermée, les données cliniques sont définitivement purgées.
 - **Isolation des origines** : RisqueCV rejette tout message dont l'`event.origin` ne correspond pas strictement à un liste blanche de partenaires.
 - **Pas de cookies** : RisqueCV n'utilise aucun cookie.
 - **Pas de publicité** : RisqueCV n'affiche aucune publicité.
@@ -1086,7 +1093,7 @@ Ce protocole a été conçu pour répondre aux exigences les plus strictes de co
 
 ## 📖 Dictionnaire des caractéristiques patient
 
-Le `payload` peut contenir n'importe quelle combinaison des clés ci-dessous. **Toutes les valeurs sont optionnelles** (`null` ou omission pour ignorer). Toute clé inconnue sera ignorée.
+Le `payload` peut contenir n'importe quelle combinaison des clés ci-dessous. **Toutes les valeurs sont optionnelles** : omettez une clé pour ne pas la transmettre. Toute clé inconnue sera ignorée.
 
 Utiliser de préférence le **typage JSON natif** : nombres pour les nombres, booléens pour les booléens.
 
@@ -1100,6 +1107,7 @@ Cependant, pour faciliter l'intégration avec les logiciels métier, RisqueCV to
 - les nombres peuvent être envoyés sous forme de string (ex : `"130"`, `"130.5"` ou `"130,5"`). 
 - Les champs déclarés comme entiers sont arrondis à l'entier le plus proche avant validation des bornes.
 - les booléens peuvent être envoyés sous forme native (`true`, `false`), sous forme de chaînes (`"true"`, `"false"`, `"1"`, `"0"`) ou sous forme numérique (`1`, `0`)
+- les valeurs `null` sont traitées comme des valeurs ignorées et signalées dans `ignoredKeys`. Si vous voulez établir la session sans préremplir de donnée clinique, envoyez plutôt un payload vide `{}`.
 - les unités ne sont jamais converties automatiquement : une valeur comme `"2 g/L"`, `"130 mmHg"` ou `"48 mmol/mol"` est ignorée pour des raisons de sécurité clinique.
 
 Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `PAS`, `HbA1c`, `age`). Les variations de casse (ex : `pas`, `hba1c`) sont tolérées mais non recommandées.
@@ -1136,7 +1144,7 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
 | `CT` | `number` | mmol/L | Décimal | Cholestérol Total |
 | `HDL` | `number` | mmol/L | Décimal | Cholestérol HDL |
 | `LDL` | `number` | mmol/L | Décimal | Cholestérol LDL |
-| `DFG` | `number` | mL/min | Décimal | Débit de Filtration Glomérulaire |
+| `DFG` | `number` | mL/min/1.73m² | Décimal | Débit de Filtration Glomérulaire |
 | `HbA1c` | `number` | % | Décimal | Hémoglobine glyquée |
 | `crp` | `number` | mg/L | Décimal | Protéine C-réactive ultra-sensible (hs-CRP) (attention pas la CRP standard) |
 | `imc` | `number` | kg/m² | Décimal | Indice de Masse Corporelle |
@@ -1374,6 +1382,9 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
 | `atcd_cerebrovasculaire`| `boolean` | Antécédent d'AVC ou d'AIT. |
 | `atcd_aomi` | `boolean` | Antécédent d'Artériopathie Oblitérante des Membres Inférieurs. |
 | `atcd_anevrismeAorte`| `boolean` | Antécédent d'anévrisme de l'aorte abdominale. |
+| `atcd_evenement_recurrent` | `boolean` | Nouvel événement cardiovasculaire malgré une statine à dose maximale tolérée. |
+| `atcd_evenement_recent` | `boolean` | Événement cardiovasculaire survenu il y a moins de 6 semaines. |
+| `atcd_polyvasculaire` | `boolean` | Atteinte polyvasculaire (par exemple coronaire + AOMI). |
 | `microangiopathie3sites`| `boolean` | Présence d'une microangiopathie sur ≥3 sites (ex: rétino + neuro + albu). |
 | `autreFacteurMajeur` | `boolean` | Présence d'un autre facteur de risque majeur (pour l'HF). |
 | `evaluationComplete`| `boolean` | Force l'affichage de l'évaluation complète (tunnel détaillé). |
@@ -1382,7 +1393,7 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
 
 ## 📋 Catalogue des messages
 
-Tous les messages partagent une structure de base : `type`, `version` (fixée à `1`) et `partner`.
+Tous les messages de session partagent une structure de base : `type`, `version` (fixée à `1`), `partner` et `sessionId`. Le message `risquecv:ping` est volontairement hors session et ne contient que son `type`.
 
 ### Étape 1 : Le signal de départ
 #### 🟢 `risquecv:ready` (RisqueCV ➡️ Votre Logiciel)
@@ -1442,9 +1453,23 @@ Envoyé après réception du `prefill`. Confirme quelles données ont été vali
   "version": 1,
   "partner": "votre-slug",
   "sessionId": "L_ID_RECU_DANS_READY",
-  "status": "ok", // "ok" ou "partial"
+  "status": "ok", // "ok", "partial" ou "empty"
   "acceptedKeys": ["age", "sexe", "pays", "tabac", "atcd"],
   "ignoredKeys": ["cleInconnue"] 
+}
+```
+
+Un `payload` vide `{}` est accepté comme handshake sans donnée clinique et renvoie :
+
+```json
+{
+  "type": "risquecv:prefill:ack",
+  "version": 1,
+  "partner": "votre-slug",
+  "sessionId": "L_ID_RECU_DANS_READY",
+  "status": "empty",
+  "acceptedKeys": [],
+  "ignoredKeys": []
 }
 ```
 
@@ -1458,7 +1483,7 @@ Envoyé lorsque le médecin clique sur le bouton de transfert dans RisqueCV. Con
   "version": 1,
   "partner": "votre-slug",
   "sessionId": "L_ID_RECU_DANS_READY",
-  "filename": "RisqueCV_NomPatient.pdf",
+  "filename": "RisqueCV_19-05-2026_17h45.pdf",
   "mimeType": "application/pdf",
   "encoding": "base64",
   "data": "JVBERi..." // Flux binaire converti en string Base64 (environ 50kB)
@@ -1507,7 +1532,7 @@ Envoyé en cas de rupture du protocole ou d'erreur critique de session.
 | `UNSUPPORTED_MESSAGE_TYPE`| Le `type` de message n'est pas pris en charge. |
 | `INVALID_SESSION` | Le `sessionId` est manquant ou incorrect. |
 | `PAYLOAD_NOT_A_FLAT_OBJECT` | Le `payload` n'est pas un objet JSON plat. |
-| `VALID_BUT_EMPTY_PAYLOAD` | Aucune donnée clinique valide n'a été trouvée dans le payload (objet vide ou toutes les clés sont inconnues). |
+| `VALID_BUT_EMPTY_PAYLOAD` | Aucune donnée clinique valide n'a été trouvée dans un payload non vide (toutes les clés sont inconnues, nulles ou invalides). |
 | `INVALID_PARTNER` | Le slug partenaire ne correspond pas à l'URL ouverte. |
 | `PDF_GENERATION_FAILED` | La génération du PDF a échoué. |
 | `PREFILL_ALREADY_APPLIED` | Un `prefill` a déjà été appliqué pour cette session. |
