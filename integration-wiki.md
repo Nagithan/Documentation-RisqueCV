@@ -1105,7 +1105,7 @@ Le format recommandé est d'envoyer les **clés** et les **types JSON natifs** t
 Cependant, pour faciliter l'intégration avec les logiciels métier, RisqueCV tolère certaines erreurs de format : 
 
 - les nombres peuvent être envoyés sous forme de string (ex : `"130"`, `"130.5"` ou `"130,5"`). 
-- Les champs déclarés comme entiers sont arrondis à l'entier le plus proche avant validation des bornes.
+- Les champs déclarés comme entiers sont d'abord contrôlés sur leurs bornes, puis arrondis à l'entier le plus proche.
 - les booléens peuvent être envoyés sous forme native (`true`, `false`), sous forme de chaînes (`"true"`, `"false"`, `"1"`, `"0"`) ou sous forme numérique (`1`, `0`)
 - les valeurs `null` sont traitées comme des valeurs ignorées et signalées dans `ignoredKeys`. Si vous voulez établir la session sans préremplir de donnée clinique, envoyez plutôt un payload vide `{}`.
 - les unités ne sont jamais converties automatiquement : une valeur comme `"2 g/L"`, `"130 mmHg"` ou `"48 mmol/mol"` est ignorée pour des raisons de sécurité clinique.
