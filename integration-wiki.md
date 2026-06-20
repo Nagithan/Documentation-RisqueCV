@@ -534,6 +534,7 @@ La méthode `window.postMessage` permet au médecin en consultation de prérempl
 
     const targetUrl = 'https://risquecv.fr/test-integration';
     const partnerSlug = 'test-integration';
+    const skipOnboardingReglagesParam = 'skip_onboarding_reglages';
 
     const btn = document.getElementById('sandbox-trigger');
     const status = document.getElementById('sandbox-status');
@@ -553,6 +554,12 @@ La méthode `window.postMessage` permet au médecin en consultation de prérempl
             clearTimeout(handshakeTimeout);
             handshakeTimeout = null;
         }
+    }
+
+    function buildSandboxUrl(baseUrl) {
+        const url = new URL(baseUrl);
+        url.searchParams.set(skipOnboardingReglagesParam, '1');
+        return url.toString();
     }
 
     function log(dir, data) {
@@ -589,7 +596,7 @@ La méthode `window.postMessage` permet au médecin en consultation de prérempl
         pdfData = null;
 
         // Si la touche Option (macOS) / Alt est enfoncée, on bascule sur l'environnement local en HTTPS
-        const currentTargetUrl = event.altKey ? 'https://risquecv.local/test-integration' : targetUrl;
+        const currentTargetUrl = buildSandboxUrl(event.altKey ? 'https://risquecv.local/test-integration' : targetUrl);
 
         popup = window.open(currentTargetUrl, '_blank');
         if (!popup) {
