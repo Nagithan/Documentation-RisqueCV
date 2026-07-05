@@ -800,7 +800,7 @@ window.addEventListener('message', (event) => {
             const payloadMessage = {
                 type: 'risquecv:prefill',
                 version: CONFIG.version,
-                partner: msg.partner,
+                partner: CONFIG.partnerSlug,
                 sessionId: msg.sessionId,
                 payload: { 
                     // Les données doivent être formatées avant l'envoi (ex: "femme" et pas "Femme" ni "F")
@@ -829,7 +829,6 @@ window.addEventListener('message', (event) => {
 
         // Si on reçoit "pdf", alors on peut sauvegarder le PDF recu dans le dossier du patient
         case 'risquecv:pdf':
-            fermerWebView();
             sauvegarderPdf(msg.data, msg.filename);
             break;
 
@@ -968,7 +967,7 @@ document.getElementById('bouton-ouvrir-risquecv').addEventListener('click', () =
                 popupWindow.postMessage({
                     type: 'risquecv:prefill',
                     version: CONFIG.version,
-                    partner: msg.partner,
+                    partner: CONFIG.partnerSlug,
                     sessionId: msg.sessionId,
                     payload: { 
                         // Les données doivent être formatées avant l'envoi (ex: "femme" et pas "Femme" ni "F")
@@ -995,10 +994,6 @@ document.getElementById('bouton-ouvrir-risquecv').addEventListener('click', () =
 
             // Si on reçoit "pdf", alors on peut sauvegarder le PDF recu dans le dossier du patient
             case 'risquecv:pdf':                
-                // Fermeture propre de la popup
-                if (popupWindow) popupWindow.close();
-                cleanupSession();
-
                 // Enregistrement du PDF dans le dossier du patient (Base64)
                 sauvegarderPdfEnBaseDeDonnees(msg.data, msg.filename);
                 break;
