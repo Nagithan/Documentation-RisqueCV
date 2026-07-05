@@ -503,7 +503,7 @@ RisqueCV.fr est un outil d'aide à la décision pour la prévention cardiovascul
 
 L'absence de serveur de calcul est **un choix délibéré pour garantir la confidentialité des données des patients.** Cette architecture rend impossible la mise à disposition d'une API REST ou SMART on FHIR.
 
-L'intégration de RisqueCV.fr à un logicier métier repose donc sur l'API Standard `window.postMessage`, permettant un **échange sécurisé** des données cliniques. Ce protocole permet l'ouverture de RisqueCV.fr, le transfert de données cliniques du logiciel métier vers la fenêtre de RisqueCV.fr (sans transfert des données sur internet), la génération du PDF des résultats en local (librairie JS) et l'envoi du rapport PDF de RisqueCV.fr vers le logiciel métier sans transfert des données sur internet.
+L'intégration de RisqueCV.fr à un logiciel métier repose donc sur l'API Standard `window.postMessage`, permettant un **échange sécurisé** des données cliniques. Ce protocole permet l'ouverture de RisqueCV.fr, le transfert de données cliniques du logiciel métier vers la fenêtre de RisqueCV.fr (sans transfert des données sur internet), la génération du PDF des résultats en local (librairie JS) et l'envoi du rapport PDF de RisqueCV.fr vers le logiciel métier sans transfert des données sur internet.
 
 La méthode `window.postMessage` permet au médecin en consultation de préremplir les données cliniques et d'utiliser l'interface de RisqueCV.fr (courbes, graphiques, conseils, etc.) comme un outil d'**aide à la décision**.
 
@@ -855,7 +855,7 @@ window.addEventListener('message', (event) => {
 // --- 1. CONFIGURATION ---
 const CONFIG = {
     version: 1, // Version du protocole d'intégration RisqueCV
-    partnerSlug: 'votre-slug', // Identifiant de votre logiciel (ex : "weda"))
+    partnerSlug: 'votre-slug', // Identifiant de votre logiciel (ex : "weda")
     targetOrigin: 'https://risquecv.fr' // Origine stricte
 };
 
@@ -1047,7 +1047,7 @@ Le protocole suit une machine à états stricte pour garantir la sécurité des 
     - *Signal ping (Partenaire vers RisqueCV)* : Si votre application a manqué le signal initial, vous pouvez envoyer un message `risquecv:ping`. RisqueCV vous renverra le message `risquecv:ready`.
 3.  **Injection "prefill" (Partenaire vers RisqueCV)** : En réponse au `risquecv:ready`, vous envoyez les données patient (age, sexe, cholestérol...) via un message `risquecv:prefill` (format du payload détaillé plus bas).
     - *Verrouillage de session (channel locking)* : Dès la réception de votre premier message `risquecv:prefill` de données (y compris un payload vide `{}`), RisqueCV **verrouille le canal**. Pour le reste de la session, RisqueCV n'acceptera plus aucun message provenant d'une autre origine ou d'une autre fenêtre que la vôtre, ni aucun message signé avec un autre `sessionId`.
-    - *Délai de repli (handshake timeout)* : Si RisqueCV ne reçoit **aucun trafic valide** (ni ping, ni prefill) dans les **5 secondes** suivant son ouverture, il bascule automatiquement en **mode standard** (non lié au logiciel métier). Un `risquecv:ping` valide relance ce délai et renvoie un nouveau `risquecv:ready`; il doit ensuite être suivi d'un `risquecv:prefill`. Cela évite de bloquer le médecin si votre logiciel métier subit un bug technique.
+    - *Délai de repli (handshake timeout)* : Si RisqueCV ne reçoit **aucun trafic valide** (ni ping, ni prefill) dans les **5 secondes** suivant son ouverture, il bascule automatiquement en **mode standard** (non lié au logiciel métier). Un `risquecv:ping` valide relance ce délai et renvoie le message `risquecv:ready` (avec le même `sessionId`); il doit ensuite être suivi d'un `risquecv:prefill`. Cela évite de bloquer le médecin si votre logiciel métier subit un bug technique.
     - *Connexion sans donnée clinique* : si votre logiciel n'a aucune donnée fiable à préremplir mais souhaite tout de même récupérer le PDF final, envoyez un `risquecv:prefill` avec `payload: {}`. RisqueCV répondra par un ACK `status: "empty"` et activera le canal de retour PDF.
 
 ### 3. Traitement des données
@@ -1069,6 +1069,8 @@ Lorsque le médecin a terminé son évaluation sur RisqueCV, il clique sur "Envo
 1. RisqueCV génère un rapport PDF (localement dans le navigateur via la librairie `pdfmake`, aucune donnée n'est envoyée à nos serveurs).
 2. Il vous transmet le PDF encodé en **Base64** via un message `risquecv:pdf`.
 3. Vous pouvez stocker le PDF dans la base de données de votre logiciel.
+
+> **Note sur le bouton "Retour vers logiciel"** : Si le médecin clique sur le bouton de retour alors qu'une évaluation est disponible mais que le PDF n'a pas encore été transmis, une modale de confirmation s'affiche dans RisqueCV. Elle lui propose d'envoyer le PDF et quitter, de quitter sans envoyer le PDF, ou de rester sur l'interface. S'il choisit de quitter (avec ou sans envoi), le signal de fermeture `risquecv:close` est émis.
 
 ### 6. Fermeture de session
 Lors du clic sur le bouton de retour, RisqueCV émet un signal `risquecv:close`.
