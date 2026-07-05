@@ -1170,7 +1170,7 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
 
 | ID accepté dans `pays` | Nom français canonique accepté |
 | :--- | :--- |
-| `AD` | Andorre |
+| `AD` | Andorre  |
 | `AE` | Émirats arabes unis |
 | `AF` | Afghanistan |
 | `AG` | Antigua-et-Barbuda |
