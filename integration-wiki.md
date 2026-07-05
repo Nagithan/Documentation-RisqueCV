@@ -1126,6 +1126,7 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
 <div class="warning">
 - <span style="font-weight: bold;">Respecter les unités mentionnées</span>. Soyez particulièrement vigilants sur le cholestérol (<code class="language-plaintext">CT</code>, <code class="language-plaintext">HDL</code>, <code class="language-plaintext">LDL</code>) qui doit impérativement être envoyé en <code class="language-plaintext">mmol/L</code> (et non en g/L), ainsi que sur l'<code class="language-plaintext">HbA1c</code> qui doit être envoyée en <code class="language-plaintext">%</code> (et non en mmol/mol).<br>
 - <span style="font-weight: bold;">Ne pas envoyer de données nominatives</span> (même si elles seront ignorées et non traitées).<br>
+- <span style="font-weight: bold;">Privilégier les données les plus récentes</span>. L'évaluation du risque cardiovasculaire n'est pertinente qu'avec des données à jour. Une vérification de la date des données doit notamment être mise en place pour la <code class="language-plaintext">PAS</code>, le <code class="language-plaintext">CT</code>, <code class="language-plaintext">HDL</code>, <code class="language-plaintext">LDL</code>, le <code class="language-plaintext">DFG</code>, la <span style="font-weight: bold;">hs-CRP</span> et l'<code class="language-plaintext">HbA1c</code>. En cas de doute sur la fraîcheur d'une donnée, il est préférable de ne pas l'envoyer : le médecin pourra la saisir manuellement.<br>
 </div>
 
 ### 1. Les 4 premières questions systématiques de RisqueCV.fr
@@ -1144,13 +1145,13 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
 | Clé | Type | Unité | Format | Description |
 | :--- | :--- | :--- | :--- | :--- |
 | `age` | `number` | ans | Entier | Âge du patient |
-| `PAS` | `number` | mmHg | Entier | Pression Artérielle Systolique (mesurée ce jour si possible). |
-| `CT` | `number` | mmol/L | Décimal | Cholestérol Total |
-| `HDL` | `number` | mmol/L | Décimal | Cholestérol HDL |
-| `LDL` | `number` | mmol/L | Décimal | Cholestérol LDL |
-| `DFG` | `number` | mL/min/1.73m² | Décimal | Débit de Filtration Glomérulaire |
-| `HbA1c` | `number` | % | Décimal | Hémoglobine glyquée |
-| `crp` | `number` | mg/L | Décimal | Protéine C-réactive ultra-sensible (hs-CRP) (attention pas la CRP standard) |
+| `PAS` | `number` | mmHg | Entier | Pression Artérielle Systolique (mesure du jour ; max conseillé 6-12 mois) |
+| `CT` | `number` | mmol/L | Décimal | Cholestérol Total (idéalement < 3 mois ; max conseillé 12-24 mois) |
+| `HDL` | `number` | mmol/L | Décimal | Cholestérol HDL (idéalement < 3 mois ; max conseillé 12-24 mois) |
+| `LDL` | `number` | mmol/L | Décimal | Cholestérol LDL (idéalement < 3 mois ; max conseillé 12-24 mois) |
+| `DFG` | `number` | mL/min/1.73m² | Décimal | Débit de Filtration Glomérulaire (idéalement < 3 mois ; max conseillé 12-24 mois) |
+| `HbA1c` | `number` | % | Décimal | Hémoglobine glyquée (idéalement < 3 mois ; max conseillé 6-12 mois) |
+| `crp` | `number` | mg/L | Décimal | Protéine C-réactive ultra-sensible (de préférence hs-CRP, pas la CRP standard). |
 | `imc` | `number` | kg/m² | Décimal | Indice de Masse Corporelle |
 | `agediabete` | `number` | ans | Entier | Âge lors du diagnostic du diabète |
 | `age_atcd` | `number` | ans | Entier | Âge lors du premier événement cardiovasculaire (AVC, AIT, SCA, IDM, AOMI, anévrisme de l'aorte abdominale) |
