@@ -31,7 +31,7 @@ jobs:
           fetch-depth: 1 # Ne télécharge que le dernier commit pour aller plus vite
 
       - name: Setup Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
