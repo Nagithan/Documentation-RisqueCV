@@ -1031,12 +1031,21 @@ RisqueCV est conçu pour être ouvert depuis votre application via :
 - **Fenêtre popup nouvel onglet (recommandé)** : `window.open('https://risquecv.fr/slug-partenaire/', '_blank')`. Cela permet une communication bilatérale fluide via la référence `window.opener`.
 - **Iframe** : compatible mais non recommandé pour des raisons d'UI/UX
 
-> 1. Pour que votre logiciel puisse intégrer RisqueCV dans une Iframe, le serveur de RisqueCV doit vous y autoriser (`Content-Security-Policy: frame-ancestors`). Si vous constatez une erreur "Clickjacking" ou "Refused to frame", demandez à ce que votre domaine soit bien whitelisté dans nos entêtes.
-> 2. Si vous décidez d'utiliser une Iframe avec l'attribut `sandbox="..."`, vous devez impérativement configurer les valeurs suivantes :
-> - `allow-scripts` : indispensable pour autoriser le fonctionnement de RisqueCV (tous les calculs cliniques et graphiques s'exécutent côté client en Javascript).
-> - `allow-same-origin` : indispensable pour que la communication `postMessage` et la validation d'origine fonctionnent. Sans ce paramètre, l'origine de l'Iframe sera traitée comme `null` (unique origin) par le navigateur, ce qui empêchera RisqueCV de valider l'origine de vos messages et vice-versa.
-> - `allow-popups` : indispensable pour permettre l'ouverture des PDF générés et des liens externes.
-> **Exemple :** `<iframe src="https://risquecv.fr/doctolib/" sandbox="allow-scripts allow-same-origin allow-popups"></iframe>`
+<details markdown="1">
+<summary>Détails pour l'implémentation via iframe</summary>
+
+1. Pour que votre logiciel puisse intégrer RisqueCV dans une iframe, le serveur de RisqueCV doit vous y autoriser (`Content-Security-Policy: frame-ancestors`). Si vous constatez une erreur "Clickjacking" ou "Refused to frame", demandez à ce que votre domaine soit bien whitelisté dans nos entêtes.
+2. Si vous décidez d'utiliser une iframe avec l'attribut `sandbox="..."`, vous devez impérativement configurer les valeurs suivantes :
+   - `allow-scripts` : indispensable pour autoriser le fonctionnement de RisqueCV (tous les calculs cliniques et graphiques s'exécutent côté client en Javascript).
+   - `allow-same-origin` : indispensable pour que la communication `postMessage` et la validation d'origine fonctionnent. Sans ce paramètre, l'origine de l'iframe sera traitée comme `null` (unique origin) par le navigateur, ce qui empêchera RisqueCV de valider l'origine de vos messages et vice-versa.
+   - `allow-popups` : indispensable pour permettre l'ouverture des PDF générés et des liens externes.
+
+**Exemple :**
+```html
+<iframe src="https://risquecv.fr/doctolib/" sandbox="allow-scripts allow-same-origin allow-popups"></iframe>
+```
+
+</details>
 
 ### 2. Établissement de la connexion ("handshake")
 
