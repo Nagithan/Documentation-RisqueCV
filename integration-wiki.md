@@ -1418,11 +1418,7 @@ Envoyé dès que RisqueCV est prêt à recevoir des données. Ce message contien
   "type": "risquecv:ready",
   "version": 1, // Il s'agit de la version du protocole d'intégration RisqueCV
   "partner": "votre-slug", // ex : "weda", "doctolib", "medistory", etc.
-  "sessionId": "uuid-genere-par-risquecv", // Identifiant unique de la session
-  "capabilities": {
-    "prefill": true, // Indique que RisqueCV accepte le pré-remplissage
-    "pdfReturn": "base64" // Indique que RisqueCV peut renvoyer le PDF en base64
-  }
+  "sessionId": "uuid-genere-par-risquecv" // Identifiant unique de la session
 }
 ```
 
