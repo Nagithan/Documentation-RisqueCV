@@ -541,7 +541,7 @@ pre[class*="language-"] > code[class*="language-"] {
         align-items: center;
         gap: 5px;
         padding: 3px 8px;
-        color: var(--difficulty-color);
+        color: var(--difficulty-text);
         background: var(--difficulty-background);
         border: 1px solid color-mix(in srgb, var(--difficulty-color) 35%, transparent);
         border-radius: 999px;
@@ -579,38 +579,92 @@ pre[class*="language-"] > code[class*="language-"] {
     }
 
     .difficulty-level-1 {
-        --difficulty-color: #2e7d32;
-        --difficulty-background: #f1f8f2;
+        --difficulty-color: #20a75a;
+        --difficulty-text: #176b3a;
+        --difficulty-background: #00c85312;
+        --difficulty-code-color: #137a43;
+        --difficulty-code-background: #168f4a1c;
     }
 
     .difficulty-level-2 {
-        --difficulty-color: #558b2f;
-        --difficulty-background: #f5faf0;
+        --difficulty-color: #84b51f;
+        --difficulty-text: #526f14;
+        --difficulty-background: #8bcf0014;
+        --difficulty-code-color: #637a0a;
+        --difficulty-code-background: #83a6001c;
     }
 
     .difficulty-level-3 {
-        --difficulty-color: #9a6700;
-        --difficulty-background: #fff8e1;
+        --difficulty-color: #e1a600;
+        --difficulty-text: #7f5d00;
+        --difficulty-background: #ffc40017;
+        --difficulty-code-color: #8a6500;
+        --difficulty-code-background: #e0a40020;
     }
 
     .difficulty-level-4 {
-        --difficulty-color: #b45309;
-        --difficulty-background: #fff1e6;
+        --difficulty-color: #de7729;
+        --difficulty-text: #934611;
+        --difficulty-background: #ff700014;
+        --difficulty-code-color: #a64a0a;
+        --difficulty-code-background: #de77291c;
     }
 
     .difficulty-level-5 {
-        --difficulty-color: #b42318;
-        --difficulty-background: #fff0f0;
+        --difficulty-color: #e04444;
+        --difficulty-text: #a61f28;
+        --difficulty-background: #ff303014;
+        --difficulty-code-color: #b81940;
+        --difficulty-code-background: #b819401c;
+    }
+
+    .implementation-table tbody > tr code[class*="language-"] {
+        color: var(--difficulty-code-color);
+        background: var(--difficulty-code-background);
     }
 
     .difficulty-cell {
-        min-width: 180px;
-        color: var(--difficulty-color);
+        min-width: 190px;
+        color: var(--difficulty-text);
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .difficulty-icon-sprite {
+        position: absolute;
+        width: 0;
+        height: 0;
+        overflow: hidden;
+        pointer-events: none;
+    }
+
+    .difficulty-label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        margin-bottom: 6px;
+        font-size: 0.88em;
+        font-weight: 700;
+        line-height: 1.25;
+        white-space: nowrap;
+    }
+
+    .difficulty-label-icon {
+        width: 18px;
+        height: 18px;
+        flex: 0 0 auto;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
     }
 
     .difficulty-score {
         display: flex;
         align-items: center;
+        justify-content: center;
         gap: 9px;
         white-space: nowrap;
     }
@@ -677,9 +731,10 @@ pre[class*="language-"] > code[class*="language-"] {
         background: #ffffff;
         border: 1px solid #cfd7e6;
         border-top: 4px solid var(--difficulty-color);
-        border-radius: 12px;
+        border-radius: 4px 4px 12px 12px;
         box-shadow: 0 18px 50px rgba(22, 34, 54, 0.22);
         line-height: 1.52;
+        text-align: left;
         overscroll-behavior: contain;
     }
 
@@ -703,7 +758,7 @@ pre[class*="language-"] > code[class*="language-"] {
         justify-content: space-between;
         gap: 16px;
         padding: 14px 16px 11px;
-        color: var(--difficulty-color);
+        color: var(--difficulty-text);
         background: var(--difficulty-background);
         border-bottom: 1px solid #e4e8f0;
     }
@@ -1774,8 +1829,35 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
 - <span style="font-weight: bold;">Privilégier les données les plus récentes</span>. L'évaluation du risque cardiovasculaire n'est pertinente qu'avec des données à jour. Une vérification de la date des données doit notamment être mise en place pour la <code class="language-plaintext">PAS</code>, le <code class="language-plaintext">CT</code>, <code class="language-plaintext">HDL</code>, <code class="language-plaintext">LDL</code>, le <code class="language-plaintext">DFG</code>, la <code class="language-plaintext">hs-CRP</code> et l'<code class="language-plaintext">HbA1c</code>. En cas de doute sur la fraîcheur d'une donnée, il est préférable de ne pas l'envoyer : le médecin pourra la saisir manuellement.<br>
 </div>
 
+<svg class="difficulty-icon-sprite" aria-hidden="true">
+  <symbol id="difficulty-icon-1" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="9"></circle>
+    <path d="m8 12 2.5 2.5L16 9"></path>
+  </symbol>
+  <symbol id="difficulty-icon-2" viewBox="0 0 24 24">
+    <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6S2.5 12 2.5 12Z"></path>
+    <circle cx="12" cy="12" r="2.5"></circle>
+  </symbol>
+  <symbol id="difficulty-icon-3" viewBox="0 0 24 24">
+    <path d="M12 3 22 20H2L12 3Z"></path>
+    <path d="M12 9v5"></path>
+    <path d="M12 17.5h.01"></path>
+  </symbol>
+  <symbol id="difficulty-icon-4" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="2.5"></circle>
+    <circle cx="5" cy="6" r="2"></circle>
+    <circle cx="19" cy="6" r="2"></circle>
+    <circle cx="12" cy="20" r="2"></circle>
+    <path d="m10.2 10.3-3.7-3M13.8 10.3l3.7-3M12 14.5V18"></path>
+  </symbol>
+  <symbol id="difficulty-icon-5" viewBox="0 0 24 24">
+    <path d="M13 2c1 4-2 5.5-2 8.5 0 1.5.8 2.7 2.1 3.5-.1-2.2 1.2-3.4 2.6-4.8 2.1 1.8 3.3 4.1 3.3 6.7A7 7 0 0 1 5 16c0-3.8 2.5-6.6 8-14Z"></path>
+    <path d="M10 18c0-1.8 1-3.1 2.5-4.4.2 1.7 1.5 2.4 1.5 4.4a2 2 0 0 1-4 0Z"></path>
+  </symbol>
+</svg>
+
 <div class="implementation-note">
-  <p><strong>À propos de la difficulté d'implémentation :</strong>Dans les tableaux ci-dessous, une note évalue la difficulté technique pour implémenter un <strong>préremplissage fiable</strong> des caractéristiques. Survolez ou activez «&nbsp;Voir les pièges&nbsp;» pour consulter les précautions propres à chaque caractéristique.</p>
+  <p><strong>À propos de la difficulté d'implémentation :</strong> Dans les tableaux ci-dessous, une note évalue la difficulté technique pour implémenter un <strong>préremplissage fiable</strong> des caractéristiques. Survolez ou activez «&nbsp;Voir les pièges&nbsp;» pour consulter les précautions propres à chaque caractéristique.</p>
   <div class="difficulty-legend" aria-label="Échelle de difficulté d’implémentation">
     <span class="difficulty-legend-item difficulty-level-1"><strong>1/5</strong> Facile</span>
     <span class="difficulty-legend-item difficulty-level-2"><strong>2/5</strong> Petite vigilance</span>
@@ -1807,6 +1889,10 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
       <td>Antécédents de maladie cardiovasculaire avérée.</td>
       <td>Maladie coronaire (angor, infarctus du myocarde, syndrome coronarien aigu, stent ou pontage coronarien), AVC, AIT, AOMI, anévrisme de l'aorte abdominale (voir la liste complète sur le site, sous le titre «&nbsp;Antécédents cardiovasculaires&nbsp;»).</td>
       <td class="difficulty-cell">
+        <div class="difficulty-label">
+          <svg class="difficulty-label-icon" aria-hidden="true"><use href="#difficulty-icon-4"></use></svg>
+          <span>Complexe</span>
+        </div>
         <div class="difficulty-score">
           <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
             <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
@@ -1836,6 +1922,10 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
       <td>Présence d'un diabète (Type 1 ou 2).</td>
       <td>Diabète (peu importe le type et le traitement).</td>
       <td class="difficulty-cell">
+        <div class="difficulty-label">
+          <svg class="difficulty-label-icon" aria-hidden="true"><use href="#difficulty-icon-3"></use></svg>
+          <span>Vigilance</span>
+        </div>
         <div class="difficulty-score">
           <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
             <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
@@ -1864,6 +1954,10 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
       <td>Maladie Rénale Chronique (DFG &lt; 60 ou albuminurie).</td>
       <td>DFG &lt; 60 ou albuminurie ou «&nbsp;Maladie rénale chronique&nbsp;».</td>
       <td class="difficulty-cell">
+        <div class="difficulty-label">
+          <svg class="difficulty-label-icon" aria-hidden="true"><use href="#difficulty-icon-3"></use></svg>
+          <span>Vigilance</span>
+        </div>
         <div class="difficulty-score">
           <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
             <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
@@ -1897,6 +1991,10 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
       <td>Autres situations complexes ou particulières qui nécessitent une évaluation personnalisée.</td>
       <td>Hypercholestérolémie familiale hétérozygote, grossesse, etc. (voir la liste complète sur le site, sous le titre «&nbsp;Autre situation particulière&nbsp;?&nbsp;»).</td>
       <td class="difficulty-cell">
+        <div class="difficulty-label">
+          <svg class="difficulty-label-icon" aria-hidden="true"><use href="#difficulty-icon-5"></use></svg>
+          <span>Quasi-impossible</span>
+        </div>
         <div class="difficulty-score">
           <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
             <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
@@ -1930,19 +2028,366 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
 
 ### 2. Valeurs numériques
 
-| Clé | Type | Unité | Format | Description |
-| :--- | :--- | :--- | :--- | :--- |
-| `age` | `number` | ans | Entier | Âge du patient |
-| `PAS` | `number` | mmHg | Entier | Pression Artérielle Systolique (mesure du jour ; max conseillé 6-12 mois) |
-| `CT` | `number` | mmol/L | Décimal | Cholestérol Total (idéalement < 3 mois ; max conseillé 12-24 mois) |
-| `HDL` | `number` | mmol/L | Décimal | Cholestérol HDL (idéalement < 3 mois ; max conseillé 12-24 mois) |
-| `LDL` | `number` | mmol/L | Décimal | Cholestérol LDL (idéalement < 3 mois ; max conseillé 12-24 mois) |
-| `DFG` | `number` | mL/min/1.73m² | Décimal | Débit de Filtration Glomérulaire (idéalement < 3 mois ; max conseillé 12-24 mois) |
-| `HbA1c` | `number` | % | Décimal | Hémoglobine glyquée (idéalement < 3 mois ; max conseillé 6-12 mois) |
-| `crp` | `number` | mg/L | Décimal | Protéine C-réactive ultra-sensible (de préférence hs-CRP, pas la CRP standard). |
-| `imc` | `number` | kg/m² | Décimal | Indice de Masse Corporelle |
-| `agediabete` | `number` | ans | Entier | Âge lors du diagnostic du diabète |
-| `age_atcd` | `number` | ans | Entier | Âge lors du premier événement cardiovasculaire (AVC, AIT, SCA, IDM, AOMI, anévrisme de l'aorte abdominale) |
+<div class="implementation-table-scroll" role="region" aria-label="Valeurs numériques et difficultés d’implémentation" tabindex="0">
+<table class="implementation-table">
+  <thead>
+    <tr>
+      <th scope="col">Clé</th>
+      <th scope="col">Type</th>
+      <th scope="col">Unité</th>
+      <th scope="col">Format</th>
+      <th scope="col">Description</th>
+      <th scope="col">Difficulté d’implémentation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="difficulty-level-1">
+      <th scope="row"><code class="language-plaintext">age</code></th>
+      <td><code class="language-plaintext">number</code></td>
+      <td>ans</td>
+      <td>Entier</td>
+      <td>Âge du patient</td>
+      <td class="difficulty-cell">
+        <div class="difficulty-label">
+          <svg class="difficulty-label-icon" aria-hidden="true"><use href="#difficulty-icon-1"></use></svg>
+          <span>Facile</span>
+        </div>
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
+            <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
+          </svg>
+          <strong>1/5</strong>
+        </div>
+      </td>
+    </tr>
+    <tr class="difficulty-level-2">
+      <th scope="row"><code class="language-plaintext">PAS</code></th>
+      <td><code class="language-plaintext">number</code></td>
+      <td>mmHg</td>
+      <td>Entier</td>
+      <td>Pression Artérielle Systolique (mesure du jour&nbsp;; max conseillé 6-12 mois)</td>
+      <td class="difficulty-cell">
+        <div class="difficulty-label">
+          <svg class="difficulty-label-icon" aria-hidden="true"><use href="#difficulty-icon-2"></use></svg>
+          <span>Petite vigilance</span>
+        </div>
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
+            <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
+          </svg>
+          <strong>2/5</strong>
+        </div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-pas" popovertarget="pitfalls-pas" style="anchor-name: --pitfalls-pas">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-2" id="pitfalls-pas" popover="auto" role="dialog" aria-labelledby="pitfalls-pas-title" style="position-anchor: --pitfalls-pas">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-pas-title"><code class="language-plaintext">PAS</code> — difficulté 2/5</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-pas" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li>La mesure attendue est idéalement celle du jour au cabinet. À défaut, il est recommandé de prendre la dernière valeur enregistrée dans le dossier, à condition que celle-ci ne soit pas trop ancienne (maximum conseillé&nbsp;: 12 mois).</li>
+              <li>Utiliser la pression systolique, pas la pression diastolique ni la pression moyenne.</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="difficulty-level-2">
+      <th scope="row"><code class="language-plaintext">CT</code></th>
+      <td><code class="language-plaintext">number</code></td>
+      <td>mmol/L</td>
+      <td>Décimal</td>
+      <td>Cholestérol Total (idéalement &lt; 3 mois&nbsp;; max conseillé 12-24 mois)</td>
+      <td class="difficulty-cell">
+        <div class="difficulty-label">
+          <svg class="difficulty-label-icon" aria-hidden="true"><use href="#difficulty-icon-2"></use></svg>
+          <span>Petite vigilance</span>
+        </div>
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
+            <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
+          </svg>
+          <strong>2/5</strong>
+        </div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-ct" popovertarget="pitfalls-ct" style="anchor-name: --pitfalls-ct">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-2" id="pitfalls-ct" popover="auto" role="dialog" aria-labelledby="pitfalls-ct-title" style="position-anchor: --pitfalls-ct">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-ct-title"><code class="language-plaintext">CT</code> — difficulté 2/5</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-ct" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li>Utiliser <strong>absolument</strong> la valeur en mmol/L, et pas celle en g/L. Si vous ne disposez que de la valeur en g/L, une conversion avant envoi est possible.</li>
+              <li>La valeur date idéalement de moins de trois mois. À défaut, il est recommandé de prendre la dernière valeur enregistrée dans le dossier, à condition que celle-ci ne soit pas trop ancienne (maximum conseillé&nbsp;: 24 mois).</li>
+              <li>Utiliser de préférence le même bilan lipidique que pour le HDL et le LDL.</li>
+              <li>Ne pas confondre cholestérol total, cholestérol non-HDL ou ratio. Il faut bien envoyer la valeur du cholestérol total.</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="difficulty-level-2">
+      <th scope="row"><code class="language-plaintext">HDL</code></th>
+      <td><code class="language-plaintext">number</code></td>
+      <td>mmol/L</td>
+      <td>Décimal</td>
+      <td>Cholestérol HDL (idéalement &lt; 3 mois&nbsp;; max conseillé 12-24 mois)</td>
+      <td class="difficulty-cell">
+        <div class="difficulty-label">
+          <svg class="difficulty-label-icon" aria-hidden="true"><use href="#difficulty-icon-2"></use></svg>
+          <span>Petite vigilance</span>
+        </div>
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
+            <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
+          </svg>
+          <strong>2/5</strong>
+        </div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-hdl" popovertarget="pitfalls-hdl" style="anchor-name: --pitfalls-hdl">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-2" id="pitfalls-hdl" popover="auto" role="dialog" aria-labelledby="pitfalls-hdl-title" style="position-anchor: --pitfalls-hdl">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-hdl-title"><code class="language-plaintext">HDL</code> — difficulté 2/5</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-hdl" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li>Même vigilance que pour le <code class="language-plaintext">CT</code>.</li>
+              <li>Utiliser <strong>absolument</strong> la valeur en mmol/L, et pas celle en g/L. Si vous ne disposez que de la valeur en g/L, une conversion avant envoi est possible.</li>
+              <li>La valeur date idéalement de moins de trois mois. À défaut, il est recommandé de prendre la dernière valeur enregistrée dans le dossier, à condition que celle-ci ne soit pas trop ancienne (maximum conseillé&nbsp;: 24 mois).</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="difficulty-level-3">
+      <th scope="row"><code class="language-plaintext">LDL</code></th>
+      <td><code class="language-plaintext">number</code></td>
+      <td>mmol/L</td>
+      <td>Décimal</td>
+      <td>Cholestérol LDL (idéalement &lt; 3 mois&nbsp;; max conseillé 12-24 mois)</td>
+      <td class="difficulty-cell">
+        <div class="difficulty-label">
+          <svg class="difficulty-label-icon" aria-hidden="true"><use href="#difficulty-icon-3"></use></svg>
+          <span>Vigilance</span>
+        </div>
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
+            <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
+          </svg>
+          <strong>3/5</strong>
+        </div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-ldl" popovertarget="pitfalls-ldl" style="anchor-name: --pitfalls-ldl">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-3" id="pitfalls-ldl" popover="auto" role="dialog" aria-labelledby="pitfalls-ldl-title" style="position-anchor: --pitfalls-ldl">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-ldl-title"><code class="language-plaintext">LDL</code> — difficulté 3/5</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-ldl" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li>Même vigilance que pour le <code class="language-plaintext">CT</code> et le <code class="language-plaintext">HDL</code>, avec une subtilité propre au LDL.</li>
+              <li>Utiliser <strong>absolument</strong> la valeur en mmol/L, et pas celle en g/L. Si vous ne disposez que de la valeur en g/L, une conversion avant envoi est possible.</li>
+              <li>La valeur date idéalement de moins de trois mois. À défaut, il est recommandé de prendre la dernière valeur enregistrée dans le dossier, à condition que celle-ci ne soit pas trop ancienne (maximum conseillé&nbsp;: 24 mois).</li>
+              <li>Le LDL d’une prise de sang est habituellement calculé — et non mesuré directement — à partir des autres valeurs du cholestérol. Cependant, lorsque les triglycérides sont élevés, le calcul du LDL est impossible&nbsp;: il est alors mesuré par le laboratoire. La biologie structurée peut donc contenir une valeur mesurée ou une valeur calculée. Dans tous les cas, privilégier le bilan le plus récent. Si elle est disponible, privilégier la valeur mesurée du LDL&nbsp;; sinon, utiliser la valeur calculée.</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="difficulty-level-3">
+      <th scope="row"><code class="language-plaintext">DFG</code></th>
+      <td><code class="language-plaintext">number</code></td>
+      <td>mL/min/1.73m²</td>
+      <td>Décimal</td>
+      <td>Débit de Filtration Glomérulaire (idéalement &lt; 3 mois&nbsp;; max conseillé 12-24 mois)</td>
+      <td class="difficulty-cell">
+        <div class="difficulty-label">
+          <svg class="difficulty-label-icon" aria-hidden="true"><use href="#difficulty-icon-3"></use></svg>
+          <span>Vigilance</span>
+        </div>
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
+            <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
+          </svg>
+          <strong>3/5</strong>
+        </div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-dfg" popovertarget="pitfalls-dfg" style="anchor-name: --pitfalls-dfg">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-3" id="pitfalls-dfg" popover="auto" role="dialog" aria-labelledby="pitfalls-dfg-title" style="position-anchor: --pitfalls-dfg">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-dfg-title"><code class="language-plaintext">DFG</code> — difficulté 3/5</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-dfg" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li>Le DFG peut être calculé avec différentes formules. Privilégier le DFG estimé avec CKD-EPI.</li>
+              <li>Privilégier la valeur la plus récente, datant de préférence de moins de trois mois et au maximum de 24 mois.</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="difficulty-level-2">
+      <th scope="row"><code class="language-plaintext">HbA1c</code></th>
+      <td><code class="language-plaintext">number</code></td>
+      <td>%</td>
+      <td>Décimal</td>
+      <td>Hémoglobine glyquée (idéalement &lt; 3 mois&nbsp;; max conseillé 6-12 mois)</td>
+      <td class="difficulty-cell">
+        <div class="difficulty-label">
+          <svg class="difficulty-label-icon" aria-hidden="true"><use href="#difficulty-icon-2"></use></svg>
+          <span>Petite vigilance</span>
+        </div>
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
+            <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
+          </svg>
+          <strong>2/5</strong>
+        </div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-hba1c" popovertarget="pitfalls-hba1c" style="anchor-name: --pitfalls-hba1c">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-2" id="pitfalls-hba1c" popover="auto" role="dialog" aria-labelledby="pitfalls-hba1c-title" style="position-anchor: --pitfalls-hba1c">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-hba1c-title"><code class="language-plaintext">HbA1c</code> — difficulté 2/5</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-hba1c" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li>Risque d’unité&nbsp;: RisqueCV attend le pourcentage NGSP, pas la valeur en mmol/mol IFCC.</li>
+              <li>Privilégier la valeur la plus récente, datant de préférence de moins de trois mois et au maximum de 12 mois.</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="difficulty-level-4">
+      <th scope="row"><code class="language-plaintext">crp</code></th>
+      <td><code class="language-plaintext">number</code></td>
+      <td>mg/L</td>
+      <td>Décimal</td>
+      <td>Protéine C-réactive ultra-sensible (hs-CRP uniquement, pas la CRP standard).</td>
+      <td class="difficulty-cell">
+        <div class="difficulty-label">
+          <svg class="difficulty-label-icon" aria-hidden="true"><use href="#difficulty-icon-4"></use></svg>
+          <span>Complexe</span>
+        </div>
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
+            <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
+          </svg>
+          <strong>4/5</strong>
+        </div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-crp" popovertarget="pitfalls-crp" style="anchor-name: --pitfalls-crp">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-4" id="pitfalls-crp" popover="auto" role="dialog" aria-labelledby="pitfalls-crp-title" style="position-anchor: --pitfalls-crp">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-crp-title"><code class="language-plaintext">crp</code> — difficulté 4/5</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-crp" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li>N’accepter que la CRP dosée par méthode ultrasensible (code LOINC 30522-7).</li>
+              <li>Le risque d’erreur silencieuse est élevé, car la valeur seule ne révèle ni la méthode ni le contexte de réalisation. Elle peut notamment être augmentée dans un contexte infectieux sans rapport avec le risque cardiovasculaire.</li>
+              <li>Ne pas envoyer la valeur si elle est supérieure à 15 mg/L.</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="difficulty-level-3">
+      <th scope="row"><code class="language-plaintext">imc</code></th>
+      <td><code class="language-plaintext">number</code></td>
+      <td>kg/m²</td>
+      <td>Décimal</td>
+      <td>Indice de Masse Corporelle</td>
+      <td class="difficulty-cell">
+        <div class="difficulty-label">
+          <svg class="difficulty-label-icon" aria-hidden="true"><use href="#difficulty-icon-3"></use></svg>
+          <span>Vigilance</span>
+        </div>
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
+            <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
+          </svg>
+          <strong>3/5</strong>
+        </div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-imc" popovertarget="pitfalls-imc" style="anchor-name: --pitfalls-imc">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-3" id="pitfalls-imc" popover="auto" role="dialog" aria-labelledby="pitfalls-imc-title" style="position-anchor: --pitfalls-imc">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-imc-title"><code class="language-plaintext">imc</code> — difficulté 3/5</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-imc" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li>Utiliser un IMC récent — moins de deux ans — ou le calculer depuis le dernier poids de moins de deux ans et la dernière taille. Ne pas utiliser une taille mesurée avant l’âge de 18 ans.</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="difficulty-level-4">
+      <th scope="row"><code class="language-plaintext">agediabete</code></th>
+      <td><code class="language-plaintext">number</code></td>
+      <td>ans</td>
+      <td>Entier</td>
+      <td>Âge lors du diagnostic du diabète</td>
+      <td class="difficulty-cell">
+        <div class="difficulty-label">
+          <svg class="difficulty-label-icon" aria-hidden="true"><use href="#difficulty-icon-4"></use></svg>
+          <span>Complexe</span>
+        </div>
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
+            <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
+          </svg>
+          <strong>4/5</strong>
+        </div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-agediabete" popovertarget="pitfalls-agediabete" style="anchor-name: --pitfalls-agediabete">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-4" id="pitfalls-agediabete" popover="auto" role="dialog" aria-labelledby="pitfalls-agediabete-title" style="position-anchor: --pitfalls-agediabete">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-agediabete-title"><code class="language-plaintext">agediabete</code> — difficulté 4/5</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-agediabete" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li>Âge lors de la confirmation du diagnostic de diabète, et non âge au premier traitement ni à la première HbA1c ou glycémie anormale.</li>
+              <li>Ne remplir que si l’âge — ou l’année — de début est explicitement renseigné dans l’antécédent structuré de diabète.</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="difficulty-level-5">
+      <th scope="row"><code class="language-plaintext">age_atcd</code></th>
+      <td><code class="language-plaintext">number</code></td>
+      <td>ans</td>
+      <td>Entier</td>
+      <td>Âge lors du premier événement cardiovasculaire (AVC, AIT, SCA, IDM, AOMI, anévrisme de l'aorte abdominale)</td>
+      <td class="difficulty-cell">
+        <div class="difficulty-label">
+          <svg class="difficulty-label-icon" aria-hidden="true"><use href="#difficulty-icon-5"></use></svg>
+          <span>Quasi-impossible</span>
+        </div>
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
+            <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
+          </svg>
+          <strong>5/5</strong>
+        </div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-age-atcd" popovertarget="pitfalls-age-atcd" style="anchor-name: --pitfalls-age-atcd">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-5" id="pitfalls-age-atcd" popover="auto" role="dialog" aria-labelledby="pitfalls-age-atcd-title" style="position-anchor: --pitfalls-age-atcd">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-age-atcd-title"><code class="language-plaintext">age_atcd</code> — difficulté 5/5</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-age-atcd" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li>Âge lors du premier événement cardiovasculaire (AVC/AIT, SCA/IDM, AOMI, anévrisme abdominal…), et non lors du plus récent.</li>
+              <li>En pratique, cette valeur est impossible à préremplir de manière fiable&nbsp;: la date indiquée dans l’antécédent peut ne pas être celle du premier événement cardiovasculaire.</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
 ### 3. Valeurs de type string
 
