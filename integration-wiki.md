@@ -34,6 +34,7 @@ permalink: /integration-wiki/
     .page-update-card {
         display: flex;
         align-items: center;
+		justify-content: center;
         gap: 12px;
         margin: 0 0 1.25rem;
         padding: 12px 15px;
