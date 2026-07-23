@@ -529,6 +529,10 @@ pre[class*="language-"] > code[class*="language-"] {
 
     .implementation-note p { margin: 0; }
 
+    .boolean-interpretation-note {
+        margin: 0.85rem 0 1rem;
+    }
+
     .difficulty-legend {
         display: flex;
         flex-wrap: wrap;
@@ -621,7 +625,8 @@ pre[class*="language-"] > code[class*="language-"] {
 
     .implementation-table th,
     .implementation-table td {
-        vertical-align: top;
+        text-align: center;
+        vertical-align: middle;
     }
 
     .implementation-table tbody th[scope="row"] {
@@ -681,18 +686,46 @@ pre[class*="language-"] > code[class*="language-"] {
         background: var(--difficulty-code-background);
     }
 
-    .difficulty-cell {
+    .type-format {
+        display: block;
+        margin-top: 4px;
+        color: var(--difficulty-text);
+        font-size: 0.82em;
+        font-weight: 650;
+        line-height: 1.2;
+    }
+
+    .implementation-table td.difficulty-cell {
         min-width: 190px;
         color: var(--difficulty-text);
-        text-align: center;
-        vertical-align: middle;
     }
 
     .difficulty-score {
         display: flex;
         align-items: center;
         justify-content: center;
+        gap: 9px;
         white-space: nowrap;
+    }
+
+    .difficulty-meter {
+        width: 78px;
+        height: 12px;
+        flex: 0 0 auto;
+        color: var(--difficulty-color);
+    }
+
+    .difficulty-meter rect {
+        fill: currentColor;
+        opacity: 0.18;
+    }
+
+    .difficulty-level-1 .difficulty-meter rect:nth-child(-n+1),
+    .difficulty-level-2 .difficulty-meter rect:nth-child(-n+2),
+    .difficulty-level-3 .difficulty-meter rect:nth-child(-n+3),
+    .difficulty-level-4 .difficulty-meter rect:nth-child(-n+4),
+    .difficulty-level-5 .difficulty-meter rect:nth-child(-n+5) {
+        opacity: 1;
     }
 
     .difficulty-score strong {
@@ -1859,8 +1892,8 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
 
 ### 1. Booléens
 
-<div class="warning">
-  <strong>Interprétation de <code class="language-plaintext">false</code>&nbsp;:</strong> <code class="language-plaintext">false</code> est une affirmation&nbsp;: «&nbsp;cet élément est faux&nbsp;». Une valeur inconnue, incomplète ou douteuse ne doit jamais être envoyée à <code class="language-plaintext">false</code>. En cas d’incertitude, omettez la clé&nbsp;: le médecin répondra dans RisqueCV.
+<div class="implementation-note boolean-interpretation-note">
+  <p><strong>Interprétation de <code class="language-plaintext">false</code>&nbsp;:</strong> <code class="language-plaintext">false</code> est une affirmation&nbsp;: «&nbsp;cet élément est faux&nbsp;». Une valeur inconnue, incomplète ou douteuse ne doit jamais être envoyée à <code class="language-plaintext">false</code>. En cas d’incertitude, omettez la clé&nbsp;: le médecin répondra dans RisqueCV.</p>
 </div>
 
 <div class="implementation-table-scroll" role="region" aria-label="Valeurs booléennes et difficultés d’implémentation" tabindex="0">
@@ -1880,6 +1913,7 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
       <td>Antécédents de maladie cardiovasculaire avérée.</td>
       <td class="difficulty-cell">
         <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
           <strong>4/5</strong>
         </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-atcd" popovertarget="pitfalls-atcd" style="anchor-name: --pitfalls-atcd">Voir les pièges</button>
@@ -1902,9 +1936,12 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
     <tr class="difficulty-level-4">
       <th scope="row"><code class="language-plaintext">atcd_coronarien</code></th>
       <td><code class="language-plaintext">boolean</code></td>
-      <td>Antécédent de maladie coronaire (IDM, SCA, angor ou revascularisation coronaire).</td>
+      <td>Antécédent de maladie coronaire.</td>
       <td class="difficulty-cell">
-        <div class="difficulty-score"><strong>4/5</strong></div>
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
+          <strong>4/5</strong>
+        </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-atcd-coronarien" popovertarget="pitfalls-atcd-coronarien" style="anchor-name: --pitfalls-atcd-coronarien">Voir les pièges</button>
         <div class="pitfall-popover difficulty-level-4" id="pitfalls-atcd-coronarien" popover="auto" role="dialog" aria-labelledby="pitfalls-atcd-coronarien-title" style="position-anchor: --pitfalls-atcd-coronarien">
           <div class="pitfall-popover-header">
@@ -1923,9 +1960,12 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
     <tr class="difficulty-level-4">
       <th scope="row"><code class="language-plaintext">atcd_cerebrovasculaire</code></th>
       <td><code class="language-plaintext">boolean</code></td>
-      <td>Antécédent d’événement cérébrovasculaire ou rétinien ischémique.</td>
+      <td>Antécédent cérébrovasculaire.</td>
       <td class="difficulty-cell">
-        <div class="difficulty-score"><strong>4/5</strong></div>
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
+          <strong>4/5</strong>
+        </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-atcd-cerebrovasculaire" popovertarget="pitfalls-atcd-cerebrovasculaire" style="anchor-name: --pitfalls-atcd-cerebrovasculaire">Voir les pièges</button>
         <div class="pitfall-popover difficulty-level-4" id="pitfalls-atcd-cerebrovasculaire" popover="auto" role="dialog" aria-labelledby="pitfalls-atcd-cerebrovasculaire-title" style="position-anchor: --pitfalls-atcd-cerebrovasculaire">
           <div class="pitfall-popover-header">
@@ -1944,9 +1984,12 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
     <tr class="difficulty-level-4">
       <th scope="row"><code class="language-plaintext">atcd_aomi</code></th>
       <td><code class="language-plaintext">boolean</code></td>
-      <td>Antécédent d’AOMI ou de revascularisation artérielle des membres inférieurs.</td>
+      <td>Antécédent d’AOMI.</td>
       <td class="difficulty-cell">
-        <div class="difficulty-score"><strong>4/5</strong></div>
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
+          <strong>4/5</strong>
+        </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-atcd-aomi" popovertarget="pitfalls-atcd-aomi" style="anchor-name: --pitfalls-atcd-aomi">Voir les pièges</button>
         <div class="pitfall-popover difficulty-level-4" id="pitfalls-atcd-aomi" popover="auto" role="dialog" aria-labelledby="pitfalls-atcd-aomi-title" style="position-anchor: --pitfalls-atcd-aomi">
           <div class="pitfall-popover-header">
@@ -1968,7 +2011,10 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
       <td><code class="language-plaintext">boolean</code></td>
       <td>Antécédent d’anévrisme de l’aorte abdominale.</td>
       <td class="difficulty-cell">
-        <div class="difficulty-score"><strong>4/5</strong></div>
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
+          <strong>4/5</strong>
+        </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-atcd-anevrisme-aorte" popovertarget="pitfalls-atcd-anevrisme-aorte" style="anchor-name: --pitfalls-atcd-anevrisme-aorte">Voir les pièges</button>
         <div class="pitfall-popover difficulty-level-4" id="pitfalls-atcd-anevrisme-aorte" popover="auto" role="dialog" aria-labelledby="pitfalls-atcd-anevrisme-aorte-title" style="position-anchor: --pitfalls-atcd-anevrisme-aorte">
           <div class="pitfall-popover-header">
@@ -1987,9 +2033,12 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
     <tr class="difficulty-level-5" hidden>
       <th scope="row"><code class="language-plaintext">atcd_evenement_recent</code></th>
       <td><code class="language-plaintext">boolean</code></td>
-      <td>Événement cardiovasculaire survenu au cours des six dernières semaines.</td>
+      <td>Événement cardiovasculaire récent.</td>
       <td class="difficulty-cell">
-        <div class="difficulty-score"><strong>5/5</strong></div>
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
+          <strong>5/5</strong>
+        </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-atcd-evenement-recent" popovertarget="pitfalls-atcd-evenement-recent" style="anchor-name: --pitfalls-atcd-evenement-recent">Voir les pièges</button>
         <div class="pitfall-popover difficulty-level-5" id="pitfalls-atcd-evenement-recent" popover="auto" role="dialog" aria-labelledby="pitfalls-atcd-evenement-recent-title" style="position-anchor: --pitfalls-atcd-evenement-recent">
           <div class="pitfall-popover-header">
@@ -2008,9 +2057,12 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
     <tr class="difficulty-level-5" hidden>
       <th scope="row"><code class="language-plaintext">atcd_evenement_recurrent</code></th>
       <td><code class="language-plaintext">boolean</code></td>
-      <td>Événements cardiovasculaires répétés malgré une statine à la dose maximale tolérée.</td>
+      <td>Événement cardiovasculaire récurrent.</td>
       <td class="difficulty-cell">
-        <div class="difficulty-score"><strong>5/5</strong></div>
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
+          <strong>5/5</strong>
+        </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-atcd-evenement-recurrent" popovertarget="pitfalls-atcd-evenement-recurrent" style="anchor-name: --pitfalls-atcd-evenement-recurrent">Voir les pièges</button>
         <div class="pitfall-popover difficulty-level-5" id="pitfalls-atcd-evenement-recurrent" popover="auto" role="dialog" aria-labelledby="pitfalls-atcd-evenement-recurrent-title" style="position-anchor: --pitfalls-atcd-evenement-recurrent">
           <div class="pitfall-popover-header">
@@ -2030,9 +2082,12 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
     <tr class="difficulty-level-4">
       <th scope="row"><code class="language-plaintext">atcd_polyvasculaire</code></th>
       <td><code class="language-plaintext">boolean</code></td>
-      <td>Atteinte cardiovasculaire portant sur au moins deux territoires.</td>
+      <td>Atteinte polyvasculaire.</td>
       <td class="difficulty-cell">
-        <div class="difficulty-score"><strong>4/5</strong></div>
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
+          <strong>4/5</strong>
+        </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-atcd-polyvasculaire" popovertarget="pitfalls-atcd-polyvasculaire" style="anchor-name: --pitfalls-atcd-polyvasculaire">Voir les pièges</button>
         <div class="pitfall-popover difficulty-level-4" id="pitfalls-atcd-polyvasculaire" popover="auto" role="dialog" aria-labelledby="pitfalls-atcd-polyvasculaire-title" style="position-anchor: --pitfalls-atcd-polyvasculaire">
           <div class="pitfall-popover-header">
@@ -2052,9 +2107,12 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
     <tr class="difficulty-level-3">
       <th scope="row"><code class="language-plaintext">antithrombotique</code></th>
       <td><code class="language-plaintext">boolean</code></td>
-      <td>Traitement actuel par antiagrégant plaquettaire ou anticoagulant.</td>
+      <td>Traitement antithrombotique actuel.</td>
       <td class="difficulty-cell">
-        <div class="difficulty-score"><strong>3/5</strong></div>
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
+          <strong>3/5</strong>
+        </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-antithrombotique" popovertarget="pitfalls-antithrombotique" style="anchor-name: --pitfalls-antithrombotique">Voir les pièges</button>
         <div class="pitfall-popover difficulty-level-3" id="pitfalls-antithrombotique" popover="auto" role="dialog" aria-labelledby="pitfalls-antithrombotique-title" style="position-anchor: --pitfalls-antithrombotique">
           <div class="pitfall-popover-header">
@@ -2073,9 +2131,10 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
     <tr class="difficulty-level-3">
       <th scope="row"><code class="language-plaintext">diabete</code></th>
       <td><code class="language-plaintext">boolean</code></td>
-      <td>Présence d'un diabète (Type 1 ou 2).</td>
+      <td>Présence d’un diabète.</td>
       <td class="difficulty-cell">
         <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
           <strong>3/5</strong>
         </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-diabete" popovertarget="pitfalls-diabete" style="anchor-name: --pitfalls-diabete">Voir les pièges</button>
@@ -2097,9 +2156,12 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
     <tr class="difficulty-level-3">
       <th scope="row"><code class="language-plaintext">insuline</code></th>
       <td><code class="language-plaintext">boolean</code></td>
-      <td>Traitement actuel du diabète par insuline.</td>
+      <td>Traitement actuel par insuline.</td>
       <td class="difficulty-cell">
-        <div class="difficulty-score"><strong>3/5</strong></div>
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
+          <strong>3/5</strong>
+        </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-insuline" popovertarget="pitfalls-insuline" style="anchor-name: --pitfalls-insuline">Voir les pièges</button>
         <div class="pitfall-popover difficulty-level-3" id="pitfalls-insuline" popover="auto" role="dialog" aria-labelledby="pitfalls-insuline-title" style="position-anchor: --pitfalls-insuline">
           <div class="pitfall-popover-header">
@@ -2120,7 +2182,10 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
       <td><code class="language-plaintext">boolean</code></td>
       <td>Présence d’une rétinopathie diabétique.</td>
       <td class="difficulty-cell">
-        <div class="difficulty-score"><strong>4/5</strong></div>
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
+          <strong>4/5</strong>
+        </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-retinopathie" popovertarget="pitfalls-retinopathie" style="anchor-name: --pitfalls-retinopathie">Voir les pièges</button>
         <div class="pitfall-popover difficulty-level-4" id="pitfalls-retinopathie" popover="auto" role="dialog" aria-labelledby="pitfalls-retinopathie-title" style="position-anchor: --pitfalls-retinopathie">
           <div class="pitfall-popover-header">
@@ -2142,7 +2207,10 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
       <td><code class="language-plaintext">boolean</code></td>
       <td>Présence d’une neuropathie diabétique.</td>
       <td class="difficulty-cell">
-        <div class="difficulty-score"><strong>4/5</strong></div>
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
+          <strong>4/5</strong>
+        </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-neuropathie" popovertarget="pitfalls-neuropathie" style="anchor-name: --pitfalls-neuropathie">Voir les pièges</button>
         <div class="pitfall-popover difficulty-level-4" id="pitfalls-neuropathie" popover="auto" role="dialog" aria-labelledby="pitfalls-neuropathie-title" style="position-anchor: --pitfalls-neuropathie">
           <div class="pitfall-popover-header">
@@ -2161,9 +2229,12 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
     <tr class="difficulty-level-5" hidden>
       <th scope="row"><code class="language-plaintext">microangiopathie3sites</code></th>
       <td><code class="language-plaintext">boolean</code></td>
-      <td>Atteinte microangiopathique du diabète sur au moins trois organes ou sites.</td>
+      <td>Microangiopathie diabétique sur au moins trois sites.</td>
       <td class="difficulty-cell">
-        <div class="difficulty-score"><strong>5/5</strong></div>
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
+          <strong>5/5</strong>
+        </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-microangiopathie-3-sites" popovertarget="pitfalls-microangiopathie-3-sites" style="anchor-name: --pitfalls-microangiopathie-3-sites">Voir les pièges</button>
         <div class="pitfall-popover difficulty-level-5" id="pitfalls-microangiopathie-3-sites" popover="auto" role="dialog" aria-labelledby="pitfalls-microangiopathie-3-sites-title" style="position-anchor: --pitfalls-microangiopathie-3-sites">
           <div class="pitfall-popover-header">
@@ -2183,9 +2254,10 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
     <tr class="difficulty-level-3">
       <th scope="row"><code class="language-plaintext">MRC</code></th>
       <td><code class="language-plaintext">boolean</code></td>
-      <td>Maladie Rénale Chronique (DFG &lt; 60 ou albuminurie).</td>
+      <td>Maladie rénale chronique.</td>
       <td class="difficulty-cell">
         <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
           <strong>3/5</strong>
         </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-mrc" popovertarget="pitfalls-mrc" style="anchor-name: --pitfalls-mrc">Voir les pièges</button>
@@ -2214,7 +2286,10 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
       <td><code class="language-plaintext">boolean</code></td>
       <td>Tabagisme actif actuel.</td>
       <td class="difficulty-cell">
-        <div class="difficulty-score"><strong>3/5</strong></div>
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
+          <strong>3/5</strong>
+        </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-tabac" popovertarget="pitfalls-tabac" style="anchor-name: --pitfalls-tabac">Voir les pièges</button>
         <div class="pitfall-popover difficulty-level-3" id="pitfalls-tabac" popover="auto" role="dialog" aria-labelledby="pitfalls-tabac-title" style="position-anchor: --pitfalls-tabac">
           <div class="pitfall-popover-header">
@@ -2237,7 +2312,10 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
       <td><code class="language-plaintext">boolean</code></td>
       <td>Hypercholestérolémie familiale hétérozygote connue.</td>
       <td class="difficulty-cell">
-        <div class="difficulty-score"><strong>3/5</strong></div>
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
+          <strong>3/5</strong>
+        </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-hypercho-famille" popovertarget="pitfalls-hypercho-famille" style="anchor-name: --pitfalls-hypercho-famille">Voir les pièges</button>
         <div class="pitfall-popover difficulty-level-3" id="pitfalls-hypercho-famille" popover="auto" role="dialog" aria-labelledby="pitfalls-hypercho-famille-title" style="position-anchor: --pitfalls-hypercho-famille">
           <div class="pitfall-popover-header">
@@ -2260,6 +2338,7 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
       <td>Autres situations complexes ou particulières qui nécessitent une évaluation personnalisée.</td>
       <td class="difficulty-cell">
         <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
           <strong>5/5</strong>
         </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-autrepb" popovertarget="pitfalls-autrepb" style="anchor-name: --pitfalls-autrepb">Voir les pièges</button>
@@ -2286,9 +2365,12 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
     <tr class="difficulty-level-5" hidden>
       <th scope="row"><code class="language-plaintext">autreFacteurMajeur</code></th>
       <td><code class="language-plaintext">boolean</code></td>
-      <td>Autre facteur de risque majeur dans le parcours d’hypercholestérolémie familiale hétérozygote.</td>
+      <td>Autre facteur de risque majeur.</td>
       <td class="difficulty-cell">
-        <div class="difficulty-score"><strong>5/5</strong></div>
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
+          <strong>5/5</strong>
+        </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-autre-facteur-majeur" popovertarget="pitfalls-autre-facteur-majeur" style="anchor-name: --pitfalls-autre-facteur-majeur">Voir les pièges</button>
         <div class="pitfall-popover difficulty-level-5" id="pitfalls-autre-facteur-majeur" popover="auto" role="dialog" aria-labelledby="pitfalls-autre-facteur-majeur-title" style="position-anchor: --pitfalls-autre-facteur-majeur">
           <div class="pitfall-popover-header">
@@ -2307,9 +2389,12 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
     <tr class="difficulty-level-5" hidden>
       <th scope="row"><code class="language-plaintext">evaluationComplete</code></th>
       <td><code class="language-plaintext">boolean</code></td>
-      <td>Choix du parcours d’évaluation détaillé ou rapide.</td>
+      <td>Évaluation complète.</td>
       <td class="difficulty-cell">
-        <div class="difficulty-score"><strong>5/5</strong></div>
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
+          <strong>5/5</strong>
+        </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-evaluation-complete" popovertarget="pitfalls-evaluation-complete" style="anchor-name: --pitfalls-evaluation-complete">Voir les pièges</button>
         <div class="pitfall-popover difficulty-level-5" id="pitfalls-evaluation-complete" popover="auto" role="dialog" aria-labelledby="pitfalls-evaluation-complete-title" style="position-anchor: --pitfalls-evaluation-complete">
           <div class="pitfall-popover-header">
@@ -2338,7 +2423,6 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
       <th scope="col">Clé</th>
       <th scope="col">Type</th>
       <th scope="col">Unité</th>
-      <th scope="col">Format</th>
       <th scope="col">Description</th>
       <th scope="col">Difficulté d’implémentation</th>
     </tr>
@@ -2346,24 +2430,24 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
   <tbody>
     <tr class="difficulty-level-1">
       <th scope="row"><code class="language-plaintext">age</code></th>
-      <td><code class="language-plaintext">number</code></td>
+      <td><code class="language-plaintext">number</code><span class="type-format">Entier</span></td>
       <td>ans</td>
-      <td>Entier</td>
       <td>Âge du patient</td>
       <td class="difficulty-cell">
         <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
           <strong>1/5</strong>
         </div>
       </td>
     </tr>
     <tr class="difficulty-level-2">
       <th scope="row"><code class="language-plaintext">PAS</code></th>
-      <td><code class="language-plaintext">number</code></td>
+      <td><code class="language-plaintext">number</code><span class="type-format">Entier</span></td>
       <td>mmHg</td>
-      <td>Entier</td>
-      <td>Pression Artérielle Systolique (mesure du jour&nbsp;; max conseillé 6-12 mois)</td>
+      <td>Pression Artérielle Systolique</td>
       <td class="difficulty-cell">
         <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
           <strong>2/5</strong>
         </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-pas" popovertarget="pitfalls-pas" style="anchor-name: --pitfalls-pas">Voir les pièges</button>
@@ -2383,12 +2467,12 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
     </tr>
     <tr class="difficulty-level-2">
       <th scope="row"><code class="language-plaintext">CT</code></th>
-      <td><code class="language-plaintext">number</code></td>
+      <td><code class="language-plaintext">number</code><span class="type-format">Décimal</span></td>
       <td>mmol/L</td>
-      <td>Décimal</td>
-      <td>Cholestérol Total (idéalement &lt; 3 mois&nbsp;; max conseillé 12-24 mois)</td>
+      <td>Cholestérol Total</td>
       <td class="difficulty-cell">
         <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
           <strong>2/5</strong>
         </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-ct" popovertarget="pitfalls-ct" style="anchor-name: --pitfalls-ct">Voir les pièges</button>
@@ -2410,12 +2494,12 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
     </tr>
     <tr class="difficulty-level-2">
       <th scope="row"><code class="language-plaintext">HDL</code></th>
-      <td><code class="language-plaintext">number</code></td>
+      <td><code class="language-plaintext">number</code><span class="type-format">Décimal</span></td>
       <td>mmol/L</td>
-      <td>Décimal</td>
-      <td>Cholestérol HDL (idéalement &lt; 3 mois&nbsp;; max conseillé 12-24 mois)</td>
+      <td>Cholestérol HDL</td>
       <td class="difficulty-cell">
         <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
           <strong>2/5</strong>
         </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-hdl" popovertarget="pitfalls-hdl" style="anchor-name: --pitfalls-hdl">Voir les pièges</button>
@@ -2436,12 +2520,12 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
     </tr>
     <tr class="difficulty-level-3">
       <th scope="row"><code class="language-plaintext">LDL</code></th>
-      <td><code class="language-plaintext">number</code></td>
+      <td><code class="language-plaintext">number</code><span class="type-format">Décimal</span></td>
       <td>mmol/L</td>
-      <td>Décimal</td>
-      <td>Cholestérol LDL (idéalement &lt; 3 mois&nbsp;; max conseillé 12-24 mois)</td>
+      <td>Cholestérol LDL</td>
       <td class="difficulty-cell">
         <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
           <strong>3/5</strong>
         </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-ldl" popovertarget="pitfalls-ldl" style="anchor-name: --pitfalls-ldl">Voir les pièges</button>
@@ -2463,12 +2547,12 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
     </tr>
     <tr class="difficulty-level-3">
       <th scope="row"><code class="language-plaintext">DFG</code></th>
-      <td><code class="language-plaintext">number</code></td>
+      <td><code class="language-plaintext">number</code><span class="type-format">Décimal</span></td>
       <td>mL/min/1.73m²</td>
-      <td>Décimal</td>
-      <td>Débit de Filtration Glomérulaire (idéalement &lt; 3 mois&nbsp;; max conseillé 12-24 mois)</td>
+      <td>Débit de Filtration Glomérulaire</td>
       <td class="difficulty-cell">
         <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
           <strong>3/5</strong>
         </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-dfg" popovertarget="pitfalls-dfg" style="anchor-name: --pitfalls-dfg">Voir les pièges</button>
@@ -2488,12 +2572,12 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
     </tr>
     <tr class="difficulty-level-2">
       <th scope="row"><code class="language-plaintext">HbA1c</code></th>
-      <td><code class="language-plaintext">number</code></td>
+      <td><code class="language-plaintext">number</code><span class="type-format">Décimal</span></td>
       <td>%</td>
-      <td>Décimal</td>
-      <td>Hémoglobine glyquée (idéalement &lt; 3 mois&nbsp;; max conseillé 6-12 mois)</td>
+      <td>Hémoglobine glyquée</td>
       <td class="difficulty-cell">
         <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
           <strong>2/5</strong>
         </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-hba1c" popovertarget="pitfalls-hba1c" style="anchor-name: --pitfalls-hba1c">Voir les pièges</button>
@@ -2513,12 +2597,12 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
     </tr>
     <tr class="difficulty-level-4">
       <th scope="row"><code class="language-plaintext">crp</code></th>
-      <td><code class="language-plaintext">number</code></td>
+      <td><code class="language-plaintext">number</code><span class="type-format">Décimal</span></td>
       <td>mg/L</td>
-      <td>Décimal</td>
-      <td>Protéine C-réactive ultra-sensible (hs-CRP uniquement, pas la CRP standard).</td>
+      <td>Protéine C-réactive ultra-sensible</td>
       <td class="difficulty-cell">
         <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
           <strong>4/5</strong>
         </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-crp" popovertarget="pitfalls-crp" style="anchor-name: --pitfalls-crp">Voir les pièges</button>
@@ -2539,12 +2623,12 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
     </tr>
     <tr class="difficulty-level-3">
       <th scope="row"><code class="language-plaintext">imc</code></th>
-      <td><code class="language-plaintext">number</code></td>
+      <td><code class="language-plaintext">number</code><span class="type-format">Décimal</span></td>
       <td>kg/m²</td>
-      <td>Décimal</td>
       <td>Indice de Masse Corporelle</td>
       <td class="difficulty-cell">
         <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
           <strong>3/5</strong>
         </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-imc" popovertarget="pitfalls-imc" style="anchor-name: --pitfalls-imc">Voir les pièges</button>
@@ -2563,12 +2647,12 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
     </tr>
     <tr class="difficulty-level-4">
       <th scope="row"><code class="language-plaintext">agediabete</code></th>
-      <td><code class="language-plaintext">number</code></td>
+      <td><code class="language-plaintext">number</code><span class="type-format">Entier</span></td>
       <td>ans</td>
-      <td>Entier</td>
       <td>Âge lors du diagnostic du diabète</td>
       <td class="difficulty-cell">
         <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
           <strong>4/5</strong>
         </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-agediabete" popovertarget="pitfalls-agediabete" style="anchor-name: --pitfalls-agediabete">Voir les pièges</button>
@@ -2588,12 +2672,12 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
     </tr>
     <tr class="difficulty-level-5" hidden>
       <th scope="row"><code class="language-plaintext">age_atcd</code></th>
-      <td><code class="language-plaintext">number</code></td>
+      <td><code class="language-plaintext">number</code><span class="type-format">Entier</span></td>
       <td>ans</td>
-      <td>Entier</td>
-      <td>Âge lors du premier événement cardiovasculaire (AVC, AIT, SCA, IDM, AOMI, anévrisme de l'aorte abdominale)</td>
+      <td>Âge lors du premier événement cardiovasculaire</td>
       <td class="difficulty-cell">
         <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
           <strong>5/5</strong>
         </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-age-atcd" popovertarget="pitfalls-age-atcd" style="anchor-name: --pitfalls-age-atcd">Voir les pièges</button>
@@ -2617,12 +2701,122 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
 
 ### 3. Valeurs de type string
 
-| Clé | Type | Valeurs autorisées (exemples) |
-| :--- | :--- | :--- |
-| `sexe` | `string` | `"homme"`, `"femme"` |
-| `typediabete` | `string` | `"type1"`, `"type2"`, `"autre"` |
-| `albuminurie` | `string` | `"non"`, `"micro"`, `"oui"` |
-| `pays` | `string` | • **Recommandé :** code ISO 3166-1 alpha-2 (ex : `"FR"`, `"BE"`, `"US"`) <br> • **Également accepté :** nom naturel en français (ex : `"France"`, `"Belgique"`, `"États-Unis"`) |
+<div class="implementation-table-scroll" role="region" aria-label="Valeurs textuelles et difficultés d’implémentation" tabindex="0">
+<table class="implementation-table">
+  <thead>
+    <tr>
+      <th scope="col">Clé</th>
+      <th scope="col">Type</th>
+      <th scope="col">Valeurs autorisées</th>
+      <th scope="col">Difficulté d’implémentation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="difficulty-level-2">
+      <th scope="row"><code class="language-plaintext">sexe</code></th>
+      <td><code class="language-plaintext">string</code></td>
+      <td><code class="language-plaintext">"homme"</code>, <code class="language-plaintext">"femme"</code></td>
+      <td class="difficulty-cell">
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
+          <strong>2/5</strong>
+        </div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-sexe" popovertarget="pitfalls-sexe" style="anchor-name: --pitfalls-sexe">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-2" id="pitfalls-sexe" popover="auto" role="dialog" aria-labelledby="pitfalls-sexe-title" style="position-anchor: --pitfalls-sexe">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-sexe-title"><code class="language-plaintext">sexe</code> — difficulté 2/5&nbsp;: Petite vigilance</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-sexe" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li>Seules les valeurs exactes <code class="language-plaintext">"homme"</code> et <code class="language-plaintext">"femme"</code> sont acceptées par le calculateur.</li>
+              <li>Le sexe biologique et le genre du patient peuvent différer. Pour le calcul du risque cardiovasculaire, il est conseillé d’envoyer le sexe biologique ou administratif.</li>
+              <li>Si votre logiciel distingue le genre et le sexe du patient et que les deux valeurs renseignées diffèrent, il est conseillé de ne pas envoyer la clé <code class="language-plaintext">sexe</code>. Le médecin et le patient pourront alors choisir eux-mêmes la valeur appropriée dans RisqueCV.</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="difficulty-level-3">
+      <th scope="row"><code class="language-plaintext">typediabete</code></th>
+      <td><code class="language-plaintext">string</code></td>
+      <td><code class="language-plaintext">"type1"</code>, <code class="language-plaintext">"type2"</code>, <code class="language-plaintext">"autre"</code></td>
+      <td class="difficulty-cell">
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
+          <strong>3/5</strong>
+        </div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-typediabete" popovertarget="pitfalls-typediabete" style="anchor-name: --pitfalls-typediabete">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-3" id="pitfalls-typediabete" popover="auto" role="dialog" aria-labelledby="pitfalls-typediabete-title" style="position-anchor: --pitfalls-typediabete">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-typediabete-title"><code class="language-plaintext">typediabete</code> — difficulté 3/5&nbsp;: Vigilance</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-typediabete" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li>Les valeurs acceptées sont <code class="language-plaintext">"type1"</code> et <code class="language-plaintext">"type2"</code>, sans espace, ou <code class="language-plaintext">"autre"</code>, valeur réservée aux diabètes rares comme les diabètes MODY ou LADA.</li>
+              <li>Utiliser les antécédents structurés du patient pour déterminer le type. Ne pas déduire un type 1 d’une insulinothérapie ni un type 2 d’une prescription de metformine.</li>
+              <li>Si le type de diabète est inconnu, ne pas envoyer <code class="language-plaintext">"autre"</code>&nbsp;: omettre la clé ou envoyer <code class="language-plaintext">null</code>.</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="difficulty-level-4">
+      <th scope="row"><code class="language-plaintext">albuminurie</code></th>
+      <td><code class="language-plaintext">string</code></td>
+      <td><code class="language-plaintext">"non"</code>, <code class="language-plaintext">"micro"</code>, <code class="language-plaintext">"oui"</code></td>
+      <td class="difficulty-cell">
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
+          <strong>4/5</strong>
+        </div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-albuminurie" popovertarget="pitfalls-albuminurie" style="anchor-name: --pitfalls-albuminurie">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-4" id="pitfalls-albuminurie" popover="auto" role="dialog" aria-labelledby="pitfalls-albuminurie-title" style="position-anchor: --pitfalls-albuminurie">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-albuminurie-title"><code class="language-plaintext">albuminurie</code> — difficulté 4/5&nbsp;: Complexe</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-albuminurie" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li>L’albuminurie ou la protéinurie peut être quantifiée de différentes manières. Par ordre de préférence&nbsp;: rapport albuminurie/créatininurie sur échantillon urinaire, rapport protéinurie/créatininurie sur échantillon urinaire, puis protéinurie des 24&nbsp;heures.</li>
+              <li>Ne pas utiliser l’albuminurie brute&nbsp;: il faut toujours la rapporter à la créatininurie. Ne pas utiliser non plus une bandelette urinaire.</li>
+              <li>Des normes internationales permettent ensuite de classer le résultat en «&nbsp;Pas d’albuminurie&nbsp;» (<code class="language-plaintext">"non"</code>), «&nbsp;Microalbuminurie&nbsp;» (<code class="language-plaintext">"micro"</code>) ou «&nbsp;Albuminurie/protéinurie&nbsp;» (<code class="language-plaintext">"oui"</code>). Attention aux unités mg/g et mg/mmol.</li>
+              <li>RisqueCV ne peut pas recevoir une valeur numérique pour ce paramètre.</li>
+              <li><code class="language-plaintext">"non"</code> signifie un résultat négatif fiable, et non «&nbsp;aucun résultat&nbsp;».</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="difficulty-level-4">
+      <th scope="row"><code class="language-plaintext">pays</code></th>
+      <td><code class="language-plaintext">string</code></td>
+      <td><strong>Recommandé&nbsp;:</strong> code ISO 3166-1 alpha-2, par exemple <code class="language-plaintext">"FR"</code>, <code class="language-plaintext">"BE"</code> ou <code class="language-plaintext">"US"</code>.<br><strong>Également accepté&nbsp;:</strong> nom naturel en français.</td>
+      <td class="difficulty-cell">
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
+          <strong>4/5</strong>
+        </div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-pays" popovertarget="pitfalls-pays" style="anchor-name: --pitfalls-pays">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-4" id="pitfalls-pays" popover="auto" role="dialog" aria-labelledby="pitfalls-pays-title" style="position-anchor: --pitfalls-pays">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-pays-title"><code class="language-plaintext">pays</code> — difficulté 4/5&nbsp;: Complexe</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-pays" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li>Utiliser le pays de résidence habituel et actuel du patient. Lorsqu’un patient est originaire d’un pays étranger et réside en France depuis seulement quelques mois ou années, une réflexion clinique est nécessaire pour choisir le pays le plus adapté à l’estimation du risque.</li>
+              <li>Ne pas utiliser la nationalité ni le pays de naissance. Privilégier l’adresse postale active.</li>
+              <li>Le pays influence la région de risque utilisée par certains scores.</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
 <details markdown="1">
 <summary>Liste des 200 identifiants pays acceptés dans `pays`</summary>
