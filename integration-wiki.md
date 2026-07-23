@@ -515,6 +515,280 @@ pre[class*="language-"] > code[class*="language-"] {
     .log-in { color: #4ec9b0; }
     .log-out { color: #ce9178; }
     .log-data { color: #9cdcfe; display: block; margin-top: 4px; white-space: pre-wrap; word-break: break-all; font-size: 0.95em; }
+
+    /* Difficulté d'implémentation du préremplissage */
+    .implementation-note {
+        margin: 1rem 0 1.25rem;
+        padding: 14px 16px;
+        color: #24324a;
+        background: #f7f9fc;
+        border: 1px solid #dce3ef;
+        border-radius: 10px;
+        line-height: 1.55;
+    }
+
+    .implementation-note p { margin: 0; }
+
+    .difficulty-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        margin-top: 10px;
+    }
+
+    .difficulty-legend-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 3px 8px;
+        color: var(--difficulty-color);
+        background: var(--difficulty-background);
+        border: 1px solid color-mix(in srgb, var(--difficulty-color) 35%, transparent);
+        border-radius: 999px;
+        font-size: 0.82em;
+        font-weight: 650;
+        white-space: nowrap;
+    }
+
+    .implementation-table-scroll {
+        width: 100%;
+        margin: 0 0 1rem;
+        overflow-x: auto;
+        border-radius: 8px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .implementation-table {
+        width: 100%;
+        min-width: 850px;
+        margin: 0;
+        border-collapse: collapse;
+    }
+
+    .implementation-table th,
+    .implementation-table td {
+        vertical-align: top;
+    }
+
+    .implementation-table tbody th[scope="row"] {
+        border-left: 4px solid var(--difficulty-color);
+    }
+
+    .implementation-table tbody tr > * {
+        background: var(--difficulty-background);
+    }
+
+    .difficulty-level-1 {
+        --difficulty-color: #2e7d32;
+        --difficulty-background: #f1f8f2;
+    }
+
+    .difficulty-level-2 {
+        --difficulty-color: #558b2f;
+        --difficulty-background: #f5faf0;
+    }
+
+    .difficulty-level-3 {
+        --difficulty-color: #9a6700;
+        --difficulty-background: #fff8e1;
+    }
+
+    .difficulty-level-4 {
+        --difficulty-color: #b45309;
+        --difficulty-background: #fff1e6;
+    }
+
+    .difficulty-level-5 {
+        --difficulty-color: #b42318;
+        --difficulty-background: #fff0f0;
+    }
+
+    .difficulty-cell {
+        min-width: 180px;
+        color: var(--difficulty-color);
+    }
+
+    .difficulty-score {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        white-space: nowrap;
+    }
+
+    .difficulty-meter {
+        width: 78px;
+        height: 12px;
+        flex: 0 0 auto;
+        color: var(--difficulty-color);
+    }
+
+    .difficulty-meter rect {
+        fill: currentColor;
+        opacity: 0.18;
+    }
+
+    .difficulty-level-1 .difficulty-meter rect:nth-child(-n+1),
+    .difficulty-level-2 .difficulty-meter rect:nth-child(-n+2),
+    .difficulty-level-3 .difficulty-meter rect:nth-child(-n+3),
+    .difficulty-level-4 .difficulty-meter rect:nth-child(-n+4),
+    .difficulty-level-5 .difficulty-meter rect:nth-child(-n+5) {
+        opacity: 1;
+    }
+
+    .difficulty-score strong {
+        font-variant-numeric: tabular-nums;
+    }
+
+    .pitfall-trigger {
+        margin: 7px 0 0;
+        padding: 0;
+        color: inherit;
+        background: transparent;
+        border: 0;
+        border-bottom: 1px dotted currentColor;
+        font: inherit;
+        font-size: 0.88em;
+        font-weight: 650;
+        line-height: 1.35;
+        cursor: pointer;
+    }
+
+    .pitfall-trigger:hover {
+        border-bottom-style: solid;
+    }
+
+    .pitfall-trigger:focus-visible {
+        outline: 2px solid currentColor;
+        outline-offset: 3px;
+        border-radius: 2px;
+    }
+
+    .pitfall-popover {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        width: min(590px, calc(100vw - 32px));
+        max-height: min(70vh, 640px);
+        margin: auto;
+        padding: 0;
+        overflow: auto;
+        color: #273142;
+        background: #ffffff;
+        border: 1px solid #cfd7e6;
+        border-top: 4px solid var(--difficulty-color);
+        border-radius: 12px;
+        box-shadow: 0 18px 50px rgba(22, 34, 54, 0.22);
+        line-height: 1.52;
+        overscroll-behavior: contain;
+    }
+
+    @supports (position-area: block-end) {
+        .pitfall-popover {
+            inset: auto;
+            margin: 9px 0;
+            position-area: block-end span-inline-end;
+            position-try-fallbacks: flip-block, flip-inline;
+        }
+    }
+
+    .pitfall-popover:popover-open,
+    .pitfall-popover.is-open {
+        display: block;
+    }
+
+    .pitfall-popover-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 14px 16px 11px;
+        color: var(--difficulty-color);
+        background: var(--difficulty-background);
+        border-bottom: 1px solid #e4e8f0;
+    }
+
+    .pitfall-popover-header h4 {
+        margin: 0;
+        color: inherit;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 1.04em;
+        line-height: 1.35;
+    }
+
+    .pitfall-popover-close {
+        display: inline-grid;
+        width: 30px;
+        height: 30px;
+        flex: 0 0 auto;
+        place-items: center;
+        margin: -5px -5px 0 0;
+        padding: 0;
+        color: inherit;
+        background: transparent;
+        border: 1px solid transparent;
+        border-radius: 7px;
+        font: inherit;
+        font-size: 1.35em;
+        line-height: 1;
+        cursor: pointer;
+    }
+
+    .pitfall-popover-close:hover {
+        background: rgba(255, 255, 255, 0.72);
+        border-color: color-mix(in srgb, var(--difficulty-color) 28%, transparent);
+    }
+
+    .pitfall-popover-close:focus-visible {
+        outline: 2px solid currentColor;
+        outline-offset: 2px;
+    }
+
+    .pitfall-popover-content {
+        padding: 13px 18px 16px;
+    }
+
+    .pitfall-popover-content ul {
+        margin: 0;
+        padding-left: 1.25rem;
+    }
+
+    .pitfall-popover-content ul ul {
+        margin-top: 5px;
+    }
+
+    .pitfall-popover-content li + li {
+        margin-top: 8px;
+    }
+
+    .pitfall-popover-content li::marker {
+        color: var(--difficulty-color);
+    }
+
+    @media (max-width: 640px) {
+        .pitfall-popover {
+            top: auto !important;
+            right: auto !important;
+            bottom: 12px;
+            left: 12px !important;
+            width: calc(100vw - 24px);
+            max-height: min(76vh, 640px);
+            margin: 0;
+            position-area: initial;
+            border-radius: 14px;
+        }
+    }
+
+    @media print {
+        .implementation-table tbody tr > * {
+            background: transparent;
+        }
+
+        .pitfall-trigger,
+        .pitfall-popover {
+            display: none !important;
+        }
+    }
 </style>
 
 <h1 class="logo-risquecv">
@@ -1500,16 +1774,159 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
 - <span style="font-weight: bold;">Privilégier les données les plus récentes</span>. L'évaluation du risque cardiovasculaire n'est pertinente qu'avec des données à jour. Une vérification de la date des données doit notamment être mise en place pour la <code class="language-plaintext">PAS</code>, le <code class="language-plaintext">CT</code>, <code class="language-plaintext">HDL</code>, <code class="language-plaintext">LDL</code>, le <code class="language-plaintext">DFG</code>, la <code class="language-plaintext">hs-CRP</code> et l'<code class="language-plaintext">HbA1c</code>. En cas de doute sur la fraîcheur d'une donnée, il est préférable de ne pas l'envoyer : le médecin pourra la saisir manuellement.<br>
 </div>
 
+<div class="implementation-note">
+  <p><strong>À propos de la difficulté d'implémentation :</strong>Dans les tableaux ci-dessous, une note évalue la difficulté technique pour implémenter un <strong>préremplissage fiable</strong> des caractéristiques. Survolez ou activez «&nbsp;Voir les pièges&nbsp;» pour consulter les précautions propres à chaque caractéristique.</p>
+  <div class="difficulty-legend" aria-label="Échelle de difficulté d’implémentation">
+    <span class="difficulty-legend-item difficulty-level-1"><strong>1/5</strong> Facile</span>
+    <span class="difficulty-legend-item difficulty-level-2"><strong>2/5</strong> Petite vigilance</span>
+    <span class="difficulty-legend-item difficulty-level-3"><strong>3/5</strong> Vigilance</span>
+    <span class="difficulty-legend-item difficulty-level-4"><strong>4/5</strong> Complexe</span>
+    <span class="difficulty-legend-item difficulty-level-5"><strong>5/5</strong> Quasi-impossible</span>
+  </div>
+</div>
+
 ### 1. Les 4 premières questions systématiques de RisqueCV.fr
 Ces booléens pilotent les 4 premières questions du formulaire.
 Les mettre à `false` permet de sauter les questions de tri initiales.
 
-| Clé | Type | Description | True si... |
-| :--- | :--- | :--- | :--- |
-| `atcd` | `boolean` | Antécédents de maladie cardiovasculaire avérée. | Maladie coronaire (angor, infarctus du myocarde, syndrome coronarien aigu, stent ou pontage coronarien), AVC, AIT, AOMI, anévrisme de l'aorte abdominale (voir la liste complète sur le site, sous le titre "Antécédents cardiovasculaires") |
-| `diabete` | `boolean` | Présence d'un diabète (Type 1 ou 2). | Diabète (peu importe le type et le traitement) |
-| `MRC` | `boolean` | Maladie Rénale Chronique (DFG < 60 ou albuminurie). | DFG < 60 ou albuminurie ou "Maladie rénale chronique" |
-| `autrepb` | `boolean` | Autres situations complexes ou particulières qui nécessitent une évaluation personnalisée. | Hypercholestérolémie familiale hétérozygote, grossesse, etc. (voir la liste complète sur le site, sous le titre "Autre situation particulière ?") |
+<div class="implementation-table-scroll" role="region" aria-label="Questions systématiques et difficultés d’implémentation" tabindex="0">
+<table class="implementation-table">
+  <thead>
+    <tr>
+      <th scope="col">Clé</th>
+      <th scope="col">Type</th>
+      <th scope="col">Description</th>
+      <th scope="col">True si...</th>
+      <th scope="col">Difficulté d’implémentation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="difficulty-level-4">
+      <th scope="row"><code class="language-plaintext">atcd</code></th>
+      <td><code class="language-plaintext">boolean</code></td>
+      <td>Antécédents de maladie cardiovasculaire avérée.</td>
+      <td>Maladie coronaire (angor, infarctus du myocarde, syndrome coronarien aigu, stent ou pontage coronarien), AVC, AIT, AOMI, anévrisme de l'aorte abdominale (voir la liste complète sur le site, sous le titre «&nbsp;Antécédents cardiovasculaires&nbsp;»).</td>
+      <td class="difficulty-cell">
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
+            <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
+          </svg>
+          <strong>4/5</strong>
+        </div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-atcd" popovertarget="pitfalls-atcd" style="anchor-name: --pitfalls-atcd">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-4" id="pitfalls-atcd" popover="auto" role="dialog" aria-labelledby="pitfalls-atcd-title" style="position-anchor: --pitfalls-atcd">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-atcd-title"><code class="language-plaintext">atcd</code> — difficulté 4/5</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-atcd" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li><code class="language-plaintext">false</code> est quasiment impossible à préremplir de manière automatique, car il exigerait une source explicitement négative. L’absence de l’élément dans les antécédents du DPI ne suffit pas&nbsp;: le médecin a pu oublier de renseigner cet élément dans les antécédents. Il est recommandé de ne jamais préremplir cette valeur à <code class="language-plaintext">false</code>.</li>
+              <li>Booléen composite couvrant plusieurs maladies, procédures et résultats d’imagerie (voir la liste complète sur le site, à la première question «&nbsp;Antécédents cardiovasculaires&nbsp;»).</li>
+              <li>Une seule valeur à <code class="language-plaintext">true</code> implique que le booléen doit être à <code class="language-plaintext">true</code>.</li>
+              <li>Ne pas confondre avec d’autres pathologies non incluses, comme l’insuffisance cardiaque, la fibrillation atriale, la thrombose veineuse ou l’embolie pulmonaire.</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="difficulty-level-3">
+      <th scope="row"><code class="language-plaintext">diabete</code></th>
+      <td><code class="language-plaintext">boolean</code></td>
+      <td>Présence d'un diabète (Type 1 ou 2).</td>
+      <td>Diabète (peu importe le type et le traitement).</td>
+      <td class="difficulty-cell">
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
+            <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
+          </svg>
+          <strong>3/5</strong>
+        </div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-diabete" popovertarget="pitfalls-diabete" style="anchor-name: --pitfalls-diabete">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-3" id="pitfalls-diabete" popover="auto" role="dialog" aria-labelledby="pitfalls-diabete-title" style="position-anchor: --pitfalls-diabete">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-diabete-title"><code class="language-plaintext">diabete</code> — difficulté 3/5</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-diabete" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li><code class="language-plaintext">false</code> est quasiment impossible à préremplir de manière automatique, car il exigerait une source explicitement négative. L’absence de l’élément dans les antécédents du DPI ne suffit pas&nbsp;: le médecin a pu oublier de renseigner cet élément dans les antécédents. Il est recommandé de ne jamais préremplir cette valeur à <code class="language-plaintext">false</code>.</li>
+              <li><code class="language-plaintext">true</code> est fiable uniquement avec un diabète confirmé dans les antécédents structurés du patient.</li>
+              <li>Ne pas déduire <code class="language-plaintext">true</code> des traitements du patient, car certains traitements peuvent être prescrits dans d’autres pathologies que le diabète.</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="difficulty-level-3">
+      <th scope="row"><code class="language-plaintext">MRC</code></th>
+      <td><code class="language-plaintext">boolean</code></td>
+      <td>Maladie Rénale Chronique (DFG &lt; 60 ou albuminurie).</td>
+      <td>DFG &lt; 60 ou albuminurie ou «&nbsp;Maladie rénale chronique&nbsp;».</td>
+      <td class="difficulty-cell">
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
+            <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
+          </svg>
+          <strong>3/5</strong>
+        </div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-mrc" popovertarget="pitfalls-mrc" style="anchor-name: --pitfalls-mrc">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-3" id="pitfalls-mrc" popover="auto" role="dialog" aria-labelledby="pitfalls-mrc-title" style="position-anchor: --pitfalls-mrc">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-mrc-title"><code class="language-plaintext">MRC</code> — difficulté 3/5</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-mrc" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li><code class="language-plaintext">false</code> est difficile à préremplir de manière automatique, mais reste possible. Il nécessite un DFG &gt; 60 récent et un dosage récent et normal de la protéinurie (rapport albuminurie/créatininurie ou rapport protéinurie/créatininurie).</li>
+              <li><code class="language-plaintext">true</code> est fiable dans deux situations&nbsp;:
+                <ul>
+                  <li>avec une maladie rénale chronique ou une insuffisance rénale chronique confirmée dans les antécédents structurés du patient&nbsp;;</li>
+                  <li>si le DFG ou la protéinurie sont anormaux sur des dosages biologiques récents, avec au moins deux dosages anormaux séparés de trois mois.</li>
+                </ul>
+              </li>
+              <li>La maladie rénale chronique ne doit pas être déduite d’un unique DFG bas ou d’une albuminurie isolée. Il faut une anomalie persistante pendant au moins trois mois d’après la définition médicale. Un seul DFG ou ACR anormal peut correspondre à une atteinte rénale aiguë — et non chronique — qui ne doit pas amener à cocher <code class="language-plaintext">true</code>.</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="difficulty-level-5">
+      <th scope="row"><code class="language-plaintext">autrepb</code></th>
+      <td><code class="language-plaintext">boolean</code></td>
+      <td>Autres situations complexes ou particulières qui nécessitent une évaluation personnalisée.</td>
+      <td>Hypercholestérolémie familiale hétérozygote, grossesse, etc. (voir la liste complète sur le site, sous le titre «&nbsp;Autre situation particulière&nbsp;?&nbsp;»).</td>
+      <td class="difficulty-cell">
+        <div class="difficulty-score">
+          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
+            <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
+          </svg>
+          <strong>5/5</strong>
+        </div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-autrepb" popovertarget="pitfalls-autrepb" style="anchor-name: --pitfalls-autrepb">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-5" id="pitfalls-autrepb" popover="auto" role="dialog" aria-labelledby="pitfalls-autrepb-title" style="position-anchor: --pitfalls-autrepb">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-autrepb-title"><code class="language-plaintext">autrepb</code> — difficulté 5/5</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-autrepb" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li><code class="language-plaintext">true</code> est fiable dans trois situations&nbsp;:
+                <ul>
+                  <li>avec une hypercholestérolémie familiale, hétérozygote ou homozygote, dans les antécédents structurés du patient&nbsp;;</li>
+                  <li>avec une HTA secondaire dans les antécédents structurés du patient — pas une simple hypertension artérielle, mais une cause secondaire, comme une HTA d’origine rénale&nbsp;;</li>
+                  <li>avec une grossesse active dont la date de début remonte à moins de neuf mois. Cette option reste risquée si un arrêt de la grossesse, comme une fausse couche, n’a pas été renseigné et que la grossesse est toujours marquée active dans le DPI.</li>
+                </ul>
+              </li>
+              <li>Cette catégorie ouverte contient notamment les «&nbsp;maladies génétiques rares&nbsp;» et les «&nbsp;autres situations complexes&nbsp;». <code class="language-plaintext">false</code> est totalement impossible à préremplir de manière automatique.</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
 ### 2. Valeurs numériques
 
@@ -2004,3 +2421,60 @@ Si vous rencontrez des difficultés (pas de réponse au handshake, données non 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+<script>
+(() => {
+    const triggers = Array.from(document.querySelectorAll('.pitfall-trigger'));
+    const hoverCapable = window.matchMedia('(hover: hover) and (pointer: fine)');
+
+    for (const trigger of triggers) {
+        const popover = document.getElementById(trigger.getAttribute('aria-controls'));
+        if (!popover) continue;
+
+        trigger.addEventListener('click', (event) => {
+            if (popover.matches(':popover-open') && trigger.dataset.openedByHover === 'true') {
+                event.preventDefault();
+                trigger.dataset.openedByHover = 'false';
+            }
+        });
+
+        trigger.addEventListener('pointerenter', () => {
+            if (!hoverCapable.matches) return;
+            window.setTimeout(() => {
+                if (trigger.matches(':hover') && !popover.matches(':popover-open')) {
+                    trigger.dataset.openedByHover = 'true';
+                    popover.showPopover();
+                }
+            }, 160);
+        });
+
+        trigger.addEventListener('pointerleave', () => {
+            if (!hoverCapable.matches) return;
+            window.setTimeout(() => {
+                if (
+                    trigger.dataset.openedByHover === 'true'
+                    && !trigger.matches(':hover')
+                    && !popover.matches(':hover')
+                    && popover.matches(':popover-open')
+                ) {
+                    popover.hidePopover();
+                }
+            }, 220);
+        });
+
+        popover.addEventListener('pointerleave', () => {
+            if (!hoverCapable.matches || trigger.dataset.openedByHover !== 'true') return;
+            window.setTimeout(() => {
+                if (!trigger.matches(':hover') && !popover.matches(':hover') && popover.matches(':popover-open')) {
+                    popover.hidePopover();
+                }
+            }, 220);
+        });
+
+        popover.addEventListener('toggle', () => {
+            const open = popover.matches(':popover-open');
+            trigger.setAttribute('aria-expanded', String(open));
+            if (!open) trigger.dataset.openedByHover = 'false';
+        });
+    }
+})();
+</script>
