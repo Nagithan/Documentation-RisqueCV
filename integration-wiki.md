@@ -612,7 +612,6 @@ pre[class*="language-"] > code[class*="language-"] {
         width: 100%;
         margin: 0 0 1rem;
         overflow-x: auto;
-        border-radius: 8px;
         -webkit-overflow-scrolling: touch;
     }
 
@@ -630,7 +629,7 @@ pre[class*="language-"] > code[class*="language-"] {
     }
 
     .implementation-table tbody th[scope="row"] {
-        border-left: 4px solid var(--difficulty-color);
+        box-shadow: inset 4px 0 0 var(--difficulty-color);
     }
 
     .implementation-table tbody tr > * {
@@ -1910,7 +1909,7 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
     <tr class="difficulty-level-4">
       <th scope="row"><code class="language-plaintext">atcd</code></th>
       <td><code class="language-plaintext">boolean</code></td>
-      <td>Antécédents de maladie cardiovasculaire avérée.</td>
+      <td>Antécédents de maladie cardiovasculaire.</td>
       <td class="difficulty-cell">
         <div class="difficulty-score">
           <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
@@ -2310,7 +2309,7 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
     <tr class="difficulty-level-3">
       <th scope="row"><code class="language-plaintext">hyperCHOfamille</code></th>
       <td><code class="language-plaintext">boolean</code></td>
-      <td>Hypercholestérolémie familiale hétérozygote connue.</td>
+      <td>Hypercholestérolémie familiale hétérozygote.</td>
       <td class="difficulty-cell">
         <div class="difficulty-score">
           <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true"><rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/></svg>
