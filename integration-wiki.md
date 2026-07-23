@@ -539,8 +539,8 @@ pre[class*="language-"] > code[class*="language-"] {
     .difficulty-legend-item {
         display: inline-flex;
         align-items: center;
-        gap: 5px;
-        padding: 3px 8px;
+        gap: 7px;
+        padding: 4px 6px 4px 9px;
         color: var(--difficulty-text);
         background: var(--difficulty-background);
         border: 1px solid color-mix(in srgb, var(--difficulty-color) 35%, transparent);
@@ -548,6 +548,60 @@ pre[class*="language-"] > code[class*="language-"] {
         font-size: 0.82em;
         font-weight: 650;
         white-space: nowrap;
+        transition: opacity 0.18s ease;
+    }
+
+    .difficulty-legend-item.is-disabled {
+        opacity: 0.68;
+    }
+
+    .difficulty-toggle {
+        position: relative;
+        width: 36px;
+        height: 20px;
+        flex: 0 0 auto;
+        margin: 0;
+        padding: 0;
+        appearance: none;
+        -webkit-appearance: none;
+        background: #ffffff;
+        border: 1.5px solid var(--difficulty-color);
+        border-radius: 999px;
+        box-shadow: 0 1px 2px rgba(22, 34, 54, 0.12);
+        cursor: pointer;
+        transition: background-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .difficulty-toggle::before {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 13px;
+        height: 13px;
+        background: var(--difficulty-color);
+        border-radius: 50%;
+        box-shadow: 0 1px 2px rgba(22, 34, 54, 0.2);
+        transition: background-color 0.18s ease, transform 0.18s ease;
+    }
+
+    .difficulty-toggle[aria-checked="true"] {
+        background: var(--difficulty-color);
+        box-shadow: 0 1px 3px color-mix(in srgb, var(--difficulty-color) 35%, transparent);
+    }
+
+    .difficulty-toggle[aria-checked="true"]::before {
+        background: #ffffff;
+        transform: translateX(16px);
+    }
+
+    .difficulty-toggle:hover {
+        box-shadow: 0 1px 5px color-mix(in srgb, var(--difficulty-color) 38%, transparent);
+    }
+
+    .difficulty-toggle:focus-visible {
+        outline: 2px solid var(--difficulty-color);
+        outline-offset: 3px;
     }
 
     .implementation-table-scroll {
@@ -576,6 +630,10 @@ pre[class*="language-"] > code[class*="language-"] {
 
     .implementation-table tbody tr > * {
         background: var(--difficulty-background);
+    }
+
+    .markdown-body table.implementation-table tbody tr:nth-child(2n) {
+        background-color: transparent;
     }
 
     .difficulty-level-1 {
@@ -630,63 +688,11 @@ pre[class*="language-"] > code[class*="language-"] {
         vertical-align: middle;
     }
 
-    .difficulty-icon-sprite {
-        position: absolute;
-        width: 0;
-        height: 0;
-        overflow: hidden;
-        pointer-events: none;
-    }
-
-    .difficulty-label {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        margin-bottom: 6px;
-        font-size: 0.88em;
-        font-weight: 700;
-        line-height: 1.25;
-        white-space: nowrap;
-    }
-
-    .difficulty-label-icon {
-        width: 18px;
-        height: 18px;
-        flex: 0 0 auto;
-        fill: none;
-        stroke: currentColor;
-        stroke-width: 2;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-    }
-
     .difficulty-score {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 9px;
         white-space: nowrap;
-    }
-
-    .difficulty-meter {
-        width: 78px;
-        height: 12px;
-        flex: 0 0 auto;
-        color: var(--difficulty-color);
-    }
-
-    .difficulty-meter rect {
-        fill: currentColor;
-        opacity: 0.18;
-    }
-
-    .difficulty-level-1 .difficulty-meter rect:nth-child(-n+1),
-    .difficulty-level-2 .difficulty-meter rect:nth-child(-n+2),
-    .difficulty-level-3 .difficulty-meter rect:nth-child(-n+3),
-    .difficulty-level-4 .difficulty-meter rect:nth-child(-n+4),
-    .difficulty-level-5 .difficulty-meter rect:nth-child(-n+5) {
-        opacity: 1;
     }
 
     .difficulty-score strong {
@@ -814,10 +820,6 @@ pre[class*="language-"] > code[class*="language-"] {
 
     .pitfall-popover-content li + li {
         margin-top: 8px;
-    }
-
-    .pitfall-popover-content li::marker {
-        color: var(--difficulty-color);
     }
 
     @media (max-width: 640px) {
@@ -1829,56 +1831,45 @@ Utiliser de préférence les **clés canoniques** documentées ci-dessous (ex: `
 - <span style="font-weight: bold;">Privilégier les données les plus récentes</span>. L'évaluation du risque cardiovasculaire n'est pertinente qu'avec des données à jour. Une vérification de la date des données doit notamment être mise en place pour la <code class="language-plaintext">PAS</code>, le <code class="language-plaintext">CT</code>, <code class="language-plaintext">HDL</code>, <code class="language-plaintext">LDL</code>, le <code class="language-plaintext">DFG</code>, la <code class="language-plaintext">hs-CRP</code> et l'<code class="language-plaintext">HbA1c</code>. En cas de doute sur la fraîcheur d'une donnée, il est préférable de ne pas l'envoyer : le médecin pourra la saisir manuellement.<br>
 </div>
 
-<svg class="difficulty-icon-sprite" aria-hidden="true">
-  <symbol id="difficulty-icon-1" viewBox="0 0 24 24">
-    <circle cx="12" cy="12" r="9"></circle>
-    <path d="m8 12 2.5 2.5L16 9"></path>
-  </symbol>
-  <symbol id="difficulty-icon-2" viewBox="0 0 24 24">
-    <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6S2.5 12 2.5 12Z"></path>
-    <circle cx="12" cy="12" r="2.5"></circle>
-  </symbol>
-  <symbol id="difficulty-icon-3" viewBox="0 0 24 24">
-    <path d="M12 3 22 20H2L12 3Z"></path>
-    <path d="M12 9v5"></path>
-    <path d="M12 17.5h.01"></path>
-  </symbol>
-  <symbol id="difficulty-icon-4" viewBox="0 0 24 24">
-    <circle cx="12" cy="12" r="2.5"></circle>
-    <circle cx="5" cy="6" r="2"></circle>
-    <circle cx="19" cy="6" r="2"></circle>
-    <circle cx="12" cy="20" r="2"></circle>
-    <path d="m10.2 10.3-3.7-3M13.8 10.3l3.7-3M12 14.5V18"></path>
-  </symbol>
-  <symbol id="difficulty-icon-5" viewBox="0 0 24 24">
-    <path d="M13 2c1 4-2 5.5-2 8.5 0 1.5.8 2.7 2.1 3.5-.1-2.2 1.2-3.4 2.6-4.8 2.1 1.8 3.3 4.1 3.3 6.7A7 7 0 0 1 5 16c0-3.8 2.5-6.6 8-14Z"></path>
-    <path d="M10 18c0-1.8 1-3.1 2.5-4.4.2 1.7 1.5 2.4 1.5 4.4a2 2 0 0 1-4 0Z"></path>
-  </symbol>
-</svg>
-
 <div class="implementation-note">
-  <p><strong>À propos de la difficulté d'implémentation :</strong> Dans les tableaux ci-dessous, une note évalue la difficulté technique pour implémenter un <strong>préremplissage fiable</strong> des caractéristiques. Survolez ou activez «&nbsp;Voir les pièges&nbsp;» pour consulter les précautions propres à chaque caractéristique.</p>
+  <p><strong>À propos de la difficulté d'implémentation :</strong><br>Dans les tableaux ci-dessous, une note évalue la difficulté technique pour implémenter un <strong>préremplissage fiable</strong> des caractéristiques. Survolez ou activez «&nbsp;Voir les pièges&nbsp;» pour consulter les précautions propres à chaque caractéristique. Les interrupteurs permettent de filtrer les lignes par difficulté&nbsp;; le niveau 5/5 est masqué par défaut.</p>
   <div class="difficulty-legend" aria-label="Échelle de difficulté d’implémentation">
-    <span class="difficulty-legend-item difficulty-level-1"><strong>1/5</strong> Facile</span>
-    <span class="difficulty-legend-item difficulty-level-2"><strong>2/5</strong> Petite vigilance</span>
-    <span class="difficulty-legend-item difficulty-level-3"><strong>3/5</strong> Vigilance</span>
-    <span class="difficulty-legend-item difficulty-level-4"><strong>4/5</strong> Complexe</span>
-    <span class="difficulty-legend-item difficulty-level-5"><strong>5/5</strong> Quasi-impossible</span>
+    <span class="difficulty-legend-item difficulty-level-1">
+      <span><strong>1/5</strong> Facile</span>
+      <button class="difficulty-toggle" type="button" role="switch" aria-checked="true" data-difficulty-level="1" data-difficulty-label="Facile" aria-label="Masquer les caractéristiques de difficulté 1 sur 5"></button>
+    </span>
+    <span class="difficulty-legend-item difficulty-level-2">
+      <span><strong>2/5</strong> Petite vigilance</span>
+      <button class="difficulty-toggle" type="button" role="switch" aria-checked="true" data-difficulty-level="2" data-difficulty-label="Petite vigilance" aria-label="Masquer les caractéristiques de difficulté 2 sur 5"></button>
+    </span>
+    <span class="difficulty-legend-item difficulty-level-3">
+      <span><strong>3/5</strong> Vigilance</span>
+      <button class="difficulty-toggle" type="button" role="switch" aria-checked="true" data-difficulty-level="3" data-difficulty-label="Vigilance" aria-label="Masquer les caractéristiques de difficulté 3 sur 5"></button>
+    </span>
+    <span class="difficulty-legend-item difficulty-level-4">
+      <span><strong>4/5</strong> Complexe</span>
+      <button class="difficulty-toggle" type="button" role="switch" aria-checked="true" data-difficulty-level="4" data-difficulty-label="Complexe" aria-label="Masquer les caractéristiques de difficulté 4 sur 5"></button>
+    </span>
+    <span class="difficulty-legend-item difficulty-level-5 is-disabled">
+      <span><strong>5/5</strong> Quasi-impossible</span>
+      <button class="difficulty-toggle" type="button" role="switch" aria-checked="false" data-difficulty-level="5" data-difficulty-label="Quasi-impossible" aria-label="Afficher les caractéristiques de difficulté 5 sur 5"></button>
+    </span>
   </div>
 </div>
 
-### 1. Les 4 premières questions systématiques de RisqueCV.fr
-Ces booléens pilotent les 4 premières questions du formulaire.
-Les mettre à `false` permet de sauter les questions de tri initiales.
+### 1. Booléens
 
-<div class="implementation-table-scroll" role="region" aria-label="Questions systématiques et difficultés d’implémentation" tabindex="0">
+<div class="warning">
+  <strong>Interprétation de <code class="language-plaintext">false</code>&nbsp;:</strong> <code class="language-plaintext">false</code> est une affirmation&nbsp;: «&nbsp;cet élément est faux&nbsp;». Une valeur inconnue, incomplète ou douteuse ne doit jamais être envoyée à <code class="language-plaintext">false</code>. En cas d’incertitude, omettez la clé&nbsp;: le médecin répondra dans RisqueCV.
+</div>
+
+<div class="implementation-table-scroll" role="region" aria-label="Valeurs booléennes et difficultés d’implémentation" tabindex="0">
 <table class="implementation-table">
   <thead>
     <tr>
       <th scope="col">Clé</th>
       <th scope="col">Type</th>
       <th scope="col">Description</th>
-      <th scope="col">True si...</th>
       <th scope="col">Difficulté d’implémentation</th>
     </tr>
   </thead>
@@ -1887,22 +1878,14 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
       <th scope="row"><code class="language-plaintext">atcd</code></th>
       <td><code class="language-plaintext">boolean</code></td>
       <td>Antécédents de maladie cardiovasculaire avérée.</td>
-      <td>Maladie coronaire (angor, infarctus du myocarde, syndrome coronarien aigu, stent ou pontage coronarien), AVC, AIT, AOMI, anévrisme de l'aorte abdominale (voir la liste complète sur le site, sous le titre «&nbsp;Antécédents cardiovasculaires&nbsp;»).</td>
       <td class="difficulty-cell">
-        <div class="difficulty-label">
-          <svg class="difficulty-label-icon" aria-hidden="true"><use href="#difficulty-icon-4"></use></svg>
-          <span>Complexe</span>
-        </div>
         <div class="difficulty-score">
-          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
-            <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
-          </svg>
           <strong>4/5</strong>
         </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-atcd" popovertarget="pitfalls-atcd" style="anchor-name: --pitfalls-atcd">Voir les pièges</button>
         <div class="pitfall-popover difficulty-level-4" id="pitfalls-atcd" popover="auto" role="dialog" aria-labelledby="pitfalls-atcd-title" style="position-anchor: --pitfalls-atcd">
           <div class="pitfall-popover-header">
-            <h4 id="pitfalls-atcd-title"><code class="language-plaintext">atcd</code> — difficulté 4/5</h4>
+            <h4 id="pitfalls-atcd-title"><code class="language-plaintext">atcd</code> — difficulté 4/5&nbsp;: Complexe</h4>
             <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-atcd" popovertargetaction="hide">&times;</button>
           </div>
           <div class="pitfall-popover-content">
@@ -1916,26 +1899,189 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
         </div>
       </td>
     </tr>
+    <tr class="difficulty-level-4">
+      <th scope="row"><code class="language-plaintext">atcd_coronarien</code></th>
+      <td><code class="language-plaintext">boolean</code></td>
+      <td>Antécédent de maladie coronaire (IDM, SCA, angor ou revascularisation coronaire).</td>
+      <td class="difficulty-cell">
+        <div class="difficulty-score"><strong>4/5</strong></div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-atcd-coronarien" popovertarget="pitfalls-atcd-coronarien" style="anchor-name: --pitfalls-atcd-coronarien">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-4" id="pitfalls-atcd-coronarien" popover="auto" role="dialog" aria-labelledby="pitfalls-atcd-coronarien-title" style="position-anchor: --pitfalls-atcd-coronarien">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-atcd-coronarien-title"><code class="language-plaintext">atcd_coronarien</code> — difficulté 4/5&nbsp;: Complexe</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-atcd-coronarien" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li><code class="language-plaintext">false</code> est quasiment impossible à préremplir automatiquement, car il exigerait une source explicitement négative. L’absence de l’élément dans les antécédents du DPI ne suffit pas&nbsp;: le médecin a pu oublier de le renseigner. Il est recommandé de ne jamais préremplir cette valeur à <code class="language-plaintext">false</code>.</li>
+              <li><code class="language-plaintext">true</code> si les antécédents structurés du patient contiennent au moins l’un des éléments suivants&nbsp;: infarctus du myocarde, syndrome coronarien aigu, syndrome coronarien chronique (angor), stent, pontage ou autre revascularisation coronaire.</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="difficulty-level-4">
+      <th scope="row"><code class="language-plaintext">atcd_cerebrovasculaire</code></th>
+      <td><code class="language-plaintext">boolean</code></td>
+      <td>Antécédent d’événement cérébrovasculaire ou rétinien ischémique.</td>
+      <td class="difficulty-cell">
+        <div class="difficulty-score"><strong>4/5</strong></div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-atcd-cerebrovasculaire" popovertarget="pitfalls-atcd-cerebrovasculaire" style="anchor-name: --pitfalls-atcd-cerebrovasculaire">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-4" id="pitfalls-atcd-cerebrovasculaire" popover="auto" role="dialog" aria-labelledby="pitfalls-atcd-cerebrovasculaire-title" style="position-anchor: --pitfalls-atcd-cerebrovasculaire">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-atcd-cerebrovasculaire-title"><code class="language-plaintext">atcd_cerebrovasculaire</code> — difficulté 4/5&nbsp;: Complexe</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-atcd-cerebrovasculaire" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li><code class="language-plaintext">false</code> est quasiment impossible à préremplir automatiquement, car il exigerait une source explicitement négative. L’absence de l’élément dans les antécédents du DPI ne suffit pas&nbsp;: le médecin a pu oublier de le renseigner. Il est recommandé de ne jamais préremplir cette valeur à <code class="language-plaintext">false</code>.</li>
+              <li><code class="language-plaintext">true</code> si les antécédents structurés du patient contiennent au moins l’un des éléments suivants&nbsp;: AVC ischémique ou hémorragique, AIT, amaurose fugace ou infarctus rétinien.</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="difficulty-level-4">
+      <th scope="row"><code class="language-plaintext">atcd_aomi</code></th>
+      <td><code class="language-plaintext">boolean</code></td>
+      <td>Antécédent d’AOMI ou de revascularisation artérielle des membres inférieurs.</td>
+      <td class="difficulty-cell">
+        <div class="difficulty-score"><strong>4/5</strong></div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-atcd-aomi" popovertarget="pitfalls-atcd-aomi" style="anchor-name: --pitfalls-atcd-aomi">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-4" id="pitfalls-atcd-aomi" popover="auto" role="dialog" aria-labelledby="pitfalls-atcd-aomi-title" style="position-anchor: --pitfalls-atcd-aomi">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-atcd-aomi-title"><code class="language-plaintext">atcd_aomi</code> — difficulté 4/5&nbsp;: Complexe</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-atcd-aomi" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li><code class="language-plaintext">false</code> est quasiment impossible à préremplir automatiquement, car il exigerait une source explicitement négative. L’absence de l’élément dans les antécédents du DPI ne suffit pas&nbsp;: le médecin a pu oublier de le renseigner. Il est recommandé de ne jamais préremplir cette valeur à <code class="language-plaintext">false</code>.</li>
+              <li><code class="language-plaintext">true</code> si les antécédents structurés du patient contiennent une AOMI ou une revascularisation artérielle des membres inférieurs.</li>
+              <li>Ne pas confondre avec une thrombose veineuse, une insuffisance veineuse ou une amputation d’une autre cause.</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="difficulty-level-4">
+      <th scope="row"><code class="language-plaintext">atcd_anevrismeAorte</code></th>
+      <td><code class="language-plaintext">boolean</code></td>
+      <td>Antécédent d’anévrisme de l’aorte abdominale.</td>
+      <td class="difficulty-cell">
+        <div class="difficulty-score"><strong>4/5</strong></div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-atcd-anevrisme-aorte" popovertarget="pitfalls-atcd-anevrisme-aorte" style="anchor-name: --pitfalls-atcd-anevrisme-aorte">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-4" id="pitfalls-atcd-anevrisme-aorte" popover="auto" role="dialog" aria-labelledby="pitfalls-atcd-anevrisme-aorte-title" style="position-anchor: --pitfalls-atcd-anevrisme-aorte">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-atcd-anevrisme-aorte-title"><code class="language-plaintext">atcd_anevrismeAorte</code> — difficulté 4/5&nbsp;: Complexe</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-atcd-anevrisme-aorte" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li><code class="language-plaintext">false</code> est quasiment impossible à préremplir automatiquement, car il exigerait une source explicitement négative. L’absence de l’élément dans les antécédents du DPI ne suffit pas&nbsp;: le médecin a pu oublier de le renseigner. Il est recommandé de ne jamais préremplir cette valeur à <code class="language-plaintext">false</code>.</li>
+              <li><code class="language-plaintext">true</code> si les antécédents structurés du patient contiennent un anévrisme de l’aorte abdominale.</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="difficulty-level-5" hidden>
+      <th scope="row"><code class="language-plaintext">atcd_evenement_recent</code></th>
+      <td><code class="language-plaintext">boolean</code></td>
+      <td>Événement cardiovasculaire survenu au cours des six dernières semaines.</td>
+      <td class="difficulty-cell">
+        <div class="difficulty-score"><strong>5/5</strong></div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-atcd-evenement-recent" popovertarget="pitfalls-atcd-evenement-recent" style="anchor-name: --pitfalls-atcd-evenement-recent">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-5" id="pitfalls-atcd-evenement-recent" popover="auto" role="dialog" aria-labelledby="pitfalls-atcd-evenement-recent-title" style="position-anchor: --pitfalls-atcd-evenement-recent">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-atcd-evenement-recent-title"><code class="language-plaintext">atcd_evenement_recent</code> — difficulté 5/5&nbsp;: Quasi-impossible</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-atcd-evenement-recent" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li><code class="language-plaintext">false</code> est quasiment impossible à préremplir automatiquement, car il exigerait une source explicitement négative. L’absence de l’élément dans les antécédents du DPI ne suffit pas&nbsp;: le médecin a pu oublier de le renseigner. Il est recommandé de ne jamais préremplir cette valeur à <code class="language-plaintext">false</code>.</li>
+              <li><code class="language-plaintext">true</code> si un événement cardiovasculaire est survenu au cours des six dernières semaines.</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="difficulty-level-5" hidden>
+      <th scope="row"><code class="language-plaintext">atcd_evenement_recurrent</code></th>
+      <td><code class="language-plaintext">boolean</code></td>
+      <td>Événements cardiovasculaires répétés malgré une statine à la dose maximale tolérée.</td>
+      <td class="difficulty-cell">
+        <div class="difficulty-score"><strong>5/5</strong></div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-atcd-evenement-recurrent" popovertarget="pitfalls-atcd-evenement-recurrent" style="anchor-name: --pitfalls-atcd-evenement-recurrent">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-5" id="pitfalls-atcd-evenement-recurrent" popover="auto" role="dialog" aria-labelledby="pitfalls-atcd-evenement-recurrent-title" style="position-anchor: --pitfalls-atcd-evenement-recurrent">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-atcd-evenement-recurrent-title"><code class="language-plaintext">atcd_evenement_recurrent</code> — difficulté 5/5&nbsp;: Quasi-impossible</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-atcd-evenement-recurrent" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li><code class="language-plaintext">false</code> est quasiment impossible à préremplir automatiquement, car il exigerait une source explicitement négative. L’absence de l’élément dans les antécédents du DPI ne suffit pas&nbsp;: le médecin a pu oublier de le renseigner. Il est recommandé de ne jamais préremplir cette valeur à <code class="language-plaintext">false</code>.</li>
+              <li><code class="language-plaintext">true</code> si les antécédents structurés montrent plusieurs épisodes cardiovasculaires — par exemple un AVC et un SCA, ou la répétition d’un même type d’événement — survenus malgré une statine à la dose maximale tolérée.</li>
+              <li>Il faut reconstruire la chronologie des événements et des traitements, y compris les doses. Plusieurs événements ne suffisent pas si la séquence thérapeutique est inconnue.</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="difficulty-level-4">
+      <th scope="row"><code class="language-plaintext">atcd_polyvasculaire</code></th>
+      <td><code class="language-plaintext">boolean</code></td>
+      <td>Atteinte cardiovasculaire portant sur au moins deux territoires.</td>
+      <td class="difficulty-cell">
+        <div class="difficulty-score"><strong>4/5</strong></div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-atcd-polyvasculaire" popovertarget="pitfalls-atcd-polyvasculaire" style="anchor-name: --pitfalls-atcd-polyvasculaire">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-4" id="pitfalls-atcd-polyvasculaire" popover="auto" role="dialog" aria-labelledby="pitfalls-atcd-polyvasculaire-title" style="position-anchor: --pitfalls-atcd-polyvasculaire">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-atcd-polyvasculaire-title"><code class="language-plaintext">atcd_polyvasculaire</code> — difficulté 4/5&nbsp;: Complexe</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-atcd-polyvasculaire" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li><code class="language-plaintext">false</code> est quasiment impossible à préremplir automatiquement, car il exigerait une source explicitement négative. L’absence de l’élément dans les antécédents du DPI ne suffit pas&nbsp;: le médecin a pu oublier de le renseigner. Il est recommandé de ne jamais préremplir cette valeur à <code class="language-plaintext">false</code>.</li>
+              <li><code class="language-plaintext">true</code> si les antécédents structurés montrent une atteinte sur au moins deux organes ou territoires, par exemple un AVC et un SCA.</li>
+              <li>En pratique, RisqueCV calcule déjà <code class="language-plaintext">true</code> si vous envoyez, par exemple, <code class="language-plaintext">atcd_cerebrovasculaire = true</code> et <code class="language-plaintext">atcd_coronarien = true</code>. Il n’est donc pas nécessaire d’implémenter l’envoi de cette caractéristique.</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="difficulty-level-3">
+      <th scope="row"><code class="language-plaintext">antithrombotique</code></th>
+      <td><code class="language-plaintext">boolean</code></td>
+      <td>Traitement actuel par antiagrégant plaquettaire ou anticoagulant.</td>
+      <td class="difficulty-cell">
+        <div class="difficulty-score"><strong>3/5</strong></div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-antithrombotique" popovertarget="pitfalls-antithrombotique" style="anchor-name: --pitfalls-antithrombotique">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-3" id="pitfalls-antithrombotique" popover="auto" role="dialog" aria-labelledby="pitfalls-antithrombotique-title" style="position-anchor: --pitfalls-antithrombotique">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-antithrombotique-title"><code class="language-plaintext">antithrombotique</code> — difficulté 3/5&nbsp;: Vigilance</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-antithrombotique" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li><code class="language-plaintext">true</code> si le patient est actuellement traité par un médicament antiagrégant ou anticoagulant.</li>
+              <li>Envoyer <code class="language-plaintext">false</code> n’est <strong>jamais</strong> recommandé&nbsp;: certains patients sont traités via une ordonnance d’un autre médecin, par exemple un cardiologue. Le traitement peut donc être prescrit sans apparaître dans les prescriptions réalisées avec le logiciel.</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
     <tr class="difficulty-level-3">
       <th scope="row"><code class="language-plaintext">diabete</code></th>
       <td><code class="language-plaintext">boolean</code></td>
       <td>Présence d'un diabète (Type 1 ou 2).</td>
-      <td>Diabète (peu importe le type et le traitement).</td>
       <td class="difficulty-cell">
-        <div class="difficulty-label">
-          <svg class="difficulty-label-icon" aria-hidden="true"><use href="#difficulty-icon-3"></use></svg>
-          <span>Vigilance</span>
-        </div>
         <div class="difficulty-score">
-          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
-            <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
-          </svg>
           <strong>3/5</strong>
         </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-diabete" popovertarget="pitfalls-diabete" style="anchor-name: --pitfalls-diabete">Voir les pièges</button>
         <div class="pitfall-popover difficulty-level-3" id="pitfalls-diabete" popover="auto" role="dialog" aria-labelledby="pitfalls-diabete-title" style="position-anchor: --pitfalls-diabete">
           <div class="pitfall-popover-header">
-            <h4 id="pitfalls-diabete-title"><code class="language-plaintext">diabete</code> — difficulté 3/5</h4>
+            <h4 id="pitfalls-diabete-title"><code class="language-plaintext">diabete</code> — difficulté 3/5&nbsp;: Vigilance</h4>
             <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-diabete" popovertargetaction="hide">&times;</button>
           </div>
           <div class="pitfall-popover-content">
@@ -1949,25 +2095,103 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
       </td>
     </tr>
     <tr class="difficulty-level-3">
+      <th scope="row"><code class="language-plaintext">insuline</code></th>
+      <td><code class="language-plaintext">boolean</code></td>
+      <td>Traitement actuel du diabète par insuline.</td>
+      <td class="difficulty-cell">
+        <div class="difficulty-score"><strong>3/5</strong></div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-insuline" popovertarget="pitfalls-insuline" style="anchor-name: --pitfalls-insuline">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-3" id="pitfalls-insuline" popover="auto" role="dialog" aria-labelledby="pitfalls-insuline-title" style="position-anchor: --pitfalls-insuline">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-insuline-title"><code class="language-plaintext">insuline</code> — difficulté 3/5&nbsp;: Vigilance</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-insuline" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li><code class="language-plaintext">true</code> si le patient est actuellement traité par insuline, quel qu’en soit le type&nbsp;: basale, rapide, mélange ou pompe.</li>
+              <li>Envoyer <code class="language-plaintext">false</code> n’est <strong>jamais</strong> recommandé&nbsp;: certains patients sont traités via une ordonnance d’un autre médecin, par exemple un diabétologue. Le traitement peut donc être prescrit sans apparaître dans les prescriptions réalisées avec le logiciel.</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="difficulty-level-4">
+      <th scope="row"><code class="language-plaintext">retinopathie</code></th>
+      <td><code class="language-plaintext">boolean</code></td>
+      <td>Présence d’une rétinopathie diabétique.</td>
+      <td class="difficulty-cell">
+        <div class="difficulty-score"><strong>4/5</strong></div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-retinopathie" popovertarget="pitfalls-retinopathie" style="anchor-name: --pitfalls-retinopathie">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-4" id="pitfalls-retinopathie" popover="auto" role="dialog" aria-labelledby="pitfalls-retinopathie-title" style="position-anchor: --pitfalls-retinopathie">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-retinopathie-title"><code class="language-plaintext">retinopathie</code> — difficulté 4/5&nbsp;: Complexe</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-retinopathie" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li><code class="language-plaintext">false</code> est quasiment impossible à préremplir automatiquement, car il exigerait une source explicitement négative. L’absence de l’élément dans les antécédents du DPI ne suffit pas&nbsp;: le médecin a pu oublier de le renseigner. Il est recommandé de ne jamais préremplir cette valeur à <code class="language-plaintext">false</code>.</li>
+              <li><code class="language-plaintext">true</code> est possible uniquement si une rétinopathie diabétique figure dans les antécédents structurés du patient.</li>
+              <li>Cette clé concerne uniquement la rétinopathie diabétique, et non n’importe quelle pathologie rétinienne.</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="difficulty-level-4">
+      <th scope="row"><code class="language-plaintext">neuropathie</code></th>
+      <td><code class="language-plaintext">boolean</code></td>
+      <td>Présence d’une neuropathie diabétique.</td>
+      <td class="difficulty-cell">
+        <div class="difficulty-score"><strong>4/5</strong></div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-neuropathie" popovertarget="pitfalls-neuropathie" style="anchor-name: --pitfalls-neuropathie">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-4" id="pitfalls-neuropathie" popover="auto" role="dialog" aria-labelledby="pitfalls-neuropathie-title" style="position-anchor: --pitfalls-neuropathie">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-neuropathie-title"><code class="language-plaintext">neuropathie</code> — difficulté 4/5&nbsp;: Complexe</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-neuropathie" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li><code class="language-plaintext">false</code> est quasiment impossible à préremplir automatiquement, car il exigerait une source explicitement négative. L’absence de l’élément dans les antécédents du DPI ne suffit pas&nbsp;: le médecin a pu oublier de le renseigner. Il est recommandé de ne jamais préremplir cette valeur à <code class="language-plaintext">false</code>.</li>
+              <li><code class="language-plaintext">true</code> est possible uniquement si une neuropathie diabétique figure dans les antécédents structurés du patient.</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="difficulty-level-5" hidden>
+      <th scope="row"><code class="language-plaintext">microangiopathie3sites</code></th>
+      <td><code class="language-plaintext">boolean</code></td>
+      <td>Atteinte microangiopathique du diabète sur au moins trois organes ou sites.</td>
+      <td class="difficulty-cell">
+        <div class="difficulty-score"><strong>5/5</strong></div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-microangiopathie-3-sites" popovertarget="pitfalls-microangiopathie-3-sites" style="anchor-name: --pitfalls-microangiopathie-3-sites">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-5" id="pitfalls-microangiopathie-3-sites" popover="auto" role="dialog" aria-labelledby="pitfalls-microangiopathie-3-sites-title" style="position-anchor: --pitfalls-microangiopathie-3-sites">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-microangiopathie-3-sites-title"><code class="language-plaintext">microangiopathie3sites</code> — difficulté 5/5&nbsp;: Quasi-impossible</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-microangiopathie-3-sites" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li><code class="language-plaintext">false</code> est quasiment impossible à préremplir automatiquement, car il exigerait une source explicitement négative. L’absence de l’élément dans les antécédents du DPI ne suffit pas&nbsp;: le médecin a pu oublier de le renseigner. Il est recommandé de ne jamais préremplir cette valeur à <code class="language-plaintext">false</code>.</li>
+              <li><code class="language-plaintext">true</code> si les antécédents structurés montrent une atteinte du diabète sur au moins trois organes.</li>
+              <li>En pratique, RisqueCV calcule déjà <code class="language-plaintext">true</code> si vous envoyez, par exemple, <code class="language-plaintext">neuropathie = true</code>, <code class="language-plaintext">retinopathie = true</code> et <code class="language-plaintext">albuminurie = micro</code>. Il n’est donc pas nécessaire d’implémenter l’envoi de cette caractéristique.</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="difficulty-level-3">
       <th scope="row"><code class="language-plaintext">MRC</code></th>
       <td><code class="language-plaintext">boolean</code></td>
       <td>Maladie Rénale Chronique (DFG &lt; 60 ou albuminurie).</td>
-      <td>DFG &lt; 60 ou albuminurie ou «&nbsp;Maladie rénale chronique&nbsp;».</td>
       <td class="difficulty-cell">
-        <div class="difficulty-label">
-          <svg class="difficulty-label-icon" aria-hidden="true"><use href="#difficulty-icon-3"></use></svg>
-          <span>Vigilance</span>
-        </div>
         <div class="difficulty-score">
-          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
-            <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
-          </svg>
           <strong>3/5</strong>
         </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-mrc" popovertarget="pitfalls-mrc" style="anchor-name: --pitfalls-mrc">Voir les pièges</button>
         <div class="pitfall-popover difficulty-level-3" id="pitfalls-mrc" popover="auto" role="dialog" aria-labelledby="pitfalls-mrc-title" style="position-anchor: --pitfalls-mrc">
           <div class="pitfall-popover-header">
-            <h4 id="pitfalls-mrc-title"><code class="language-plaintext">MRC</code> — difficulté 3/5</h4>
+            <h4 id="pitfalls-mrc-title"><code class="language-plaintext">MRC</code> — difficulté 3/5&nbsp;: Vigilance</h4>
             <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-mrc" popovertargetaction="hide">&times;</button>
           </div>
           <div class="pitfall-popover-content">
@@ -1985,26 +2209,63 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
         </div>
       </td>
     </tr>
-    <tr class="difficulty-level-5">
+    <tr class="difficulty-level-3">
+      <th scope="row"><code class="language-plaintext">tabac</code></th>
+      <td><code class="language-plaintext">boolean</code></td>
+      <td>Tabagisme actif actuel.</td>
+      <td class="difficulty-cell">
+        <div class="difficulty-score"><strong>3/5</strong></div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-tabac" popovertarget="pitfalls-tabac" style="anchor-name: --pitfalls-tabac">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-3" id="pitfalls-tabac" popover="auto" role="dialog" aria-labelledby="pitfalls-tabac-title" style="position-anchor: --pitfalls-tabac">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-tabac-title"><code class="language-plaintext">tabac</code> — difficulté 3/5&nbsp;: Vigilance</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-tabac" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li>État actuel&nbsp;: le patient fume-t-il du tabac&nbsp;? Envoyer <code class="language-plaintext">true</code> quelle que soit la quantité fumée ou la durée du tabagisme.</li>
+              <li>Ancien fumeur&nbsp;: <code class="language-plaintext">false</code>.</li>
+              <li>Patient n’ayant jamais fumé&nbsp;: <code class="language-plaintext">false</code>.</li>
+              <li>Le statut tabagique peut avoir été renseigné plusieurs années auparavant sans avoir été actualisé. Pour éviter l’erreur critique consistant à déclarer fumeur un patient qui aurait arrêté depuis, il est recommandé de n’envoyer <code class="language-plaintext">true</code> que si ce statut a été enregistré ou modifié dans le DPI il y a moins d’un an. Une donnée datant de plus d’un an ne doit pas être envoyée à RisqueCV.</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="difficulty-level-3">
+      <th scope="row"><code class="language-plaintext">hyperCHOfamille</code></th>
+      <td><code class="language-plaintext">boolean</code></td>
+      <td>Hypercholestérolémie familiale hétérozygote connue.</td>
+      <td class="difficulty-cell">
+        <div class="difficulty-score"><strong>3/5</strong></div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-hypercho-famille" popovertarget="pitfalls-hypercho-famille" style="anchor-name: --pitfalls-hypercho-famille">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-3" id="pitfalls-hypercho-famille" popover="auto" role="dialog" aria-labelledby="pitfalls-hypercho-famille-title" style="position-anchor: --pitfalls-hypercho-famille">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-hypercho-famille-title"><code class="language-plaintext">hyperCHOfamille</code> — difficulté 3/5&nbsp;: Vigilance</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-hypercho-famille" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li><code class="language-plaintext">false</code> est quasiment impossible à préremplir automatiquement, car il exigerait une source explicitement négative. L’absence de l’élément dans les antécédents du DPI ne suffit pas&nbsp;: le médecin a pu oublier de le renseigner. Il est recommandé de ne jamais préremplir cette valeur à <code class="language-plaintext">false</code>.</li>
+              <li><code class="language-plaintext">true</code> est possible uniquement si une hypercholestérolémie familiale <strong>hétérozygote</strong> — et non homozygote — figure dans les antécédents structurés du patient.</li>
+              <li>Si cette clé vaut <code class="language-plaintext">true</code>, <code class="language-plaintext">autrepb</code> doit également être envoyé à <code class="language-plaintext">true</code>.</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="difficulty-level-5" hidden>
       <th scope="row"><code class="language-plaintext">autrepb</code></th>
       <td><code class="language-plaintext">boolean</code></td>
       <td>Autres situations complexes ou particulières qui nécessitent une évaluation personnalisée.</td>
-      <td>Hypercholestérolémie familiale hétérozygote, grossesse, etc. (voir la liste complète sur le site, sous le titre «&nbsp;Autre situation particulière&nbsp;?&nbsp;»).</td>
       <td class="difficulty-cell">
-        <div class="difficulty-label">
-          <svg class="difficulty-label-icon" aria-hidden="true"><use href="#difficulty-icon-5"></use></svg>
-          <span>Quasi-impossible</span>
-        </div>
         <div class="difficulty-score">
-          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
-            <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
-          </svg>
           <strong>5/5</strong>
         </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-autrepb" popovertarget="pitfalls-autrepb" style="anchor-name: --pitfalls-autrepb">Voir les pièges</button>
         <div class="pitfall-popover difficulty-level-5" id="pitfalls-autrepb" popover="auto" role="dialog" aria-labelledby="pitfalls-autrepb-title" style="position-anchor: --pitfalls-autrepb">
           <div class="pitfall-popover-header">
-            <h4 id="pitfalls-autrepb-title"><code class="language-plaintext">autrepb</code> — difficulté 5/5</h4>
+            <h4 id="pitfalls-autrepb-title"><code class="language-plaintext">autrepb</code> — difficulté 5/5&nbsp;: Quasi-impossible</h4>
             <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-autrepb" popovertargetaction="hide">&times;</button>
           </div>
           <div class="pitfall-popover-content">
@@ -2017,6 +2278,48 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
                 </ul>
               </li>
               <li>Cette catégorie ouverte contient notamment les «&nbsp;maladies génétiques rares&nbsp;» et les «&nbsp;autres situations complexes&nbsp;». <code class="language-plaintext">false</code> est totalement impossible à préremplir de manière automatique.</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="difficulty-level-5" hidden>
+      <th scope="row"><code class="language-plaintext">autreFacteurMajeur</code></th>
+      <td><code class="language-plaintext">boolean</code></td>
+      <td>Autre facteur de risque majeur dans le parcours d’hypercholestérolémie familiale hétérozygote.</td>
+      <td class="difficulty-cell">
+        <div class="difficulty-score"><strong>5/5</strong></div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-autre-facteur-majeur" popovertarget="pitfalls-autre-facteur-majeur" style="anchor-name: --pitfalls-autre-facteur-majeur">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-5" id="pitfalls-autre-facteur-majeur" popover="auto" role="dialog" aria-labelledby="pitfalls-autre-facteur-majeur-title" style="position-anchor: --pitfalls-autre-facteur-majeur">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-autre-facteur-majeur-title"><code class="language-plaintext">autreFacteurMajeur</code> — difficulté 5/5&nbsp;: Quasi-impossible</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-autre-facteur-majeur" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li>Cette clé est utilisée dans le parcours d’évaluation de l’hypercholestérolémie familiale hétérozygote, avec une définition très ouverte&nbsp;: HTA, antécédents familiaux, etc.</li>
+              <li>RisqueCV détermine lui-même ce qui constitue ou non un facteur de risque majeur.</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr class="difficulty-level-5" hidden>
+      <th scope="row"><code class="language-plaintext">evaluationComplete</code></th>
+      <td><code class="language-plaintext">boolean</code></td>
+      <td>Choix du parcours d’évaluation détaillé ou rapide.</td>
+      <td class="difficulty-cell">
+        <div class="difficulty-score"><strong>5/5</strong></div>
+        <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-evaluation-complete" popovertarget="pitfalls-evaluation-complete" style="anchor-name: --pitfalls-evaluation-complete">Voir les pièges</button>
+        <div class="pitfall-popover difficulty-level-5" id="pitfalls-evaluation-complete" popover="auto" role="dialog" aria-labelledby="pitfalls-evaluation-complete-title" style="position-anchor: --pitfalls-evaluation-complete">
+          <div class="pitfall-popover-header">
+            <h4 id="pitfalls-evaluation-complete-title"><code class="language-plaintext">evaluationComplete</code> — difficulté 5/5&nbsp;: Quasi-impossible</h4>
+            <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-evaluation-complete" popovertargetaction="hide">&times;</button>
+          </div>
+          <div class="pitfall-popover-content">
+            <ul>
+              <li>Cette clé est techniquement simple, mais ce n’est pas une caractéristique du patient&nbsp;: c’est un choix de parcours et d’expérience utilisateur.</li>
+              <li><code class="language-plaintext">true</code> demande une évaluation détaillée comprenant une quinzaine de questions&nbsp;; <code class="language-plaintext">false</code> mène aux recommandations rapides après deux ou trois questions.</li>
             </ul>
           </div>
         </div>
@@ -2048,14 +2351,7 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
       <td>Entier</td>
       <td>Âge du patient</td>
       <td class="difficulty-cell">
-        <div class="difficulty-label">
-          <svg class="difficulty-label-icon" aria-hidden="true"><use href="#difficulty-icon-1"></use></svg>
-          <span>Facile</span>
-        </div>
         <div class="difficulty-score">
-          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
-            <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
-          </svg>
           <strong>1/5</strong>
         </div>
       </td>
@@ -2067,20 +2363,13 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
       <td>Entier</td>
       <td>Pression Artérielle Systolique (mesure du jour&nbsp;; max conseillé 6-12 mois)</td>
       <td class="difficulty-cell">
-        <div class="difficulty-label">
-          <svg class="difficulty-label-icon" aria-hidden="true"><use href="#difficulty-icon-2"></use></svg>
-          <span>Petite vigilance</span>
-        </div>
         <div class="difficulty-score">
-          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
-            <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
-          </svg>
           <strong>2/5</strong>
         </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-pas" popovertarget="pitfalls-pas" style="anchor-name: --pitfalls-pas">Voir les pièges</button>
         <div class="pitfall-popover difficulty-level-2" id="pitfalls-pas" popover="auto" role="dialog" aria-labelledby="pitfalls-pas-title" style="position-anchor: --pitfalls-pas">
           <div class="pitfall-popover-header">
-            <h4 id="pitfalls-pas-title"><code class="language-plaintext">PAS</code> — difficulté 2/5</h4>
+            <h4 id="pitfalls-pas-title"><code class="language-plaintext">PAS</code> — difficulté 2/5&nbsp;: Petite vigilance</h4>
             <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-pas" popovertargetaction="hide">&times;</button>
           </div>
           <div class="pitfall-popover-content">
@@ -2099,20 +2388,13 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
       <td>Décimal</td>
       <td>Cholestérol Total (idéalement &lt; 3 mois&nbsp;; max conseillé 12-24 mois)</td>
       <td class="difficulty-cell">
-        <div class="difficulty-label">
-          <svg class="difficulty-label-icon" aria-hidden="true"><use href="#difficulty-icon-2"></use></svg>
-          <span>Petite vigilance</span>
-        </div>
         <div class="difficulty-score">
-          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
-            <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
-          </svg>
           <strong>2/5</strong>
         </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-ct" popovertarget="pitfalls-ct" style="anchor-name: --pitfalls-ct">Voir les pièges</button>
         <div class="pitfall-popover difficulty-level-2" id="pitfalls-ct" popover="auto" role="dialog" aria-labelledby="pitfalls-ct-title" style="position-anchor: --pitfalls-ct">
           <div class="pitfall-popover-header">
-            <h4 id="pitfalls-ct-title"><code class="language-plaintext">CT</code> — difficulté 2/5</h4>
+            <h4 id="pitfalls-ct-title"><code class="language-plaintext">CT</code> — difficulté 2/5&nbsp;: Petite vigilance</h4>
             <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-ct" popovertargetaction="hide">&times;</button>
           </div>
           <div class="pitfall-popover-content">
@@ -2133,20 +2415,13 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
       <td>Décimal</td>
       <td>Cholestérol HDL (idéalement &lt; 3 mois&nbsp;; max conseillé 12-24 mois)</td>
       <td class="difficulty-cell">
-        <div class="difficulty-label">
-          <svg class="difficulty-label-icon" aria-hidden="true"><use href="#difficulty-icon-2"></use></svg>
-          <span>Petite vigilance</span>
-        </div>
         <div class="difficulty-score">
-          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
-            <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
-          </svg>
           <strong>2/5</strong>
         </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-hdl" popovertarget="pitfalls-hdl" style="anchor-name: --pitfalls-hdl">Voir les pièges</button>
         <div class="pitfall-popover difficulty-level-2" id="pitfalls-hdl" popover="auto" role="dialog" aria-labelledby="pitfalls-hdl-title" style="position-anchor: --pitfalls-hdl">
           <div class="pitfall-popover-header">
-            <h4 id="pitfalls-hdl-title"><code class="language-plaintext">HDL</code> — difficulté 2/5</h4>
+            <h4 id="pitfalls-hdl-title"><code class="language-plaintext">HDL</code> — difficulté 2/5&nbsp;: Petite vigilance</h4>
             <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-hdl" popovertargetaction="hide">&times;</button>
           </div>
           <div class="pitfall-popover-content">
@@ -2166,20 +2441,13 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
       <td>Décimal</td>
       <td>Cholestérol LDL (idéalement &lt; 3 mois&nbsp;; max conseillé 12-24 mois)</td>
       <td class="difficulty-cell">
-        <div class="difficulty-label">
-          <svg class="difficulty-label-icon" aria-hidden="true"><use href="#difficulty-icon-3"></use></svg>
-          <span>Vigilance</span>
-        </div>
         <div class="difficulty-score">
-          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
-            <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
-          </svg>
           <strong>3/5</strong>
         </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-ldl" popovertarget="pitfalls-ldl" style="anchor-name: --pitfalls-ldl">Voir les pièges</button>
         <div class="pitfall-popover difficulty-level-3" id="pitfalls-ldl" popover="auto" role="dialog" aria-labelledby="pitfalls-ldl-title" style="position-anchor: --pitfalls-ldl">
           <div class="pitfall-popover-header">
-            <h4 id="pitfalls-ldl-title"><code class="language-plaintext">LDL</code> — difficulté 3/5</h4>
+            <h4 id="pitfalls-ldl-title"><code class="language-plaintext">LDL</code> — difficulté 3/5&nbsp;: Vigilance</h4>
             <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-ldl" popovertargetaction="hide">&times;</button>
           </div>
           <div class="pitfall-popover-content">
@@ -2200,20 +2468,13 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
       <td>Décimal</td>
       <td>Débit de Filtration Glomérulaire (idéalement &lt; 3 mois&nbsp;; max conseillé 12-24 mois)</td>
       <td class="difficulty-cell">
-        <div class="difficulty-label">
-          <svg class="difficulty-label-icon" aria-hidden="true"><use href="#difficulty-icon-3"></use></svg>
-          <span>Vigilance</span>
-        </div>
         <div class="difficulty-score">
-          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
-            <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
-          </svg>
           <strong>3/5</strong>
         </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-dfg" popovertarget="pitfalls-dfg" style="anchor-name: --pitfalls-dfg">Voir les pièges</button>
         <div class="pitfall-popover difficulty-level-3" id="pitfalls-dfg" popover="auto" role="dialog" aria-labelledby="pitfalls-dfg-title" style="position-anchor: --pitfalls-dfg">
           <div class="pitfall-popover-header">
-            <h4 id="pitfalls-dfg-title"><code class="language-plaintext">DFG</code> — difficulté 3/5</h4>
+            <h4 id="pitfalls-dfg-title"><code class="language-plaintext">DFG</code> — difficulté 3/5&nbsp;: Vigilance</h4>
             <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-dfg" popovertargetaction="hide">&times;</button>
           </div>
           <div class="pitfall-popover-content">
@@ -2232,20 +2493,13 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
       <td>Décimal</td>
       <td>Hémoglobine glyquée (idéalement &lt; 3 mois&nbsp;; max conseillé 6-12 mois)</td>
       <td class="difficulty-cell">
-        <div class="difficulty-label">
-          <svg class="difficulty-label-icon" aria-hidden="true"><use href="#difficulty-icon-2"></use></svg>
-          <span>Petite vigilance</span>
-        </div>
         <div class="difficulty-score">
-          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
-            <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
-          </svg>
           <strong>2/5</strong>
         </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-hba1c" popovertarget="pitfalls-hba1c" style="anchor-name: --pitfalls-hba1c">Voir les pièges</button>
         <div class="pitfall-popover difficulty-level-2" id="pitfalls-hba1c" popover="auto" role="dialog" aria-labelledby="pitfalls-hba1c-title" style="position-anchor: --pitfalls-hba1c">
           <div class="pitfall-popover-header">
-            <h4 id="pitfalls-hba1c-title"><code class="language-plaintext">HbA1c</code> — difficulté 2/5</h4>
+            <h4 id="pitfalls-hba1c-title"><code class="language-plaintext">HbA1c</code> — difficulté 2/5&nbsp;: Petite vigilance</h4>
             <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-hba1c" popovertargetaction="hide">&times;</button>
           </div>
           <div class="pitfall-popover-content">
@@ -2264,20 +2518,13 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
       <td>Décimal</td>
       <td>Protéine C-réactive ultra-sensible (hs-CRP uniquement, pas la CRP standard).</td>
       <td class="difficulty-cell">
-        <div class="difficulty-label">
-          <svg class="difficulty-label-icon" aria-hidden="true"><use href="#difficulty-icon-4"></use></svg>
-          <span>Complexe</span>
-        </div>
         <div class="difficulty-score">
-          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
-            <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
-          </svg>
           <strong>4/5</strong>
         </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-crp" popovertarget="pitfalls-crp" style="anchor-name: --pitfalls-crp">Voir les pièges</button>
         <div class="pitfall-popover difficulty-level-4" id="pitfalls-crp" popover="auto" role="dialog" aria-labelledby="pitfalls-crp-title" style="position-anchor: --pitfalls-crp">
           <div class="pitfall-popover-header">
-            <h4 id="pitfalls-crp-title"><code class="language-plaintext">crp</code> — difficulté 4/5</h4>
+            <h4 id="pitfalls-crp-title"><code class="language-plaintext">crp</code> — difficulté 4/5&nbsp;: Complexe</h4>
             <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-crp" popovertargetaction="hide">&times;</button>
           </div>
           <div class="pitfall-popover-content">
@@ -2297,20 +2544,13 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
       <td>Décimal</td>
       <td>Indice de Masse Corporelle</td>
       <td class="difficulty-cell">
-        <div class="difficulty-label">
-          <svg class="difficulty-label-icon" aria-hidden="true"><use href="#difficulty-icon-3"></use></svg>
-          <span>Vigilance</span>
-        </div>
         <div class="difficulty-score">
-          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
-            <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
-          </svg>
           <strong>3/5</strong>
         </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-imc" popovertarget="pitfalls-imc" style="anchor-name: --pitfalls-imc">Voir les pièges</button>
         <div class="pitfall-popover difficulty-level-3" id="pitfalls-imc" popover="auto" role="dialog" aria-labelledby="pitfalls-imc-title" style="position-anchor: --pitfalls-imc">
           <div class="pitfall-popover-header">
-            <h4 id="pitfalls-imc-title"><code class="language-plaintext">imc</code> — difficulté 3/5</h4>
+            <h4 id="pitfalls-imc-title"><code class="language-plaintext">imc</code> — difficulté 3/5&nbsp;: Vigilance</h4>
             <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-imc" popovertargetaction="hide">&times;</button>
           </div>
           <div class="pitfall-popover-content">
@@ -2328,20 +2568,13 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
       <td>Entier</td>
       <td>Âge lors du diagnostic du diabète</td>
       <td class="difficulty-cell">
-        <div class="difficulty-label">
-          <svg class="difficulty-label-icon" aria-hidden="true"><use href="#difficulty-icon-4"></use></svg>
-          <span>Complexe</span>
-        </div>
         <div class="difficulty-score">
-          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
-            <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
-          </svg>
           <strong>4/5</strong>
         </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-agediabete" popovertarget="pitfalls-agediabete" style="anchor-name: --pitfalls-agediabete">Voir les pièges</button>
         <div class="pitfall-popover difficulty-level-4" id="pitfalls-agediabete" popover="auto" role="dialog" aria-labelledby="pitfalls-agediabete-title" style="position-anchor: --pitfalls-agediabete">
           <div class="pitfall-popover-header">
-            <h4 id="pitfalls-agediabete-title"><code class="language-plaintext">agediabete</code> — difficulté 4/5</h4>
+            <h4 id="pitfalls-agediabete-title"><code class="language-plaintext">agediabete</code> — difficulté 4/5&nbsp;: Complexe</h4>
             <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-agediabete" popovertargetaction="hide">&times;</button>
           </div>
           <div class="pitfall-popover-content">
@@ -2353,27 +2586,20 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
         </div>
       </td>
     </tr>
-    <tr class="difficulty-level-5">
+    <tr class="difficulty-level-5" hidden>
       <th scope="row"><code class="language-plaintext">age_atcd</code></th>
       <td><code class="language-plaintext">number</code></td>
       <td>ans</td>
       <td>Entier</td>
       <td>Âge lors du premier événement cardiovasculaire (AVC, AIT, SCA, IDM, AOMI, anévrisme de l'aorte abdominale)</td>
       <td class="difficulty-cell">
-        <div class="difficulty-label">
-          <svg class="difficulty-label-icon" aria-hidden="true"><use href="#difficulty-icon-5"></use></svg>
-          <span>Quasi-impossible</span>
-        </div>
         <div class="difficulty-score">
-          <svg class="difficulty-meter" viewBox="0 0 76 8" aria-hidden="true">
-            <rect x="0" y="0" width="12" height="8" rx="2"/><rect x="16" y="0" width="12" height="8" rx="2"/><rect x="32" y="0" width="12" height="8" rx="2"/><rect x="48" y="0" width="12" height="8" rx="2"/><rect x="64" y="0" width="12" height="8" rx="2"/>
-          </svg>
           <strong>5/5</strong>
         </div>
         <button class="pitfall-trigger" type="button" aria-expanded="false" aria-controls="pitfalls-age-atcd" popovertarget="pitfalls-age-atcd" style="anchor-name: --pitfalls-age-atcd">Voir les pièges</button>
         <div class="pitfall-popover difficulty-level-5" id="pitfalls-age-atcd" popover="auto" role="dialog" aria-labelledby="pitfalls-age-atcd-title" style="position-anchor: --pitfalls-age-atcd">
           <div class="pitfall-popover-header">
-            <h4 id="pitfalls-age-atcd-title"><code class="language-plaintext">age_atcd</code> — difficulté 5/5</h4>
+            <h4 id="pitfalls-age-atcd-title"><code class="language-plaintext">age_atcd</code> — difficulté 5/5&nbsp;: Quasi-impossible</h4>
             <button class="pitfall-popover-close" type="button" aria-label="Fermer les pièges d’implémentation" popovertarget="pitfalls-age-atcd" popovertargetaction="hide">&times;</button>
           </div>
           <div class="pitfall-popover-content">
@@ -2605,27 +2831,6 @@ Les mettre à `false` permet de sauter les questions de tri initiales.
 | `ZW` | Zimbabwe |
 
 </details>
-
-### 4. Booléens
-
-| Clé | Type | Description |
-| :--- | :--- | :--- |
-| `tabac` | `boolean` | Tabagisme actif actuel. |
-| `antithrombotique` | `boolean` | Traitement actuel : aspirine ou autre antiagrégant plaquettaire ou anticoagulants. |
-| `insuline` | `boolean` | Diabète traité par insuline. |
-| `hyperCHOfamille`| `boolean` | Hypercholestérolémie familiale hétérozygote connue. |
-| `retinopathie` | `boolean` | Présence d'une rétinopathie diabétique. |
-| `neuropathie` | `boolean` | Présence d'une neuropathie diabétique. |
-| `atcd_coronarien` | `boolean` | Antécédent de maladie coronaire (IDM, SCA, revascularisation). |
-| `atcd_cerebrovasculaire`| `boolean` | Antécédent d'AVC ou d'AIT. |
-| `atcd_aomi` | `boolean` | Antécédent d'Artériopathie Oblitérante des Membres Inférieurs. |
-| `atcd_anevrismeAorte`| `boolean` | Antécédent d'anévrisme de l'aorte abdominale. |
-| `atcd_evenement_recurrent` | `boolean` | Nouvel événement cardiovasculaire malgré une statine à dose maximale tolérée. |
-| `atcd_evenement_recent` | `boolean` | Événement cardiovasculaire survenu il y a moins de 6 semaines. |
-| `atcd_polyvasculaire` | `boolean` | Atteinte polyvasculaire (par exemple coronaire + AOMI). |
-| `microangiopathie3sites`| `boolean` | Présence d'une microangiopathie sur ≥3 sites (ex: rétino + neuro + albu). |
-| `autreFacteurMajeur` | `boolean` | Présence d'un autre facteur de risque majeur (pour l'HF). |
-| `evaluationComplete`| `boolean` | Force l'affichage de l'évaluation complète (tunnel détaillé). |
 
 ---
 
@@ -2869,7 +3074,38 @@ Si vous rencontrez des difficultés (pas de réponse au handshake, données non 
 <script>
 (() => {
     const triggers = Array.from(document.querySelectorAll('.pitfall-trigger'));
+    const difficultyToggles = Array.from(document.querySelectorAll('.difficulty-toggle'));
     const hoverCapable = window.matchMedia('(hover: hover) and (pointer: fine)');
+
+    const applyDifficultyFilter = (toggle) => {
+        const level = toggle.dataset.difficultyLevel;
+        const label = toggle.dataset.difficultyLabel;
+        const isVisible = toggle.getAttribute('aria-checked') === 'true';
+        const rows = document.querySelectorAll(`.implementation-table tbody tr.difficulty-level-${level}`);
+
+        for (const row of rows) {
+            if (!isVisible) {
+                const popover = row.querySelector('.pitfall-popover');
+                if (popover?.matches(':popover-open')) popover.hidePopover();
+            }
+            row.hidden = !isVisible;
+        }
+
+        toggle.closest('.difficulty-legend-item')?.classList.toggle('is-disabled', !isVisible);
+        const action = isVisible ? 'Masquer' : 'Afficher';
+        const accessibleLabel = `${action} les caractéristiques de difficulté ${level} sur 5 — ${label}`;
+        toggle.setAttribute('aria-label', accessibleLabel);
+        toggle.title = accessibleLabel;
+    };
+
+    for (const toggle of difficultyToggles) {
+        toggle.addEventListener('click', () => {
+            const isVisible = toggle.getAttribute('aria-checked') === 'true';
+            toggle.setAttribute('aria-checked', String(!isVisible));
+            applyDifficultyFilter(toggle);
+        });
+        applyDifficultyFilter(toggle);
+    }
 
     for (const trigger of triggers) {
         const popover = document.getElementById(trigger.getAttribute('aria-controls'));
